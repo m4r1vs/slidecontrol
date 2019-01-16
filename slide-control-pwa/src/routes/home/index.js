@@ -1,10 +1,12 @@
 import { h } from 'preact';
+import { Link } from 'preact-router/match';
 import style from './style.scss';
 
 const Home = () => (
 	<div class={style.home}>
-		<h1>Home</h1>
-		<p>This is the Home component.</p>
+		<h1>slidecontrol</h1>
+		<input type="number"></input>
+		<Link href="/controller/hello">Me</Link>
 	</div>
 );
 
