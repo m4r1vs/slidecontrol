@@ -1,0 +1,13 @@
+.home {
+	padding: 70px 20px;
+	min-height: 100%;
+	width: 100%;
+
+	&:hover {
+		opacity: 0;
+	}
+
+	h1 {
+		font-size: 20px;
+	}
+}
