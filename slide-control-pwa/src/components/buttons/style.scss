@@ -1,0 +1,18 @@
+.button {
+    cursor: pointer;
+    appearance: none;
+    background: var(--primary-color);
+    border: none;
+    font-size: 16px;
+    line-height: 1;
+    padding: 8px 16px;
+    border-radius: 3px;
+    color: black;
+    transition: background .13s;
+    margin-bottom: 16px;
+    
+    &:hover, &:focus {
+      outline: none;
+      background: var(--primary-color-dark);
+    }
+}

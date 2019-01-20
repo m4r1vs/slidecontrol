@@ -1,6 +1,39 @@
 .home {
-	padding: 18px;
+	padding: 56px 18px 18px;
 	min-height: 100%;
 	width: 100%;
 	text-align: center;
+
+	h1 {
+		margin-top: 86px;
+		margin-bottom: 12px;
+	}
+
+	h1, p {
+		color: var(--primary-color)
+	}
+
+	p {
+		margin: 0px 18px 32px;
+	}
+
+	.logo {
+		background: url("/assets/logo_ohnekontur.png");
+		height: 72px;
+		background-position: center;
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+
+	input.code {
+		font-size: 42px;
+		width: 248px;
+		-webkit-appearance: mpme;
+		background: none;
+		border: 3px solid var(--primary-color);
+		border-radius: 12px;
+		padding: 12px;
+		text-align: center;
+		color: var(--primary-color);
+	}
 }
