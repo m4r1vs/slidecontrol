@@ -28,12 +28,18 @@
 	input.code {
 		font-size: 42px;
 		width: 248px;
-		-webkit-appearance: mpme;
+		-webkit-appearance: none;
 		background: none;
-		border: 3px solid var(--primary-color);
+		border: 3px solid grey;
 		border-radius: 12px;
 		padding: 12px;
+		margin-bottom: 16px;
 		text-align: center;
+		outline: none;
 		color: var(--primary-color);
+
+		&:focus, &:active, &:valid {
+			border-color: var(--primary-color);
+		}
 	}
 }

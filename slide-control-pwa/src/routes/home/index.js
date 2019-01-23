@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+import { route } from 'preact-router';
 import style from './style.scss';
 
 import Button from '../../components/buttons';
@@ -26,12 +27,30 @@ class Onboarding extends Component {
 
 class Main extends Component {
 
-	submitCode() {
-		console.log('hi');
-	}
-
 	getGreeting() {
 		return 'Good Evening,';
+	}
+
+	changeInput(e) {
+		this.setState({
+			input: e.srcElement.value
+		});
+	}
+
+	sendCode() {
+		route(`/controller/${this.state.input}`);
+	}
+
+	constructor(props) {
+		
+		super(props);
+		
+		this.state = {
+			input: 0
+		};
+
+		this.changeInput = this.changeInput.bind(this);
+		this.sendCode = this.sendCode.bind(this);
 	}
 
 	render() {
@@ -42,8 +61,8 @@ class Main extends Component {
 				<p>
 					Now just open your slides and type in your generated code to get started:
 				</p>
-				<input class={style.code} type="number" />
-				<Button text="DONE" action={this.setOnboarded} />
+				<input placeholder="0000" onChange={this.changeInput} required class={style.code} type="number" /><br />
+				<Button text="DONE" action={this.sendCode} />
 			</div>
 		);
 	}
