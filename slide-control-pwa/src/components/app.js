@@ -5,6 +5,20 @@ import { Router } from 'preact-router';
 import Home from '../routes/home';
 import Controller from '../routes/controller';
 
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
+let config = {
+	apiKey: 'AIzaSyCqS1FW46byte9poi87zoS1dGxy1nMlVZI',
+	authDomain: 'slide-control-firebase.firebaseapp.com',
+	databaseURL: 'https://slide-control-firebase.firebaseio.com',
+	projectId: 'slide-control-firebase',
+	storageBucket: 'slide-control-firebase.appspot.com',
+	messagingSenderId: '377566080352'
+};
+
+firebase.initializeApp(config);
+
 export default class App extends Component {
 	
 	/** Gets fired when the route changes.
