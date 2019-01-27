@@ -4,12 +4,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    
+
     "start": "per-env",
     "start:production": "npm run -s serve",
     "start:development": "npm run -s dev",
-    "build": "preact build",
-    "serve": "preact build && preact serve",
-    "dev": "preact watch",
+    "build": "preact build --template src/template.html --no-prerender --production --service-worker",
+    "serve": "preact build --template src/template.html && preact serve",
+    "dev": "preact watch --template src/template.html",
     "lint": "eslint src"
   },
   "eslintConfig": {

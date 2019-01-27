@@ -10,22 +10,18 @@ export default class Profile extends Component {
 	
 	nextSlide() {
 		const presentations = this.db.collection('presentations');
-		presentations.doc(this.props.id).get()
-			.then(doc => {
-				presentations.doc(this.props.id).set({
-					activeSlide: doc.data().activeSlide + 1
-				});
-			});
+		presentations.doc(this.props.id).update({
+			command: 'next',
+			timestamp: new Date().getTime()
+		});
 	}
 
 	previousSlide() {
 		const presentations = this.db.collection('presentations');
-		presentations.doc(this.props.id).get()
-			.then(doc => {
-				presentations.doc(this.props.id).set({
-					activeSlide: doc.data().activeSlide - 1
-				});
-			});
+		presentations.doc(this.props.id).update({
+			command: 'back',
+			timestamp: new Date().getTime()
+		});
 	}
 	
 	constructor(props) {
@@ -42,9 +38,17 @@ export default class Profile extends Component {
 		const presentations = this.db.collection('presentations');
 		presentations.doc(this.props.id).get()
 			.then(doc => {
+
 				if (!doc.exists) {
 					if (window) alert('Wrong ID');
+					location.href = '/';
 				}
+				else {
+					presentations.doc(this.props.id).update({
+						devicesConnected: doc.data().devicesConnected + 1
+					});
+				}
+
 			});
 	}
 	
