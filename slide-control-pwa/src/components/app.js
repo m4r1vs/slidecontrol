@@ -5,6 +5,8 @@ import { Router } from 'preact-router';
 import Home from '../routes/home';
 import Controller from '../routes/controller';
 
+import Snackbar from '../components/snackbar';
+
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -29,12 +31,48 @@ export default class App extends Component {
 		this.currentUrl = e.url;
 	};
 
+	hideSnackbar = () => {
+		this.setState({
+			notification: {
+				text: null,
+				actionText: null,
+				clickAction: () => console.error('cLiCkEd An EmTy NoTiFiCaTiOn :!§')
+			}
+		});
+	};
+
+	showSnackbar = (text, actionText, _clickAction) => {
+
+		const clickAction = () => {
+			this.hideSnackbar();
+			_clickAction();
+		};
+
+		this.setState({
+			notification: {
+				text,
+				actionText,
+				clickAction
+			}
+		});
+		setTimeout(this.hideSnackbar, 3500);
+	};
+
+	constructor(props) {
+		super(props);
+		this.showSnackbar = this.showSnackbar.bind(this);
+	}
+
 	render() {
+
+		console.log(this.state);
+
 		return (
 			<div id="app">
+				<Snackbar {...this.state.notification} />
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
-					<Controller path="/controller/:id" />
+					<Controller showSnackbar={this.showSnackbar} path="/controller/:id" />
 				</Router>
 			</div>
 		);

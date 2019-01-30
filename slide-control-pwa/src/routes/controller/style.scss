@@ -1,5 +1,43 @@
-.profile {
-	padding: 56px 20px;
+.controller {
+	padding: 0;
 	min-height: 100%;
 	width: 100%;
+
+	h1 {
+		margin: 0;
+		text-align: center;
+		line-height: 84px;
+		color: var(--primary-color);
+	}
+
+	div.container {
+		height: 60vh;
+		max-height: 192px;
+		padding: 12px;
+		margin-top: calc(40vh - 84px);
+
+		div {
+			width: calc(50% - 8px);
+			height: 100%;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: contain;
+			display: inline-block;
+			filter: grayscale(40%);
+			transition: filter .25s;
+
+			&:hover {
+				filter: grayscale(0);
+			}
+		}
+
+		div.previousButton {
+			background-image: url(https://i.ibb.co/HFPD3cb/left2.png);
+		}
+
+		div.nextButton {
+			background-image: url(https://i.ibb.co/0m1Gt02/right2.png);
+			margin-left: 16px;
+		}
+	}
 }

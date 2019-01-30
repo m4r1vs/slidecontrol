@@ -3,7 +3,7 @@
   "short_name": "slide-control-pwa",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#fff",
   "theme_color": "#212121",
   "icons": [
