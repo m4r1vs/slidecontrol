@@ -32,8 +32,8 @@ export default class Profile extends Component {
 		this.previousSlide = this.previousSlide.bind(this);
 
 	}
-	
-	componentWillMount(props) {
+
+	componentDidMount() {
 		const presentations = this.db.collection('presentations');
 		presentations.doc(this.props.id).get()
 			.then(doc => {
@@ -42,10 +42,17 @@ export default class Profile extends Component {
 					this.props.showSnackbar(`The code you entered (${this.props.id}) is invalid.`, 'BACK', () => route('/'));
 				}
 				else {
-					this.props.showSnackbar(`Connected to Slide #${this.props.id}`, () => console.log('Hey there :)'));
+					this.title = doc.data().title;
+					this.notesContainer.innerHTML = doc.data().notes;
+					this.props.showSnackbar(`Connected to "${this.title}"`, () => console.log('Hey there :)'));
 					presentations.doc(this.props.id).update({
 						devicesConnected: doc.data().devicesConnected + 1
 					});
+
+					presentations.doc(this.props.id)
+						.onSnapshot(doc => {
+							this.notesContainer.innerHTML = doc.data().notes;
+						});
 				}
 
 			});
@@ -54,7 +61,8 @@ export default class Profile extends Component {
 	render({ id }) {
 		return (
 			<div class={style.controller}>
-				<h1>slidecontrol #{id}</h1>
+				<h1>{this.title || 'Loading...'}</h1>
+				<div class={style.notesContainer} ref={div => this.notesContainer = div} />
 				<div class={style.container}>
 					<div class={style.previousButton} onClick={this.previousSlide} />
 					<div class={style.nextButton} onClick={this.nextSlide} />

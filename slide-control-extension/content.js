@@ -14,6 +14,7 @@ firebase.initializeApp(config);
 const db = firebase.firestore();
 const presentations = db.collection("presentations");
 
+let slideData;
 let presentationId;
 let activeSlide = 0;
 
@@ -36,10 +37,6 @@ const spawnId = function () {
 
 spawnId();
 
-const initListener = function (id) {
-
-}
-
 const parseBody = function () {
 	const script = document.createElement("script");
 	script.id = "tmpScript";
@@ -48,6 +45,17 @@ const parseBody = function () {
 	(document.body || document.head || document.documentElement).appendChild(script);
 	let r = JSON.parse(document.querySelector("body").getAttribute("viewerData"));
 	document.querySelector("#tmpScript").remove();
+	document.querySelector("body").removeAttribute("viewerData");
+}
+
+const parseNotes = function () {
+	let script = document.createElement("script");
+	let scriptContent = "document.querySelector('body').setAttribute('viewerData', JSON.stringify(viewerData))";
+	script.id = "tmp_script";
+	script.appendChild(document.createTextNode(scriptContent));
+	(document.body || document.head || document.documentElement).appendChild(script);
+	slideData = JSON.parse(document.querySelector("body").getAttribute("viewerData"));
+	document.querySelector("#tmp_script").remove();
 	document.querySelector("body").removeAttribute("viewerData");
 }
 
@@ -92,6 +100,8 @@ const init = function () {
 	punchContainer.appendChild(div);
 	
 	activeSlide = parseInt(document.querySelector(".goog-flat-menu-button-caption").getAttribute("aria-posinset"));
+	
+	parseNotes();
 
 	document.querySelector("#sc_show_id").addEventListener("click", function () {
 
@@ -112,11 +122,36 @@ const init = function () {
 		let timestamp = new Date().getTime();
 		let devicesConnected = 0;
 
+		let position = parseInt(document.querySelector(".goog-flat-menu-button-caption").getAttribute("aria-posinset"));
+		let totalSlides = parseInt(document.querySelector(".goog-flat-menu-button-caption").getAttribute("aria-setsize"))
+		let notes = slideData.docData[1][position - 1][9];
+		let title = document.querySelector('[property="og:title"]').content;
+
+		let observer = new MutationObserver(function () {
+
+			position = parseInt(document.querySelector(".goog-flat-menu-button-caption").getAttribute("aria-posinset"));
+			notes = slideData.docData[1][position - 1][9];
+
+			presentations.doc(presentationId.toString())
+				.update({
+					notes,
+					position
+				})
+		});
+
+		observer.observe(document.querySelector(".goog-flat-menu-button-caption"), {
+			attributes: true
+		})
+
 		presentations.doc(presentationId.toString())
 			.set({
 				command: "none",
 				devicesConnected,
-				timestamp 
+				timestamp,
+				totalSlides,
+				position,
+				notes,
+				title
 			})
 			.then(function () {
 				presentations.doc(presentationId.toString())

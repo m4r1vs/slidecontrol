@@ -10,6 +10,15 @@
 		color: var(--primary-color);
 	}
 
+	div.notesContainer {
+		padding: 12px;
+		color: var(--primary-color) !important;
+
+		p, h1, h2, h3, h4, h5, li, span {
+			color: var(--primary-color) !important;
+		}
+	}
+
 	div.container {
 		height: 60vh;
 		max-height: 192px;

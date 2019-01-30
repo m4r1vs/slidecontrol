@@ -1,12 +1,17 @@
 {
-  "name": "slide-control-pwa",
-  "short_name": "slide-control-pwa",
+  "name": "slidecontrol",
+  "short_name": "slidecontrol",
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#fff",
-  "theme_color": "#212121",
+  "background_color": "#212121",
+  "theme_color": "#ffbc16",
   "icons": [
+    {
+      "src": "/assets/icons/favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
     {
       "src": "/assets/icons/android-chrome-192x192.png",
       "type": "image/png",
