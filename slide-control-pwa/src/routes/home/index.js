@@ -17,7 +17,8 @@ class Onboarding extends Component {
 				<div class={style.logo} />
 				<h1>Hi there,</h1>
 				<p>
-					Slidecontrol is the app to command your slides. Before you get started you need to make sure that you have installed our browser extension on the device hosting your slides.
+					Slidecontrol is the app to command your slides.<br />
+					Before you get started you need to make sure that you have installed our browser extension on the device hosting your slides.
 				</p>
 				<Button text="got it, continue" action={this.setOnboarded} />
 			</div>
@@ -66,7 +67,7 @@ class Main extends Component {
 				<div class={style.logo} />
 				<h1>{this.getGreeting()}</h1>
 				<p>
-					Now just open your slide and start slidecontrol there to get your code:<br />
+					Now just open your slide and start slidecontrol there in order to get your code:<br />
 				</p>
 				<form onSubmit={this.sendCode}>
 					<input name="code" placeholder="0000" value={this.state.input} onChange={this.changeInput} required class={style.code} type="number" /><br />

@@ -76,6 +76,7 @@ export default class App extends Component {
 					<Help path="/help" />
 					<Controller showSnackbar={this.showSnackbar} path="/controller/:id" />
 				</Router>
+				<span class="beta">BETA (SePA 2019)</span>
 			</div>
 		);
 	}

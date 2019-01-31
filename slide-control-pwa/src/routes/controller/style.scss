@@ -5,6 +5,10 @@
 	padding-bottom: 162px;
 	padding-top: 48px;
 
+	@media screen and (orientation: landscape) {
+		padding: 48px 15vw 0 15vw;
+	}
+
 	h1 {
 		margin: 0;
 		top: 0;
@@ -14,13 +18,36 @@
 		line-height: 48px;
 		border-bottom: var(--primary-color) 2px solid;
 		position: fixed;
+		left: 0;
+		right: 0;
 		color: var(--primary-color);
 		background: rgba(33, 33, 33, 0.85);
+	}
+
+	.timer {
+		position: fixed;
+		top: 50px;
+		background: rgba(33, 33, 33, 0.85);
+		right: 0;
+		padding: 0 4px;
+		border-left: var(--primary-color) 2px solid;
+		border-bottom: var(--primary-color) 2px solid;
+		color: var(--primary-color-dark);
+		z-index: 1;
+
+		@media screen and (orientation: landscape) {
+			width: 15vw;
+		}
 	}
 
 	div.notesContainer {
 		padding: 4px 12px;
 		color: var(--primary-color) !important;
+
+		@media screen and (orientation: landscape) {
+			background: transparent;
+			border: none;
+		}
 
 		p, h1, h2, h3, h4, h5, li, span {
 			margin: 4px 0;

@@ -25,6 +25,17 @@ a {
 	}
 }
 
+span[class=beta] {
+	position: fixed;
+	bottom: -2px;
+	color: var(--primary-color);
+	width: 146px;
+	text-align: center;
+	left: calc(50% - (146px / 2));
+	background: #212121;
+	border: var(--primary-color) 2px solid;
+}
+
 * {
 	box-sizing: border-box;
 }
