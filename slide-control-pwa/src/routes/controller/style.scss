@@ -2,28 +2,47 @@
 	padding: 0;
 	min-height: 100%;
 	width: 100%;
+	padding-bottom: 162px;
+	padding-top: 48px;
 
 	h1 {
 		margin: 0;
+		top: 0;
+		font-size: 16px;
+		width: 100vw;
 		text-align: center;
-		line-height: 84px;
+		line-height: 48px;
+		border-bottom: var(--primary-color) 2px solid;
+		position: fixed;
 		color: var(--primary-color);
+		background: rgba(33, 33, 33, 0.85);
 	}
 
 	div.notesContainer {
-		padding: 12px;
+		padding: 4px 12px;
 		color: var(--primary-color) !important;
 
 		p, h1, h2, h3, h4, h5, li, span {
+			margin: 4px 0;
 			color: var(--primary-color) !important;
 		}
 	}
 
 	div.container {
 		height: 60vh;
-		max-height: 192px;
+		max-height: 162px;
 		padding: 12px;
-		margin-top: calc(40vh - 84px);
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		background: rgba(33, 33, 33, 0.85);
+		right: 0;
+		border-top: var(--primary-color) 2px solid;
+
+		@media screen and (orientation: landscape) {
+			background: transparent;
+			border: none;
+		}
 
 		div {
 			width: calc(50% - 8px);
@@ -42,11 +61,29 @@
 
 		div.previousButton {
 			background-image: url(https://i.ibb.co/HFPD3cb/left2.png);
+
+			@media screen and (orientation: landscape) {
+				position: fixed;
+				border-right: var(--primary-color) 2px solid;
+				top: 50px;
+				left: 0;
+				width: 15vw;
+				height: calc(100vh - 50px);
+			}
 		}
 
 		div.nextButton {
 			background-image: url(https://i.ibb.co/0m1Gt02/right2.png);
 			margin-left: 16px;
+
+			@media screen and (orientation: landscape) {
+				position: fixed;
+				border-left: var(--primary-color) 2px solid;
+				top: 50px;
+				right: 0;
+				width: 15vw;
+				height: calc(100vh - 50px);
+			}
 		}
 	}
 }

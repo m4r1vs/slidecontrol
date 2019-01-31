@@ -26,6 +26,11 @@ export default class Profile extends Component {
 	constructor(props) {
 
 		super(props);
+
+		this.state = {
+			totalSlides: 0,
+			currentSlide: 0
+		};
 		
 		this.db = firebase.firestore();
 		this.nextSlide = this.nextSlide.bind(this);
@@ -52,6 +57,10 @@ export default class Profile extends Component {
 					presentations.doc(this.props.id)
 						.onSnapshot(doc => {
 							this.notesContainer.innerHTML = doc.data().notes;
+							this.setState({
+								totalSlides: doc.data().totalSlides,
+								currentSlide: doc.data().position
+							});
 						});
 				}
 
@@ -61,7 +70,7 @@ export default class Profile extends Component {
 	render({ id }) {
 		return (
 			<div class={style.controller}>
-				<h1>{this.title || 'Loading...'}</h1>
+				<h1>{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}</h1>
 				<div class={style.notesContainer} ref={div => this.notesContainer = div} />
 				<div class={style.container}>
 					<div class={style.previousButton} onClick={this.previousSlide} />

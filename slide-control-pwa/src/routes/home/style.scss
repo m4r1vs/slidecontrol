@@ -4,6 +4,10 @@
 	width: 100%;
 	text-align: center;
 
+	a {
+		color: var(--primary-color-dark);
+	}
+
 	h1 {
 		margin-top: 86px;
 		margin-bottom: 12px;
@@ -25,6 +29,25 @@
 		background-repeat: no-repeat;
 	}
 
+	.button {
+		cursor: pointer;
+    appearance: none;
+    background: var(--primary-color);
+    border: none;
+    font-size: 16px;
+    line-height: 1;
+    padding: 8px 16px;
+    border-radius: 3px;
+    color: black;
+    transition: background .13s;
+    margin-bottom: 16px;
+    
+    &:hover, &:focus {
+      outline: none;
+      background: var(--primary-color-dark);
+    }
+	}
+
 	input.code {
 		font-size: 42px;
 		width: 248px;
@@ -37,6 +60,7 @@
 		text-align: center;
 		outline: none;
 		color: var(--primary-color);
+		transition: border-color .25s;
 
 		&:focus, &:active, &:valid {
 			border-color: var(--primary-color);

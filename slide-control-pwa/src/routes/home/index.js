@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { route } from 'preact-router';
+import { route, Link } from 'preact-router';
 import style from './style.scss';
 
 import Button from '../../components/buttons';
@@ -28,7 +28,13 @@ class Onboarding extends Component {
 class Main extends Component {
 
 	getGreeting() {
-		return 'Good Evening,';
+		let h = new Date().getHours();
+		if (h < 3) return 'Good Night,';
+		else if (h < 10) return 'Good Morning,';
+		else if (h < 13) return 'Hey there,';
+		else if (h < 18) return 'Good Afternoon,';
+		else if (h < 22) return 'Good Evening';
+		return 'Good Night,';
 	}
 
 	changeInput(e) {
@@ -37,7 +43,8 @@ class Main extends Component {
 		});
 	}
 
-	sendCode() {
+	sendCode(e) {
+		e.preventDefault();
 		route(`/controller/${this.state.input}`);
 	}
 
@@ -46,7 +53,7 @@ class Main extends Component {
 		super(props);
 		
 		this.state = {
-			input: 0
+			input: null
 		};
 
 		this.changeInput = this.changeInput.bind(this);
@@ -59,10 +66,13 @@ class Main extends Component {
 				<div class={style.logo} />
 				<h1>{this.getGreeting()}</h1>
 				<p>
-					Now just open your slides and type in your generated code to get started:
+					Now just open your slide and start slidecontrol there to get your code:<br />
 				</p>
-				<input placeholder="0000" onChange={this.changeInput} required class={style.code} type="number" /><br />
-				<Button text="DONE" action={this.sendCode} />
+				<form onSubmit={this.sendCode}>
+					<input name="code" placeholder="0000" value={this.state.input} onChange={this.changeInput} required class={style.code} type="number" /><br />
+					<input class={style.button} type="submit" value="LET'S GO" /><br />
+					<Link href="/help/">what code?</Link>
+				</form>
 			</div>
 		);
 	}

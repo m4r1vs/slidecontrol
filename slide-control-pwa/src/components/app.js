@@ -3,6 +3,7 @@ import { Router } from 'preact-router';
 
 // Code-splitting is automated for routes
 import Home from '../routes/home';
+import Help from '../routes/help';
 import Controller from '../routes/controller';
 
 import Snackbar from '../components/snackbar';
@@ -72,6 +73,7 @@ export default class App extends Component {
 				<Snackbar {...this.state.notification} />
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
+					<Help path="/help" />
 					<Controller showSnackbar={this.showSnackbar} path="/controller/:id" />
 				</Router>
 			</div>
