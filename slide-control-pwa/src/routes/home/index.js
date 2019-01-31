@@ -14,7 +14,9 @@ class Onboarding extends Component {
 	render() {
 		return (
 			<div class={style.home}>
-				<div class={style.logo} />
+				<div class={style.logo} >
+					<span>BETA</span>
+				</div>
 				<h1>Hi there,</h1>
 				<p>
 					Slidecontrol is the app to command your slides.<br />
@@ -34,7 +36,7 @@ class Main extends Component {
 		else if (h < 10) return 'Good Morning,';
 		else if (h < 13) return 'Hey there,';
 		else if (h < 18) return 'Good Afternoon,';
-		else if (h < 22) return 'Good Evening';
+		else if (h < 22) return 'Good Evening,';
 		return 'Good Night,';
 	}
 
@@ -64,7 +66,9 @@ class Main extends Component {
 	render() {
 		return (
 			<div class={style.home}>
-				<div class={style.logo} />
+				<div class={style.logo} >
+					<span>BETA</span>
+				</div>
 				<h1>{this.getGreeting()}</h1>
 				<p>
 					Now just open your slide and start slidecontrol there in order to get your code:<br />
@@ -85,14 +89,5 @@ const Home = () => {
 
 	return onboarded ? <Main /> : <Onboarding />;
 };
-
-
-(
-	<div class={style.home}>
-		<div class={style.logo} />
-		<h1>welcome to slidecontrol.</h1>
-
-	</div>
-);
 
 export default Home;

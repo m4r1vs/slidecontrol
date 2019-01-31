@@ -27,6 +27,14 @@
 		background-position: center;
 		background-size: contain;
 		background-repeat: no-repeat;
+		line-height: .4;
+
+		span {
+			position: relative;
+			color: var(--primary-color);
+			margin-right: -50px;
+			font-size: 12px;
+		}
 	}
 
 	.button {

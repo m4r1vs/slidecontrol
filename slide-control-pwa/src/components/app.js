@@ -42,7 +42,9 @@ export default class App extends Component {
 		});
 	};
 
-	showSnackbar = (text, actionText, _clickAction) => {
+	showSnackbar = (text, actionText, delay, _clickAction) => {
+
+		clearTimeout(this.timeout);
 
 		const clickAction = () => {
 			this.hideSnackbar();
@@ -56,11 +58,12 @@ export default class App extends Component {
 				clickAction
 			}
 		});
-		setTimeout(this.hideSnackbar, 3500);
+		this.timeout = setTimeout(this.hideSnackbar, delay);
 	};
 
 	constructor(props) {
 		super(props);
+		this.timeout = null;
 		this.showSnackbar = this.showSnackbar.bind(this);
 	}
 
@@ -76,7 +79,6 @@ export default class App extends Component {
 					<Help path="/help" />
 					<Controller showSnackbar={this.showSnackbar} path="/controller/:id" />
 				</Router>
-				<span class="beta">BETA (SePA 2019)</span>
 			</div>
 		);
 	}

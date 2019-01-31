@@ -3,51 +3,43 @@
 	min-height: 100%;
 	width: 100%;
 	padding-bottom: 162px;
-	padding-top: 48px;
+	padding-top: 38px;
 
 	@media screen and (orientation: landscape) {
-		padding: 48px 15vw 0 15vw;
+		padding: 38px 15vw 0 15vw;
 	}
 
 	h1 {
 		margin: 0;
 		top: 0;
-		font-size: 16px;
+		font-size: 17px;
 		width: 100vw;
 		text-align: center;
-		line-height: 48px;
-		border-bottom: var(--primary-color) 2px solid;
+		line-height: 38px;
 		position: fixed;
 		left: 0;
 		right: 0;
-		color: var(--primary-color);
-		background: rgba(33, 33, 33, 0.85);
+		background: var(--primary-color);
+		color: rgba(0, 0, 0, 0.87);
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 	}
 
 	.timer {
 		position: fixed;
-		top: 50px;
-		background: rgba(33, 33, 33, 0.85);
-		right: 0;
-		padding: 0 4px;
-		border-left: var(--primary-color) 2px solid;
-		border-bottom: var(--primary-color) 2px solid;
-		color: var(--primary-color-dark);
+		top: 48px;
+		right: 8px;
+		background: var(--primary-color);
+		padding: 0 7px;
+		line-height: 25px;
+		border-radius: 11px;
+		color: rgba(0, 0, 0, 0.87);
 		z-index: 1;
-
-		@media screen and (orientation: landscape) {
-			width: 15vw;
-		}
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 	}
 
 	div.notesContainer {
 		padding: 4px 12px;
 		color: var(--primary-color) !important;
-
-		@media screen and (orientation: landscape) {
-			background: transparent;
-			border: none;
-		}
 
 		p, h1, h2, h3, h4, h5, li, span {
 			margin: 4px 0;
@@ -62,13 +54,16 @@
 		position: fixed;
 		bottom: 0;
 		left: 0;
-		background: rgba(33, 33, 33, 0.85);
+		background: #303030;
 		right: 0;
-		border-top: var(--primary-color) 2px solid;
+		box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
+		border-top-left-radius: 34px;
+		border-top-right-radius: 34px;
 
 		@media screen and (orientation: landscape) {
 			background: transparent;
 			border: none;
+			box-shadow: none;
 		}
 
 		div {
@@ -91,11 +86,13 @@
 
 			@media screen and (orientation: landscape) {
 				position: fixed;
-				border-right: var(--primary-color) 2px solid;
-				top: 50px;
-				left: 0;
+				box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
+				background-color: #303030;
+				border-radius: 50%;
+				height: 15vw;
+				left: 12px;
 				width: 15vw;
-				height: calc(100vh - 50px);
+				bottom: 12px;
 			}
 		}
 
@@ -105,11 +102,13 @@
 
 			@media screen and (orientation: landscape) {
 				position: fixed;
-				border-left: var(--primary-color) 2px solid;
-				top: 50px;
-				right: 0;
+				background-color: #303030;
+				border-radius: 50%;
+				height: 15vw;
+				right: 12px;
+				box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
 				width: 15vw;
-				height: calc(100vh - 50px);
+				bottom: 12px;
 			}
 		}
 	}
