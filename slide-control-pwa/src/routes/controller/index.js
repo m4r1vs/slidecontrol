@@ -67,6 +67,8 @@ export default class Profile extends Component {
 			slideLoaded: false
 		};
 		
+		this.onTouchStart = null;
+		this.onTouchEnd = null;
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
 		this.db = firebase.firestore();
@@ -98,13 +100,15 @@ export default class Profile extends Component {
 					let touchstartX = 0;
 					let touchstartY = 0;
 					let touchstartTimestamp = 0;
-					this.controller.addEventListener('touchstart', e => {
+
+					this.onTouchStart = e => {
 						touchstartX = e.changedTouches[0].screenX;
 						touchstartY = e.changedTouches[0].screenY;
 						touchstartTimestamp = e.timeStamp;
-					});
+					};
+					this.controller.addEventListener('touchstart', this.onTouchStart);
 
-					this.controller.addEventListener('touchend', e => {
+					this.onTouchEnd = e => {
 						if ((e.timeStamp - touchstartTimestamp) > 750) return true;
 						if (Math.abs(touchstartY - e.changedTouches[0].screenY) > 150) return true;
 
@@ -114,11 +118,13 @@ export default class Profile extends Component {
 						if (touchstartX < e.changedTouches[0].screenX) {
 							if ((e.changedTouches[0].screenX - touchstartX) > 80) this.previousSlide();
 						}
-					});
+					};
+					this.controller.addEventListener('touchend', this.onTouchEnd);
 
 					presentations.doc(this.props.id)
 						.onSnapshot(doc => {
-							this.notesContainer.innerHTML = doc.data().notes;
+							if (doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
+							else this.notesContainer.innerHTML = <p>No notes for this slide :/</p>;
 							this.setState({
 								totalSlides: doc.data().totalSlides,
 								currentSlide: doc.data().position
@@ -131,6 +137,8 @@ export default class Profile extends Component {
 
 	componentWillUnmount() {
 		clearInterval(this.incrementer);
+		this.controller.removeEventListener('touchstart', this.onTouchStart, false);
+		this.controller.removeEventListener('touchend', this.onTouchEnd, false);
 	}
 	
 	render({ id }) {
