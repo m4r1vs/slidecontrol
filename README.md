@@ -23,7 +23,7 @@ If you have [nvm](https://github.com/creationix/nvm), you also should run `nvm u
 If you want to see how it currently looks like, you can go ahead and give it a visit via [https://mnged.me](https://mnged.me). This page is hosted on Firebase Hosting and should be updated. But please don't get driven crazy if something does not work. Everything is still under construction!
 ## About
 MNGED is a so called Progressive Web App (PWA). PWA's stand out because they are fast 🚀 and always work, even with no connection to the internet.
-![Screenshot of slidecontrol](https://raw.githubusercontent.com/m4r1vs/slidecontrol/master/slide-control-pwa/src/assets/Phone%20Angle%201.png)
+![Screenshot of slidecontrol](https://raw.githubusercontent.com/m4r1vs/slidecontrol/master/slide-control-pwa/src/assets/phone_angle_1.png)
 MNGED uses [Firebase 🔥](https://firebase.google.com) for authentication and as a database. Firebase is developed and maintained by Google. The authentication is build by the same team that also build the Google Sign In and is responsible for other security at Google. But that also means that Google has access to our database which you may or may not care about.
 
 As the UI provider I decided to go with [Preact](https://preactjs.com), a lightweight 3kb fork of React. For storing the state I use [MobX](https://mobx.js.org/getting-started.html), it's a simple but powerful state management solution. And finally as the database I went with Firebase, a mostly free hosting and database provided by Google. The nice thing about firebase is that it comes with a nice JavaScript library which enables Authentication and live-updates when the database changes.
