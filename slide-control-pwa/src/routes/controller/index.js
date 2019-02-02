@@ -148,7 +148,7 @@ export default class Profile extends Component {
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>
 				{this.state.slideLoaded && <span fadeIn onClick={this.startTimer} class={style.timer}>{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }</span>}
-				<h1 fadeIn><i onClick={this.goHome} class="material-icons">home</i>{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}</h1>
+				<h1><i onClick={this.goHome} class="material-icons">home</i>{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}</h1>
 				<div fadeIn class={style.notesContainer} ref={div => this.notesContainer = div} />
 				{this.state.slideLoaded && <div>
 					<div class={style.container}>

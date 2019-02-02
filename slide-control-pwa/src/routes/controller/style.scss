@@ -22,6 +22,11 @@
 		background: var(--primary-color);
 		color: rgba(0, 0, 0, 0.87);
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+		transform: translateY(-38px);
+		animation: slideDown ease-out 1;
+		animation-fill-mode:forwards;
+		animation-duration: .22s;
+		animation-delay: 0;
 
 		i {
 			position: absolute;
@@ -135,8 +140,17 @@
 }
 
 @keyframes slideUp {
-	form {
+	from {
 		transform: translateY(162px);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideDown {
+	from {
+		transform: translateY(-38px);
 	}
 	to {
 		transform: translateY(0);
