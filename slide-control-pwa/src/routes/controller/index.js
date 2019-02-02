@@ -130,23 +130,23 @@ export default class Profile extends Component {
 
 					this.onTouchEnd = e => {
 
-						// make sure DeltaY is not too big and DeltaT isn't either
-						if ((e.timeStamp - touchstartTimestamp) > 750) return true;
-						if (Math.abs(touchstartY - e.changedTouches[0].screenY) > 150) return true;
+						const touchend = e.changedTouches[0];
 
-						// gesture right-to-left
-						if (touchstartX > e.changedTouches[0].screenX) {
-							if ((touchstartX - e.changedTouches[0].screenX) > 80) this.nextSlide();
-						}
+						// Δ's
+						const deltaY = Math.abs(touchend.screenY - touchstartY),
+							deltaX = Math.abs(touchend.screenX - touchstartX),
+							deltaT = e.timeStamp - touchstartTimestamp;
 
-						// gesture left-to-right
-						if (touchstartX < e.changedTouches[0].screenX) {
-							if ((e.changedTouches[0].screenX - touchstartX) > 80) this.previousSlide();
-						}
+						// make sure ΔY & ΔT aren't too big and ΔX not too small
+						if (deltaY > 150 || deltaT > 750 || deltaX < 80) return true;
+
+						// gesture right-to-left and left-to-right
+						if (touchstartX > touchend.screenX) this.nextSlide();
+						else this.previousSlide();
 
 					};
 
-					// listen for finger-up event
+					// fire function above whenever finger is lifted from screen
 					this.controller.addEventListener('touchend', this.onTouchEnd);
 
 					// update notes etc. on slide change

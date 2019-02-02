@@ -27,6 +27,7 @@
 		animation-fill-mode:forwards;
 		animation-duration: .22s;
 		animation-delay: 0;
+		z-index: 1;
 
 		i {
 			position: absolute;
@@ -60,7 +61,7 @@
 		p, h1, h2, h3, h4, h5, li, span {
 			opacity:0;
 			animation: fadeIn ease-in 1;
-			animation-fill-mode:forwards;
+			animation-fill-mode: forwards;
 			animation-duration: .22s;
 			animation-delay: 0;
 			margin: 4px 0;
