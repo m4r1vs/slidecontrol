@@ -4,6 +4,7 @@ import { Link } from 'preact-router';
 
 const Help = props => (
 	<div class={style.help} fadeIn>
+
 		<h1>HOW TO USE</h1>
 		<p>
 				Before you can use slidecontrol you need to install our Chrome Extension.
@@ -21,6 +22,7 @@ const Help = props => (
 				If everything worked as intended you should have a small code to be
 				entered <Link href="/">here</Link>.
 		</p>
+
 		<h1>HOW IT WORKS</h1>
 		<p>
 				Slidecontrol was developed by Niels Kapeller and Marius Niveri as a project
@@ -39,6 +41,7 @@ const Help = props => (
 				Once you enter the generated code in our phone-app it then is able to change the data
 				in the right document in order for the Chrome Extension to switch slides.
 		</p>
+		
 	</div>
 );
 

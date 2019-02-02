@@ -18,8 +18,7 @@ html, body {
 
 a {
 	color: var(--primary-color-dark);
-	transition: color .25s;
-
+	
 	&:hover {
 		color: var(--primary-color);
 	}

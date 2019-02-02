@@ -8,7 +8,7 @@
     font-size: 16px;
     user-select: none;
     width: 100vw;
-    transition: transform .42s;
+    transition: transform .42s !important;
   
     @media only screen and (min-width: 700px) {
       min-width: 288px;

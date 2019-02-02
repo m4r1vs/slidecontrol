@@ -1,16 +1,17 @@
 import { h, Component } from 'preact';
 import { Router } from 'preact-router';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
-// Code-splitting is automated for routes
+// routes
 import Home from '../routes/home';
 import Help from '../routes/help';
 import Controller from '../routes/controller';
 
+// Components
 import Snackbar from '../components/snackbar';
 
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-
+// Initialize Firebase
 let config = {
 	apiKey: 'AIzaSyCqS1FW46byte9poi87zoS1dGxy1nMlVZI',
 	authDomain: 'slide-control-firebase.firebaseapp.com',
@@ -24,14 +25,6 @@ firebase.initializeApp(config);
 
 export default class App extends Component {
 	
-	/** Gets fired when the route changes.
-	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
-	 *	@param {string} event.url	The newly routed URL
-	 */
-	handleRoute = e => {
-		this.currentUrl = e.url;
-	};
-
 	hideSnackbar = () => {
 		this.setState({
 			notification: {
@@ -40,26 +33,26 @@ export default class App extends Component {
 				clickAction: () => console.error('cLiCkEd An EmTy NoTiFiCaTiOn :!§')
 			}
 		});
-	};
+	}
 
-	showSnackbar = (text, actionText, delay, _clickAction) => {
+	showSnackbar = (text, actionText, delay, clickAction) => {
 
 		clearTimeout(this.timeout);
 
-		const clickAction = () => {
+		const _clickAction = () => {
 			this.hideSnackbar();
-			_clickAction();
+			clickAction();
 		};
 
 		this.setState({
 			notification: {
 				text,
 				actionText,
-				clickAction
+				clickAction: _clickAction
 			}
 		});
 		this.timeout = setTimeout(this.hideSnackbar, delay);
-	};
+	}
 
 	constructor(props) {
 		super(props);
@@ -71,7 +64,11 @@ export default class App extends Component {
 
 		return (
 			<div id="app">
+
+				{/* Global Components */}
 				<Snackbar {...this.state.notification} />
+
+				{/* Different routes */}
 				<Router onChange={this.handleRoute}>
 					<Home path="/" />
 					<Help path="/help" />

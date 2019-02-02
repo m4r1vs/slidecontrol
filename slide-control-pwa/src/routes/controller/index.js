@@ -8,50 +8,58 @@ import { route } from 'preact-router';
 const formattedSeconds = sec => Math.floor(sec / 60) + ':' + ('0' + sec % 60).slice(-2);
 
 export default class Profile extends Component {
-	
-	nextSlide() {
+
+	switchSlides = direction => {
+
 		navigator.vibrate(10);
-		const presentations = this.db.collection('presentations');
-		presentations.doc(this.props.id).update({
-			command: 'next',
-			timestamp: new Date().getTime()
-		});
+		let presentations = this.db.collection('presentations');
+
+		presentations.doc(this.props.id)
+			.update({
+				command: direction,
+				timestamp: new Date().getTime()
+			});
+
 	}
 
-	previousSlide() {
-		navigator.vibrate(10);
-		const presentations = this.db.collection('presentations');
-		presentations.doc(this.props.id).update({
-			command: 'back',
-			timestamp: new Date().getTime()
-		});
-	}
+	startTimer = () => {
 
-	startTimer() {
 		if (!this.state.timerRunning) {
+
 			this.setState({
 				timerRunning: true
 			});
+
 			if (this.state.secondsElapsed === 0) {
+
 				this.setState({
 					secondsElapsed: 1
 				});
+
 				this.props.showSnackbar('Started new timer for you', null, 2000, () => console.log('App did big oopsie doopsie'));
+
 			}
+
 			else this.props.showSnackbar(`Resumed timer for you at ${formattedSeconds(this.state.secondsElapsed)}`, null, 2000, () => console.log('App did big oopsie doopsie vol. II'));
+			
 			this.incrementer = setInterval(() => {
 				this.setState(state => ({ secondsElapsed: state.secondsElapsed + 1 }));
 			}, 1000);
 
 		}
+
 		else {
+
 			this.setState({
 				timerRunning: false
 			});
+
 			this.props.showSnackbar(`Paused timer for you at ${formattedSeconds(this.state.secondsElapsed)}`, 'RESET IT', 3500, () => this.setState({
 				secondsElapsed: 0
 			}));
+
 			clearInterval(this.incrementer);
+
 		}
 	}
 
@@ -73,29 +81,36 @@ export default class Profile extends Component {
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
 		this.db = firebase.firestore();
-		this.nextSlide = this.nextSlide.bind(this);
-		this.previousSlide = this.previousSlide.bind(this);
+		this.nextSlide = () => this.switchSlides('next');
+		this.previousSlide = () => this.switchSlides('back');
 		this.goHome = () => route('/');
 
 	}
 
 	componentDidMount() {
+
 		const presentations = this.db.collection('presentations');
+
 		presentations.doc(this.props.id).get()
 			.then(doc => {
 
 				if (!doc.exists) {
 					this.props.showSnackbar(`You just did a big oopsie doopsie, cz the code you entered (${this.props.id}) is invalid.`, 'FUCK, GO BACK!', 8000, () => route('/'));
 				}
+
 				else {
+
 					this.setState({
 						slideLoaded: true
 					});
 
-					this.title = doc.data().title;
 					if (this.notes !== doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
+					
+					this.title = doc.data().title;
 					this.notes = doc.data().notes;
+					
 					this.props.showSnackbar(`Synced to "${this.title}" (#${this.props.id})`, null, 3500, () => console.log('Hey there :)'));
+					
 					presentations.doc(this.props.id).update({
 						devicesConnected: doc.data().devicesConnected + 1
 					});
@@ -109,21 +124,32 @@ export default class Profile extends Component {
 						touchstartY = e.changedTouches[0].screenY;
 						touchstartTimestamp = e.timeStamp;
 					};
+
+					// listen for finger-move event
 					this.controller.addEventListener('touchstart', this.onTouchStart);
 
 					this.onTouchEnd = e => {
+
+						// make sure DeltaY is not too big and DeltaT isn't either
 						if ((e.timeStamp - touchstartTimestamp) > 750) return true;
 						if (Math.abs(touchstartY - e.changedTouches[0].screenY) > 150) return true;
 
+						// gesture right-to-left
 						if (touchstartX > e.changedTouches[0].screenX) {
 							if ((touchstartX - e.changedTouches[0].screenX) > 80) this.nextSlide();
 						}
+
+						// gesture left-to-right
 						if (touchstartX < e.changedTouches[0].screenX) {
 							if ((e.changedTouches[0].screenX - touchstartX) > 80) this.previousSlide();
 						}
+
 					};
+
+					// listen for finger-up event
 					this.controller.addEventListener('touchend', this.onTouchEnd);
 
+					// update notes etc. on slide change
 					presentations.doc(this.props.id)
 						.onSnapshot(doc => {
 							if (this.notes !== doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
@@ -138,6 +164,7 @@ export default class Profile extends Component {
 			});
 	}
 
+	// clear some scheduled code when exiting component
 	componentWillUnmount() {
 		clearInterval(this.incrementer);
 		this.controller.removeEventListener('touchstart', this.onTouchStart, false);
@@ -147,14 +174,34 @@ export default class Profile extends Component {
 	render({ id }) {
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>
-				{this.state.slideLoaded && <span fadeIn onClick={this.startTimer} class={style.timer}>{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }</span>}
-				<h1><i onClick={this.goHome} class="material-icons">home</i>{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}</h1>
-				<div fadeIn class={style.notesContainer} ref={div => this.notesContainer = div} />
+
+				{/* timer */}
+				{this.state.slideLoaded && (
+					<span fadeIn onClick={this.startTimer} class={style.timer}>
+						{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }
+					</span>)
+				}
+
+				{/* header */}
+				<h1>
+					<i onClick={this.goHome} class="material-icons">home</i>
+					{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}
+				</h1>
+
+				{/* Notes */}
+				<div
+					fadeIn
+					class={style.notesContainer}
+					ref={div => this.notesContainer = div}
+				/>
+
+				{/* Next/Previous slide buttons */}
 				{this.state.slideLoaded && <div>
 					<div class={style.container}>
 						<div class={style.previousButton} onClick={this.previousSlide} />
 						<div class={style.nextButton} onClick={this.nextSlide} />
 					</div></div>}
+
 			</div>
 		);
 	}
