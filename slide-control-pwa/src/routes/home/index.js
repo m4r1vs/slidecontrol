@@ -74,7 +74,15 @@ class Main extends Component {
 					Now just open your slide and start slidecontrol there in order to get your code:<br />
 				</p>
 				<form onSubmit={this.sendCode}>
-					<input name="code" placeholder="0000" value={this.state.input} onChange={this.changeInput} required class={style.code} type="number" /><br />
+					<input
+						name="code"
+						placeholder="0000"
+						value={this.state.input}
+						onChange={this.changeInput}
+						required class={style.code}
+						type="number"
+					/>
+					<br />
 					<input class={style.button} type="submit" value="LET'S GO" /><br />
 					<Link href="/help/">what code?</Link>
 				</form>
