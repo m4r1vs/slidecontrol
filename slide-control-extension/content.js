@@ -31,7 +31,7 @@ const spawnId = function () {
 			}
 		})
 		.catch(function (err) {
-			alert("Error in Slidecontrol (#021)");
+			alert("Oopsie Doopsie, slidecontrol failed connecting to the serva UwU");
 		})
 }
 

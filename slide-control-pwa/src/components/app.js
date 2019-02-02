@@ -69,8 +69,6 @@ export default class App extends Component {
 
 	render() {
 
-		console.log(this.state);
-
 		return (
 			<div id="app">
 				<Snackbar {...this.state.notification} />

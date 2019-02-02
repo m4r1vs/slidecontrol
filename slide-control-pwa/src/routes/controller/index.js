@@ -67,6 +67,7 @@ export default class Profile extends Component {
 			slideLoaded: false
 		};
 		
+		this.notes = '';
 		this.onTouchStart = null;
 		this.onTouchEnd = null;
 		this.incrementer = null;
@@ -74,6 +75,7 @@ export default class Profile extends Component {
 		this.db = firebase.firestore();
 		this.nextSlide = this.nextSlide.bind(this);
 		this.previousSlide = this.previousSlide.bind(this);
+		this.goHome = () => route('/');
 
 	}
 
@@ -91,7 +93,8 @@ export default class Profile extends Component {
 					});
 
 					this.title = doc.data().title;
-					this.notesContainer.innerHTML = doc.data().notes;
+					if (this.notes !== doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
+					this.notes = doc.data().notes;
 					this.props.showSnackbar(`Synced to "${this.title}" (#${this.props.id})`, null, 3500, () => console.log('Hey there :)'));
 					presentations.doc(this.props.id).update({
 						devicesConnected: doc.data().devicesConnected + 1
@@ -123,8 +126,8 @@ export default class Profile extends Component {
 
 					presentations.doc(this.props.id)
 						.onSnapshot(doc => {
-							if (doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
-							else this.notesContainer.innerHTML = <p>No notes for this slide :/</p>;
+							if (this.notes !== doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
+							this.notes = doc.data().notes;
 							this.setState({
 								totalSlides: doc.data().totalSlides,
 								currentSlide: doc.data().position
@@ -144,9 +147,9 @@ export default class Profile extends Component {
 	render({ id }) {
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>
-				{this.state.slideLoaded && <span onClick={this.startTimer} class={style.timer}>{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }</span>}
-				<h1>{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}</h1>
-				<div class={style.notesContainer} ref={div => this.notesContainer = div} />
+				{this.state.slideLoaded && <span fadeIn onClick={this.startTimer} class={style.timer}>{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }</span>}
+				<h1 fadeIn><i onClick={this.goHome} class="material-icons">home</i>{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}</h1>
+				<div fadeIn class={style.notesContainer} ref={div => this.notesContainer = div} />
 				{this.state.slideLoaded && <div>
 					<div class={style.container}>
 						<div class={style.previousButton} onClick={this.previousSlide} />

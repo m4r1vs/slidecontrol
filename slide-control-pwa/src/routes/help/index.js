@@ -5,7 +5,7 @@ import { Link } from 'preact-router';
 const Help = props => {
 
 	return (
-		<div class={style.help}>
+		<div class={style.help} fadeIn>
 			<h1>HOW TO USE</h1>
 			<p>
 				Before you can use slidecontrol you need to install our Chrome Extension.

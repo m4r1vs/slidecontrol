@@ -65,7 +65,7 @@ class Main extends Component {
 
 	render() {
 		return (
-			<div class={style.home}>
+			<div class={style.home} fadeIn>
 				<div class={style.logo} >
 					<span>BETA</span>
 				</div>

@@ -9,9 +9,9 @@ html, body {
 	padding: 0;
 	margin: 0;
 	background: #212121;
-	font-family: 'Roboto', 'Helvetica Neue', arial, sans-serif;
+	font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', arial, sans-serif;
 	font-weight: 400;
-	color: rgba(255,255,255,.87);
+	color: var(--primary-color);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -31,4 +31,21 @@ a {
 
 #app {
 	height: 100%;
+}
+
+*[fadeIn=true] {
+	opacity:0;
+	animation:fadeIn ease-in 1;
+	animation-fill-mode:forwards;
+	animation-duration: .22s;
+	animation-delay: 0;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
