@@ -31,6 +31,7 @@
 		i {
 			position: absolute;
 			left: 7px;
+			cursor: pointer;
 			top: 7px;
 		}
 	}
@@ -99,7 +100,6 @@
 			background-size: contain;
 			display: inline-block;
 			filter: grayscale(40%);
-			transition: filter .25s;
 
 			&:hover {
 				filter: grayscale(0);
