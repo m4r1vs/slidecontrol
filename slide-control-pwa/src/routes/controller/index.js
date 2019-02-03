@@ -63,6 +63,14 @@ export default class Profile extends Component {
 		}
 	}
 
+	toggleLightMode = () => {
+		let lightMode = !this.state.lightMode;
+		this.setState({
+			lightMode
+		});
+		document.body.style.background = lightMode ? '#fafafa' : '#212121';
+	}
+
 	constructor(props) {
 
 		super(props);
@@ -72,7 +80,8 @@ export default class Profile extends Component {
 			currentSlide: 0,
 			secondsElapsed: 0,
 			timerRunning: false,
-			slideLoaded: false
+			slideLoaded: false,
+			lightMode: false
 		};
 		
 		this.notes = '';
@@ -80,6 +89,7 @@ export default class Profile extends Component {
 		this.onTouchEnd = null;
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
+		this.toggleLightMode = this.toggleLightMode.bind(this);
 		this.db = firebase.firestore();
 		this.nextSlide = () => this.switchSlides('next');
 		this.previousSlide = () => this.switchSlides('back');
@@ -172,6 +182,10 @@ export default class Profile extends Component {
 	}
 	
 	render({ id }) {
+
+		document.querySelector('meta[name=theme-color]')
+			.setAttribute('content', '#ffbc16');
+
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>
 
@@ -186,12 +200,16 @@ export default class Profile extends Component {
 				<h1>
 					<i onClick={this.goHome} class="material-icons">home</i>
 					{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}
+					<i onClick={this.toggleLightMode} class="material-icons" style={{ right: '7px', left: 'auto' }}>
+						{this.state.lightMode ? 'brightness_7' : 'brightness_2'}
+					</i>
 				</h1>
 
 				{/* Notes */}
 				<div
 					fadeIn
 					class={style.notesContainer}
+					light={this.state.lightMode}
 					ref={div => this.notesContainer = div}
 				/>
 

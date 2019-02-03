@@ -68,6 +68,11 @@ class Main extends Component {
 	}
 
 	render() {
+
+		document.body.style.background = '#212121';
+		document.querySelector('meta[name=theme-color]')
+			.setAttribute('content', '#212121');
+
 		return (
 			<div class={style.home} fadeIn>
 
