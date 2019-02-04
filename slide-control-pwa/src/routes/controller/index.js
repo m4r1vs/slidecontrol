@@ -11,7 +11,7 @@ export default class Profile extends Component {
 
 	switchSlides = direction => {
 
-		navigator.vibrate(10);
+		if (navigator.vibrate) navigator.vibrate(10);
 		let presentations = this.db.collection('presentations');
 
 		presentations.doc(this.props.id)

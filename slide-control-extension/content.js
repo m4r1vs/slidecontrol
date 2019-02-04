@@ -88,22 +88,24 @@ const init = function () {
 	slidecontrolProxy.style.margin = "0 4px";
 	slidecontrolProxy.style.padding = "0";
 
-	slidecontrolProxy.innerHTML = '<div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"></div>' + // the devider
-
-																'<div class="goog-inline-block goog-flat-button" id="slidecontrol-start-block">' +
-																	'<div class="punch-viewer-captioned-button" id="slidecontrol-start-button">' +
-																		'<div style="width:24px; height:24px;background-image:url(https://i.ibb.co/YPnSnLP/logo-ohnekontur-1.png);filter:grayscale(100);background-size:contain;background-position:center;background-repeat:no-repeat">' +
-																		'</div>' +
-																		'<div class="punch-viewer-speaker-notes-text goog-inline-block">' +
-																			'Start slidecontrol' +
-																		'</div>' +
-																	'</div>' + 
-																'</div>' +
-
-																'<div id="slidecontrol-id-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; line-height: 16px;">' +
-																	'<div>Your ID:</div>' +
-																	'<div id="slidecontrol-id-text" style="font-size: 16px; font-weight: 600;" />' +
-																'</div>';
+	slidecontrolProxy.innerHTML = 	'<div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"></div>' + // the devider
+									
+									// start slidecontrol button
+									'<div class="goog-inline-block goog-flat-button" id="slidecontrol-start-block">' +
+										'<div class="punch-viewer-captioned-button" id="slidecontrol-start-button">' +
+											'<div style="width:24px; height:24px;background-image:url(https://i.ibb.co/YPnSnLP/logo-ohnekontur-1.png);filter:grayscale(100);background-size:contain;background-position:center;background-repeat:no-repeat">' +
+											'</div>' +
+											'<div class="punch-viewer-speaker-notes-text goog-inline-block">' +
+												'Start slidecontrol' +
+											'</div>' +
+										'</div>' + 
+									'</div>' +
+									
+									// gets rendered after slidecontrol started
+									'<div id="slidecontrol-id-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; line-height: 16px; cursor: text;">' +
+										'<div>Your ID:</div>' +
+										'<div id="slidecontrol-id-text" style="font-size: 16px; font-weight: 600;" />' +
+									'</div>';
 
 	googleSlideController.appendChild(slidecontrolProxy);
 	

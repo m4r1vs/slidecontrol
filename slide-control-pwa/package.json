@@ -12,7 +12,8 @@
     "build": "preact build --template src/template.html --no-prerender --production --service-worker",
     "serve": "preact build --template src/template.html && preact serve",
     "dev": "preact watch --template src/template.html",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": "eslint-config-synacor"
