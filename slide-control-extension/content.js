@@ -121,8 +121,8 @@ const init = function () {
 		chrome.runtime.sendMessage("Your code for this slide is " + presentationId.toString());
 
 		let startButton = document.querySelector("#slidecontrol-start-block"),
-				idContainer = document.querySelector("#slidecontrol-id-block"),
-				idText = document.querySelector("#slidecontrol-id-text");
+			idContainer = document.querySelector("#slidecontrol-id-block"),
+			idText = document.querySelector("#slidecontrol-id-text");
 
 		// hide the start button and show the ID
 		startButton.style.display = "none";
@@ -130,12 +130,12 @@ const init = function () {
 		idText.innerHTML = presentationId.toString();
 
 		let timestamp = new Date().getTime(),
-				googleSlideButton = document.querySelector(".goog-flat-menu-button-caption"), // Google button containing further info about slide
-				devicesConnected = 0, // in order to display "new device synced" notification
-				position = parseInt(googleSlideButton.getAttribute("aria-posinset")), // current Slide
-				totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")), // total Slides
-				notes = presentationInfo.docData[1][position - 1][9], // notes as HTML
-				title = document.querySelector('[property="og:title"]').content; // title of presentation
+			googleSlideButton = document.querySelector(".goog-flat-menu-button-caption"), // Google button containing further info about slide
+			devicesConnected = 0, // in order to display "new device synced" notification
+			position = parseInt(googleSlideButton.getAttribute("aria-posinset")), // current Slide
+			totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")), // total Slides
+			notes = presentationInfo.docData[1][position - 1][9], // notes as HTML
+			title = document.querySelector('[property="og:title"]').content; // title of presentation
 
 		// in order to detect change of slides
 		const observer = new MutationObserver(function () {
