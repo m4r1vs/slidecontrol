@@ -1,0 +1,19 @@
+{
+  "name": "slide-control-server",
+  "version": "1.0.0",
+  "description": "Server for slide-control",
+  "main": "server.js",
+  "scripts": {
+	  "start": "node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m4r1vs/slidecontrol.git"
+  },
+  "author": "Marius Niveri <marius.niveri@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m4r1vs/slidecontrol/issues"
+  },
+  "homepage": "https://github.com/m4r1vs/slidecontrol#readme"
+}
