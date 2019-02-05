@@ -4,7 +4,7 @@
   "description": "Server for slide-control",
   "main": "server.js",
   "scripts": {
-	  "start": "node ./server.js"
+    "start": "node ./server.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/m4r1vs/slidecontrol/issues"
   },
-  "homepage": "https://github.com/m4r1vs/slidecontrol#readme"
+  "homepage": "https://github.com/m4r1vs/slidecontrol#readme",
+  "dependencies": {
+    "websocket": "^1.0.28",
+    "ws": "^6.1.3"
+  }
 }

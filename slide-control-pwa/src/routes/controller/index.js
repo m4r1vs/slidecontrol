@@ -10,15 +10,11 @@ const formattedSeconds = sec => Math.floor(sec / 60) + ':' + ('0' + sec % 60).sl
 export default class Profile extends Component {
 
 	switchSlides = direction => {
-
 		if (navigator.vibrate) navigator.vibrate(10);
-		let presentations = this.db.collection('presentations');
-
-		presentations.doc(this.props.id)
-			.update({
-				command: direction,
-				timestamp: new Date().getTime()
-			});
+		this.Socket.send(JSON.stringify({
+			reason: direction === 'next' ? 'next-slide' : 'previous-slide',
+			code: this.props.id
+		}));
 
 	}
 
@@ -77,108 +73,158 @@ export default class Profile extends Component {
 
 		this.state = {
 			totalSlides: 0,
-			currentSlide: 0,
+			activeSlide: 0,
 			secondsElapsed: 0,
+			title: null,
 			timerRunning: false,
 			slideLoaded: false,
-			lightMode: false
+			lightMode: false,
+			laserPointer: true
 		};
-		
+
+		window.WebSocket = window.WebSocket || window.MozWebSocket;
+		this.Socket = null;
 		this.notes = '';
-		this.onTouchStart = null;
-		this.onTouchEnd = null;
+		this.onTouchStartNotes = null;
+		this.onTouchEndNotes = null;
+		this.onTouchStartPointer = null;
+		this.onTouchMovePointer = null;
+		this.onTouchEndPointer = null;
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
 		this.toggleLightMode = this.toggleLightMode.bind(this);
-		this.db = firebase.firestore();
 		this.nextSlide = () => this.switchSlides('next');
 		this.previousSlide = () => this.switchSlides('back');
 		this.goHome = () => route('/');
 
 	}
 
+	componentWillMount() {
+		this.Socket = new WebSocket('ws://localhost:1337');
+		this.Socket.onopen = () => {
+			this.Socket.send(JSON.stringify({
+				reason: 'register-controller',
+				code: this.props.id
+			}));
+		};
+	}
+
 	componentDidMount() {
 
-		const presentations = this.db.collection('presentations');
+		this.Socket.onmessage = message => {
+			message = JSON.parse(message.data);
+			
+			if (message.reason === 'slide-code-not-found') {
+				this.props.showSnackbar(
+					`You just did a big oopsie doopsie, cz the code you entered (${this.props.id}) is invalid.`,
+					'FUCK, GO BACK!',
+					8000,
+					() => route('/')
+				);
+			}
 
-		presentations.doc(this.props.id).get()
-			.then(doc => {
+			if (message.reason === 'send-slide-info') {
+				this.props.showSnackbar(`Synced to "${message.title}" (#${this.props.id})`, null, 3500, () => console.log('Hey there :)'));
+				this.notesContainer.innerHTML = message.notes;
+				this.setState({
+					totalSlides: message.totalSlides,
+					activeSlide: message.activeSlide,
+					slideLoaded: true,
+					title: message.title
+				});
+			}
 
-				if (!doc.exists) {
-					this.props.showSnackbar(`You just did a big oopsie doopsie, cz the code you entered (${this.props.id}) is invalid.`, 'FUCK, GO BACK!', 8000, () => route('/'));
-				}
+			if (message.reason === 'slide-changed') {
+				this.notesContainer.innerHTML = message.notes;
+				this.setState({
+					activeSlide: message.currentSlide
+				});
+			}
+		};
 
-				else {
+		this.Socket.onerror = error => console.error(error);
 
-					this.setState({
-						slideLoaded: true
-					});
+		let touchstartXnotes = 0;
+		let touchstartYnotes = 0;
+		let touchstartTimestamp = 0;
 
-					if (this.notes !== doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
-					
-					this.title = doc.data().title;
-					this.notes = doc.data().notes;
-					
-					this.props.showSnackbar(`Synced to "${this.title}" (#${this.props.id})`, null, 3500, () => console.log('Hey there :)'));
-					
-					presentations.doc(this.props.id).update({
-						devicesConnected: doc.data().devicesConnected + 1
-					});
-					
-					let touchstartX = 0;
-					let touchstartY = 0;
-					let touchstartTimestamp = 0;
+		this.onTouchStartNotes = e => {
+			touchstartXnotes = e.changedTouches[0].screenX;
+			touchstartYnotes = e.changedTouches[0].screenY;
+			touchstartTimestamp = e.timeStamp;
+		};
 
-					this.onTouchStart = e => {
-						touchstartX = e.changedTouches[0].screenX;
-						touchstartY = e.changedTouches[0].screenY;
-						touchstartTimestamp = e.timeStamp;
-					};
+		// listen for finger-move event
+		this.notesContainer.addEventListener('touchstart', this.onTouchStartNotes);
 
-					// listen for finger-move event
-					this.controller.addEventListener('touchstart', this.onTouchStart);
+		this.onTouchEndNotes = e => {
 
-					this.onTouchEnd = e => {
+			const touchend = e.changedTouches[0];
 
-						const touchend = e.changedTouches[0];
+			// Δ's
+			const deltaY = Math.abs(touchend.screenY - touchstartYnotes),
+				deltaX = Math.abs(touchend.screenX - touchstartXnotes),
+				deltaT = e.timeStamp - touchstartTimestamp;
 
-						// Δ's
-						const deltaY = Math.abs(touchend.screenY - touchstartY),
-							deltaX = Math.abs(touchend.screenX - touchstartX),
-							deltaT = e.timeStamp - touchstartTimestamp;
+			// make sure ΔY & ΔT aren't too big and ΔX not too small
+			if (deltaY > 150 || deltaT > 750 || deltaX < 80) return true;
 
-						// make sure ΔY & ΔT aren't too big and ΔX not too small
-						if (deltaY > 150 || deltaT > 750 || deltaX < 80) return true;
+			// gesture right-to-left and left-to-right
+			if (touchstartXnotes > touchend.screenX) this.nextSlide();
+			else this.previousSlide();
 
-						// gesture right-to-left and left-to-right
-						if (touchstartX > touchend.screenX) this.nextSlide();
-						else this.previousSlide();
+		};
 
-					};
+		// fire function above whenever finger is lifted from screen
+		this.notesContainer.addEventListener('touchend', this.onTouchEndNotes);
 
-					// fire function above whenever finger is lifted from screen
-					this.controller.addEventListener('touchend', this.onTouchEnd);
+		let touchstartXpointer = 0;
+		let touchstartYpointer = 0;
 
-					// update notes etc. on slide change
-					presentations.doc(this.props.id)
-						.onSnapshot(doc => {
-							if (this.notes !== doc.data().notes) this.notesContainer.innerHTML = doc.data().notes;
-							this.notes = doc.data().notes;
-							this.setState({
-								totalSlides: doc.data().totalSlides,
-								currentSlide: doc.data().position
-							});
-						});
-				}
+		this.onTouchStartPointer = e => {
 
-			});
+			touchstartXpointer = e.changedTouches[0].clientX,
+			touchstartYpointer = e.changedTouches[0].clientY,
+
+			this.Socket.send(JSON.stringify({
+				reason: 'laserpointer-start',
+				code: this.props.id
+			}));
+		};
+
+		this.laserPointer.addEventListener('touchstart', this.onTouchStartPointer);
+
+		this.onTouchMovePointer = e => {
+			this.Socket.send(JSON.stringify({
+				reason: 'laserpointer-move',
+				code: this.props.id,
+				x: e.changedTouches[0].clientX - touchstartXpointer,
+				y: e.changedTouches[0].clientY - touchstartYpointer
+			}));
+		};
+
+		this.laserPointer.addEventListener('touchmove', this.onTouchMovePointer);
+
+		this.onTouchEndPointer = e => {
+			this.Socket.send(JSON.stringify({
+				reason: 'laserpointer-end',
+				code: this.props.id
+			}));
+		};
+
+		this.laserPointer.addEventListener('touchend', this.onTouchEndPointer);
+		
 	}
 
 	// clear some scheduled code when exiting component
 	componentWillUnmount() {
 		clearInterval(this.incrementer);
-		this.controller.removeEventListener('touchstart', this.onTouchStart, false);
-		this.controller.removeEventListener('touchend', this.onTouchEnd, false);
+		this.Socket.close();
+		this.notesContainer.removeEventListener('touchstart', this.onTouchStartNotes, false);
+		this.notesContainer.removeEventListener('touchend', this.onTouchEndNotes, false);
+		this.laserPointer.removeEventListener('touchstart', this.onTouchStartPointer, false);
+		this.laserPointer.removeEventListener('touchmove', this.onTouchMovePointer, false);
+		this.laserPointer.removeEventListener('touchend', this.onTouchEndPointer, false);
 	}
 	
 	render({ id }) {
@@ -199,7 +245,7 @@ export default class Profile extends Component {
 				{/* header */}
 				<h1>
 					<i onClick={this.goHome} class="material-icons">home</i>
-					{this.title || 'Loading...'} {this.state.currentSlide}/{this.state.totalSlides}
+					{this.state.title || 'Loading...'} {this.state.activeSlide}/{this.state.totalSlides}
 					<i onClick={this.toggleLightMode} class="material-icons" style={{ right: '7px', left: 'auto' }}>
 						{this.state.lightMode ? 'brightness_7' : 'brightness_2'}
 					</i>
@@ -208,9 +254,18 @@ export default class Profile extends Component {
 				{/* Notes */}
 				<div
 					fadeIn
+					style={{ display: !this.state.laserPointer ? 'block' : 'none' }}
 					class={style.notesContainer}
 					light={this.state.lightMode}
 					ref={div => this.notesContainer = div}
+				/>
+
+				{/* laserpointer */}
+				<div
+					style={{ display: this.state.laserPointer ? 'block' : 'none' }}
+					class={style.laserPointer}
+					light={this.state.lightMode}
+					ref={div => this.laserPointer = div}
 				/>
 
 				{/* Next/Previous slide buttons */}

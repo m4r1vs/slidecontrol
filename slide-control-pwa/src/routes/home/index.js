@@ -53,7 +53,12 @@ class Main extends Component {
 
 	sendCode(e) {
 		e.preventDefault();
-		route(`/controller/${this.state.input}`);
+		if (!this.Socket.OPEN) alert('Server call made a fucky wucy :/');
+		this.input.disabled = true;
+		this.Socket.send(JSON.stringify({
+			reason: 'check-slide-code',
+			code: this.state.input
+		}));
 	}
 
 	constructor(props) {
@@ -63,8 +68,30 @@ class Main extends Component {
 			input: null
 		};
 
+		window.WebSocket = window.WebSocket || window.MozWebSocket;
+		this.Socket = new WebSocket('ws://localhost:1337');
 		this.changeInput = this.changeInput.bind(this);
 		this.sendCode = this.sendCode.bind(this);
+	}
+
+	componentDidMount() {
+
+		this.Socket.onmessage = message => {
+			message = JSON.parse(message.data);
+			if (message.reason === 'slide-code-ok') {
+				route(`/controller/${message.code}`);
+			}
+			if (message.reason === 'slide-code-not-ok') {
+				alert(`Hmm, seems like the code ${message.code} is not used by any presentation :/`);
+				this.input.disabled = false;
+			}
+		};
+
+		this.Socket.onerror = error => console.error(error);
+	}
+
+	componentWillUnmount() {
+		this.Socket.close();
 	}
 
 	render() {
@@ -91,6 +118,7 @@ class Main extends Component {
 
 					<input
 						name="code"
+						ref={input => this.input = input}
 						placeholder="0000"
 						value={this.state.input}
 						onChange={this.changeInput}

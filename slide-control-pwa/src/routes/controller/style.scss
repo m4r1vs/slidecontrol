@@ -53,13 +53,15 @@
 	div.notesContainer {
 		padding: 4px 12px;
 		color: var(--primary-color) !important;
+		min-height: calc(100vh - 38px);
 
 		&[light=true] {
 			color: #212121 !important;
 		} 
 
 		@media screen and (orientation: portrait) {
-			padding: 36px 12px 4px 12px; 
+			padding: 36px 12px 4px 12px;
+			min-height: calc(100vh - 162px - 38px);
 		}
 
 		p, h1, h2, h3, h4, h5, li, span {
@@ -70,6 +72,20 @@
 			animation-delay: 0;
 			margin: 4px 0;
 			color: inherit !important;
+		}
+	}
+
+	div.laserPointer {
+		margin: 48px 12px 12px;
+		border-radius: 12px;
+		width: calc(100vw - (12px * 2));
+		height: calc(100vh - (38px + 162px + (48px + 12px)));
+		border: 1px yellow solid;
+
+		@media screen and (orientation: landscape) {
+			margin: 24px;
+			width: calc(100% - (24px * 2));
+			height: calc(100vh - (38px + (48px + 12px)));
 		}
 	}
 
