@@ -112,6 +112,8 @@ const handleSwitchSlide = message => {
 const handleSlideChange = (message, connection) => {
     server.clients.forEach(client => {
         if (client.controllerCode && client.controllerCode === connection.slideCode) {
+            slides[connection.slideCode].notes = message.notes
+            slides[connection.slideCode].activeSlide = message.activeSlide
             client.send(JSON.stringify({
                 reason: 'slide-changed',
                 notes: message.notes,

@@ -33,10 +33,10 @@ const getPresentationInfo = function () {
 
 	// parse information and return it
 	let googleSlideButton = document.querySelector(".goog-flat-menu-button-caption"), // Google button containing further info about slide
-			activeSlide = parseInt(googleSlideButton.getAttribute("aria-posinset")), // current Slide
-			totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")), // total Slides
-			notes = viewerData.docData[1][activeSlide - 1][9], // notes as HTML
-			title = document.querySelector('[property="og:title"]').content // title of presentation
+		activeSlide = parseInt(googleSlideButton.getAttribute("aria-posinset")), // current Slide
+		totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")), // total Slides
+		notes = viewerData.docData[1][activeSlide - 1][9], // notes as HTML
+		title = document.querySelector('[property="og:title"]').content // title of presentation
 
 	return {
 		notes,
@@ -57,7 +57,7 @@ const registerSlide = () => {
 
 	// check quality of code
 	if (!code) registerSlide()
-  if (isNaN(code)) registerSlide()
+	if (isNaN(code)) registerSlide()
 	if (code < 1000 || code > 99999) registerSlide()
 	
 	Logger.log("Generated ID for slide: #" + code)
@@ -80,17 +80,19 @@ class Laserpointer {
 		this.element = document.createElement("div")
 		
 		this.element.id = "laserpointer"
-		this.element.style =  "position: relative;" +
-													"width: 14px;" +
-													"height: 14px;" +
-													"transition: opacity, transform .45s;" +
-													"background: red;" +
-													"border-radius: 7px;" +
-													"border-top-left-radius: 0;" +
-													"box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .87);" +
-													"z-index: 5;" +
-													"bottom: 100px;" +
-													"left: 100px"
+		this.element.style = `
+			position: relative;
+			width: 14px;
+			height: 14px;
+			transition: opacity, transform .45s;
+			background: red;
+			border-radius: 7px;
+			border-top-left-radius: 0;
+			box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .87);
+			z-index: 5;
+			bottom: 100px;
+			left: 100px;
+		`
 		
 		this.slideWrapper = document.querySelector(".punch-viewer-content")
 		this.slideWrapper.insertBefore(this.element, this.slideWrapper.firstChild)
@@ -149,35 +151,18 @@ const handleMessage = message => {
 	Logger.log('recieved message: ' + message.reason)
 	if (!message || !message.reason) return
 
-	switch (message.reason) {
-		case "error-slide-code-taken":
-			registerSlide()
-			break
-		case "slide-created":
-			startSlidecontrol(message.code)
-			break
-		case "next-slide":
-			switchSlide("next")
-			break
-		case "previous-slide":
-			switchSlide("back")
-			break
-		case "new-device-synced":
-			chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
-			break
-		case "laserpointer-down":
-			laserpointer.show()
-			break
-		case "laserpointer-move":
-			laserpointer.move(message.x, message.y)
-			break
-		case "laserpointer-up":
-			laserpointer.hide()
-			break
-		default:
-			Logger.log("Command ignored: " + message.reason)
-			break
+	const map = {
+		"error-slide-code-taken": () => registerSlide(),
+		"slide-created": () => startSlidecontrol(message.code),
+		"next-slide": () => switchSlide("next"),
+		"previous-slide": () => switchSlide("previous"),
+		"new-device-synced": () => chrome.runtime.sendMessage("New device synced to slide: #" + message.code),
+		"laserpointer-down": () => laserpointer.show(),
+		"laserpointer-move": () => laserpointer.move(message.x, message.y),
+		"laserpointer-up": () => laserpointer.hide()
 	}
+
+	if (map[message.reason]) map[message.reason]()
 }
 
 /**
@@ -195,24 +180,24 @@ const main = function () {
 	slidecontrolProxy.style.margin = "0 4px"
 	slidecontrolProxy.style.padding = "0"
 
-	slidecontrolProxy.innerHTML = 	'<div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"></div>' + // the devider
-									
-									// start slidecontrol button
-									'<div class="goog-inline-block goog-flat-button" id="slidecontrol-start-block">' +
-										'<div class="punch-viewer-captioned-button" id="slidecontrol-start-button">' +
-											'<div style="width:24px; height:24px; background-image:url(https://i.ibb.co/YPnSnLP/logo-ohnekontur-1.png); filter:grayscale(100); background-size:contain; background-position:center; background-repeat:no-repeat;">' +
-											'</div>' +
-											'<div class="punch-viewer-speaker-notes-text goog-inline-block">' +
-												'Start slidecontrol' +
-											'</div>' +
-										'</div>' + 
-									'</div>' +
-									
-									// gets rendered after slidecontrol started
-									'<div id="slidecontrol-id-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; line-height: 16px; cursor: text;">' +
-										'<div>Your ID:</div>' +
-										'<div id="slidecontrol-id-text" style="font-size: 16px; font-weight: 600;" />' +
-									'</div>'
+	slidecontrolProxy.innerHTML = `
+		<div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"></div>
+
+		<div class="goog-inline-block goog-flat-button" id="slidecontrol-start-block">
+			<div class="punch-viewer-captioned-button" id="slidecontrol-start-button">
+				<div style="width:24px; height:24px; background-image:url(https://i.ibb.co/YPnSnLP/logo-ohnekontur-1.png); filter:grayscale(100); background-size:contain; background-position:center; background-repeat:no-repeat;">
+				</div>
+				<div class="punch-viewer-speaker-notes-text goog-inline-block">
+					Start slidecontrol
+				</div>
+			</div> 
+		</div>
+		
+		<div id="slidecontrol-id-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; line-height: 16px; cursor: text;">
+			<div>Your ID:</div>
+			<div id="slidecontrol-id-text" style="font-size: 16px; font-weight: 600;" />
+		</div>
+	`																
 
 	googleSlideController.appendChild(slidecontrolProxy)
 
@@ -327,30 +312,24 @@ if (path.includes("/presentation/d/")) {
 				cursor: pointer;
 				background-image: none;
 				border-radius: 4px;
+				box-shadow: none;
+				box-sizing: border-box;
+				font-family: var(--docs-material-header-font-family,Roboto,RobotoDraft,Helvetica,Arial,sans-serif);
+				font-weight: var(--docs-material-font-weight-bold,500);
+				font-size: 14px;
+				height: 36px;
+				letter-spacing: 0.25px;
+				line-height: 16px;
+				background: white;
+				border: 1px solid #dadce0!important;
+				color: #202124;
+				padding: 9px 11px 10px 12px
+			}
+			#slidecontrol-open-presentation-button-text:hover {
+				border: 1px solid #feedbc!important;
+				background: #fffdf6
+			}
 		`
-		
-		
-		// "#slidecontrol-open-presentation-button {" +
-		// 							"text-decoration: none !important}" +
-		// 						"#slidecontrol-open-presentation-button-text {" +
-		// 							"cursor: pointer;" +
-		// 							"background-image: none;" +
-		// 							"border-radius: 4px;" +
-		// 							"box-shadow: none;" +
-		// 							"box-sizing: border-box;" +
-		// 							"font-family: var(--docs-material-header-font-family,Roboto,RobotoDraft,Helvetica,Arial,sans-serif);" +
-		// 							"font-weight: var(--docs-material-font-weight-bold,500);" +
-		// 							"font-size: 14px;" +
-		// 							"height: 36px;" +
-		// 							"letter-spacing: 0.25px;" +
-		// 							"line-height: 16px;" +
-		// 							"background: white;" +
-		// 							"border: 1px solid #dadce0!important;" +
-		// 							"color: #202124;" +
-		// 							"padding: 9px 11px 10px 12px}" +
-		// 						"#slidecontrol-open-presentation-button-text:hover {" +
-		// 							"border: 1px solid #feedbc!important;" +
-		// 							"background: #fffdf6}"
 
 		// place stylesheet
 		document.head.appendChild(stylesheet)

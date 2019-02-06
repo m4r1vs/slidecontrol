@@ -14,7 +14,7 @@ html, body {
 	color: var(--primary-color);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	transition: background .25s;
+	transition: background .22s;
 }
 
 body * {
@@ -35,6 +35,7 @@ a {
 
 #app {
 	height: 100%;
+	padding-top: 56px;
 }
 
 *[fadeIn=true] {

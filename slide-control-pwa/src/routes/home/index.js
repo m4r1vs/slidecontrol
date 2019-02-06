@@ -2,38 +2,8 @@ import { h, Component } from 'preact';
 import { route, Link } from 'preact-router';
 import style from './style.scss';
 
-import Button from '../../components/buttons';
-
-// Gets shown on first visit of app
-class Onboarding extends Component {
-
-	setOnboarded() {
-		localStorage.setItem('onboarded', 'true');
-		location.href = '/';
-	}
-
-	render() {
-		return (
-			<div class={style.home}>
-
-				<div class={style.logo} >
-					<span>BETA</span>
-				</div>
-
-				<h1>Hi there,</h1>
-				<p>
-					Slidecontrol is the app to command your slides.<br />
-					Before you get started you need to make sure that you have installed our browser extension on the device hosting your slides.
-				</p>
-
-				<Button text="got it, continue" action={this.setOnboarded} />
-			</div>
-		);
-	}
-}
-
 // gets shown after onboarding
-class Main extends Component {
+export default class Home extends Component {
 
 	getGreeting() {
 		let h = new Date().getHours();
@@ -53,12 +23,16 @@ class Main extends Component {
 
 	sendCode(e) {
 		e.preventDefault();
-		if (!this.Socket.OPEN) alert('Server call made a fucky wucy :/');
+		if (!this.Socket.OPEN) alert('Server call made a fucky wucy :/'); // eslint-disable-line no-alert
 		this.input.disabled = true;
 		this.Socket.send(JSON.stringify({
 			reason: 'check-slide-code',
 			code: this.state.input
 		}));
+	}
+
+	routeHelp() {
+		route('/help');
 	}
 
 	constructor(props) {
@@ -76,13 +50,15 @@ class Main extends Component {
 
 	componentDidMount() {
 
+		this.input.disabled = false;
+
 		this.Socket.onmessage = message => {
 			message = JSON.parse(message.data);
 			if (message.reason === 'slide-code-ok') {
 				route(`/controller/${message.code}`);
 			}
 			if (message.reason === 'slide-code-not-ok') {
-				alert(`Hmm, seems like the code ${message.code} is not used by any presentation :/`);
+				alert(`Hmm, seems like the code ${message.code} is not used by any presentation :/`); // eslint-disable-line no-alert
 				this.input.disabled = false;
 			}
 		};
@@ -97,15 +73,9 @@ class Main extends Component {
 	render() {
 
 		document.body.style.background = '#212121';
-		document.querySelector('meta[name=theme-color]')
-			.setAttribute('content', '#212121');
 
 		return (
 			<div class={style.home} fadeIn>
-
-				<div class={style.logo} >
-					<span>BETA</span>
-				</div>
 
 				<h1>{this.getGreeting()}</h1>
 
@@ -139,10 +109,3 @@ class Main extends Component {
 		);
 	}
 }
-
-const Home = () => {
-	const onboarded = localStorage.getItem('onboarded') === 'true';
-	return onboarded ? <Main /> : <Onboarding />;
-};
-
-export default Home;

@@ -1,46 +1,17 @@
 .controller {
 	padding: 0;
-	min-height: 100%;
 	width: 100%;
 	padding-bottom: 162px;
-	padding-top: 38px;
 
 	@media screen and (orientation: landscape) {
-		padding: 38px 15vw 0 15vw;
-	}
-
-	h1 {
-		margin: 0;
-		top: 0;
-		font-size: 17px;
-		width: 100vw;
-		text-align: center;
-		line-height: 38px;
-		position: fixed;
-		left: 0;
-		right: 0;
-		background: var(--primary-color);
-		color: rgba(0, 0, 0, 0.87);
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-		transform: translateY(-38px);
-		animation: slideDown ease-out 1;
-		animation-fill-mode:forwards;
-		animation-duration: .22s;
-		animation-delay: 0;
-		z-index: 1;
-
-		i {
-			position: absolute;
-			left: 7px;
-			cursor: pointer;
-			top: 7px;
-		}
+		padding: 0 15vw;
 	}
 
 	.timer {
 		position: fixed;
-		top: 48px;
-		right: 8px;
+		bottom: 172px;
+		left: 18px;
+		cursor: pointer;
 		background: var(--primary-color);
 		padding: 0 7px;
 		line-height: 25px;
@@ -48,20 +19,25 @@
 		color: rgba(0, 0, 0, 0.87);
 		z-index: 1;
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
+		@media screen and (orientation: landscape) {
+			top: 44px;
+			bottom: auto;
+		}
 	}
 
 	div.notesContainer {
 		padding: 4px 12px;
 		color: var(--primary-color) !important;
-		min-height: calc(100vh - 38px);
+		min-height: calc(100vh - 57px);
 
 		&[light=true] {
 			color: #212121 !important;
 		} 
 
 		@media screen and (orientation: portrait) {
-			padding: 36px 12px 4px 12px;
-			min-height: calc(100vh - 162px - 38px);
+			padding: 12px 12px 24px 12px;
+			min-height: calc(100vh - 162px - 57px);
 		}
 
 		p, h1, h2, h3, h4, h5, li, span {
@@ -76,10 +52,10 @@
 	}
 
 	div.laserPointer {
-		margin: 48px 12px 12px;
+		margin: 12px;
 		border-radius: 12px;
 		width: calc(100vw - (12px * 2));
-		height: calc(100vh - (38px + 162px + (48px + 12px)));
+		height: calc(100vh - 162px - 12px - 32px - 72px);
 		border: 1px var(--primary-color) solid;
 
 		&[light=true] {
@@ -89,7 +65,7 @@
 		@media screen and (orientation: landscape) {
 			margin: 24px;
 			width: calc(100% - (24px * 2));
-			height: calc(100vh - (38px + (48px + 12px)));
+			height: calc(100vh - (57px + (48px + 12px)));
 		}
 	}
 
@@ -125,6 +101,7 @@
 			background-size: contain;
 			display: inline-block;
 			filter: grayscale(40%);
+			cursor: pointer;
 
 			&:hover {
 				filter: grayscale(0);
@@ -167,15 +144,6 @@
 @keyframes slideUp {
 	from {
 		transform: translateY(162px);
-	}
-	to {
-		transform: translateY(0);
-	}
-}
-
-@keyframes slideDown {
-	from {
-		transform: translateY(-38px);
 	}
 	to {
 		transform: translateY(0);

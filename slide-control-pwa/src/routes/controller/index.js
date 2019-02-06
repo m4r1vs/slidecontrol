@@ -30,11 +30,21 @@ export default class Profile extends Component {
 					secondsElapsed: 1
 				});
 
-				this.props.showSnackbar('Started new timer for you', null, 2000, () => console.log('App did big oopsie doopsie'));
+				this.props.showSnackbar(
+					'Started new timer for you',
+					null,
+					2000,
+					() => console.warn('App did big oopsie doopsie')
+				);
 
 			}
 
-			else this.props.showSnackbar(`Resumed timer for you at ${formattedSeconds(this.state.secondsElapsed)}`, null, 2000, () => console.log('App did big oopsie doopsie vol. II'));
+			else this.props.showSnackbar(
+				`Resumed timer for you at ${formattedSeconds(this.state.secondsElapsed)}`,
+				null,
+				2000,
+				() => console.warn('App did big oopsie doopsie vol. II')
+			);
 			
 			this.incrementer = setInterval(() => {
 				this.setState(state => ({ secondsElapsed: state.secondsElapsed + 1 }));
@@ -59,6 +69,7 @@ export default class Profile extends Component {
 
 	toggleLightMode = () => {
 		let lightMode = !this.state.lightMode;
+		this.lightModeToggle.innerHTML = lightMode ? 'brightness_2' : 'brightness_7';
 		this.setState({
 			lightMode
 		});
@@ -117,6 +128,12 @@ export default class Profile extends Component {
 
 	componentDidMount() {
 
+		this.props.changeHeaderChildren(
+			<i onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ position: 'absolute', right: '7px', left: 'auto' }}>
+				{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
+			</i>
+		);
+
 		this.Socket.onmessage = message => {
 			message = JSON.parse(message.data);
 			
@@ -130,8 +147,14 @@ export default class Profile extends Component {
 			}
 
 			if (message.reason === 'send-slide-info') {
-				this.props.showSnackbar(`Synced to "${message.title}" (#${this.props.id})`, null, 3500, () => console.log('Hey there :)'));
+				this.props.showSnackbar(
+					`Synced to "${message.title}" (#${this.props.id})`,
+					null,
+					3500,
+					() => console.warn('Wait, you were not supposed to read this, lol')
+				);
 				this.notesContainer.innerHTML = message.notes;
+				this.props.changeHeaderTitle(`${message.title} (${message.activeSlide}/${message.totalSlides})`);
 				this.setState({
 					totalSlides: message.totalSlides,
 					activeSlide: message.activeSlide,
@@ -141,8 +164,8 @@ export default class Profile extends Component {
 			}
 
 			if (message.reason === 'slide-changed') {
-				console.log(message)
 				this.notesContainer.innerHTML = message.notes;
+				this.props.changeHeaderTitle(`${this.state.title} (${message.activeSlide}/${this.state.totalSlides})`);
 				this.setState({
 					activeSlide: message.activeSlide
 				});
@@ -238,9 +261,6 @@ export default class Profile extends Component {
 	
 	render({ id }) {
 
-		document.querySelector('meta[name=theme-color]')
-			.setAttribute('content', '#ffbc16');
-
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>
 
@@ -250,18 +270,13 @@ export default class Profile extends Component {
 						{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }
 					</span>)
 				}
-
-				{/* header */}
-				<h1>
-					<i onClick={this.goHome} class="material-icons">home</i>
-					{this.state.title || 'Loading...'} {this.state.activeSlide}/{this.state.totalSlides}
-					<i onClick={this.toggleLaserpointer} class="material-icons" style={{ right: '38px', left: 'auto' }}>
-						{this.state.laserPointer ? 'notes' : 'touch_app'}
-					</i>
-					<i onClick={this.toggleLightMode} class="material-icons" style={{ right: '7px', left: 'auto' }}>
-						{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
-					</i>
-				</h1>
+				
+				{/* laserpointer button */}
+				{this.state.slideLoaded && (
+					<span style={{ left: 'auto', right: '18px' }} fadeIn onClick={this.toggleLaserpointer} class={style.timer}>
+						{this.state.laserPointer ? 'show notes' : 'laserpointer'}
+					</span>
+				)}
 
 				{/* Notes */}
 				<div
