@@ -1,6 +1,13 @@
 const WebSocket = require('ws');
+const https = require('https');
+const fs = require('fs');
 
-const server = new WebSocket.Server({ port: 1337 });
+const httpsServer = new https.createServer({
+	cert: fs.readFileSync('/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/cert.pem'),
+	key: fs.readFileSync('/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/privkey.pem')
+})
+
+const server = new WebSocket.Server({ server: httpsServer });
 
 let slides = {}
 
@@ -158,3 +165,5 @@ server.on('connection', connection => {
     connection.on('message', raw => handleMessage(JSON.parse(raw), connection))
     connection.on('close', () => handleClose(connection))
 })
+
+httpsServer.listen(61263)

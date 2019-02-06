@@ -2,7 +2,11 @@
 
 // variables
 let path = window.location.pathname,
-	Socket = null
+	Socket = null,
+	laserpointerX = 100,
+	laserpointerY = 100,
+	_laserpointerX = 0,
+	_laserpointerY = 0
 
 // Logger for info and errors
 const Logger = {
@@ -75,9 +79,24 @@ const handleMessage = message => {
 	if (message.reason === "next-slide") switchSlide("next")
 	if (message.reason === "previous-slide") switchSlide("back")
 	if (message.reason === "new-device-synced") chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
-	if (message.reason === "laserpointer-down") console.log("enabling laserpointer")
-	if (message.reason === "laserpointer-move") console.log("moving laserpointer", message.x, message.y)
-	if (message.reason === "laserpointer-up") console.log("disabling laserpointer")
+
+	if (message.reason === "laserpointer-down") document.querySelector("#laserpointer").style.opacity = "1"
+
+	if (message.reason === "laserpointer-move") {
+		let laserpointer = document.querySelector("#laserpointer")
+		if (laserpointerX + message.x < 0) laserpointerX = 0
+		if (laserpointerY + message.y < 0) laserpointery = 0
+		laserpointer.style.left = `${laserpointerX + message.x * 3}px`
+		laserpointer.style.top = `${laserpointerY + message.y * 3}px`
+		_laserpointerX = message.x * 3
+		_laserpointerY = message.y * 3
+	}
+	
+	if (message.reason === "laserpointer-up") {
+		laserpointerX = laserpointerX + _laserpointerX
+		laserpointerY = laserpointerY + _laserpointerY
+		document.querySelector("#laserpointer").style.opacity = "0.3"
+	}
 }
 
 /**
@@ -124,7 +143,7 @@ const main = function () {
 const initializeSlidecontrol = () => {
 	console.log('Initializing slidecontrol...')
 
-	Socket = new WebSocket('ws://localhost:1337')
+	Socket = new WebSocket('wss://www.maniyt.de:61263')
 
 	Socket.onopen = () => {
 		registerSlide()
@@ -146,7 +165,8 @@ const startSlidecontrol = code => {
 
 	let startButton = document.querySelector("#slidecontrol-start-block"),
 		idContainer = document.querySelector("#slidecontrol-id-block"),
-		idText = document.querySelector("#slidecontrol-id-text")
+		idText = document.querySelector("#slidecontrol-id-text"),
+		slideWrapper = document.querySelector(".punch-viewer-content")
 
 	// hide the start button and show the ID
 	startButton.style.display = "none"
@@ -177,6 +197,21 @@ const startSlidecontrol = code => {
 		attributes: true
 	})
 
+	let laserpointer = document.createElement("div")
+
+	laserpointer.id = "laserpointer"
+	laserpointer.style = 	"position: relative;" +
+												"width: 10px;" +
+												"height: 10px;" +
+												"transition: opacity .25s;" +
+												"background: red;" +
+												"border-radius: 5px;" +
+												"box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .87);" +
+												"z-index: 5;" +
+												"bottom: 100px;" +
+												"left: 100px"
+
+	slideWrapper.insertBefore(laserpointer, slideWrapper.firstChild)
 }
 
 /**

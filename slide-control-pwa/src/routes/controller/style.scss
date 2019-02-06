@@ -80,7 +80,11 @@
 		border-radius: 12px;
 		width: calc(100vw - (12px * 2));
 		height: calc(100vh - (38px + 162px + (48px + 12px)));
-		border: 1px yellow solid;
+		border: 1px var(--primary-color) solid;
+
+		&[light=true] {
+			border: 1px #212121 solid;
+		}
 
 		@media screen and (orientation: landscape) {
 			margin: 24px;

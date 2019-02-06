@@ -1,6 +1,4 @@
 import { h, Component } from 'preact';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 
 import style from './style.scss';
 import { route } from 'preact-router';
@@ -67,6 +65,13 @@ export default class Profile extends Component {
 		document.body.style.background = lightMode ? '#fafafa' : '#212121';
 	}
 
+	toggleLaserpointer = () => {
+		let laserPointer = !this.state.laserPointer;
+		this.setState({
+			laserPointer
+		});
+	}
+
 	constructor(props) {
 
 		super(props);
@@ -79,7 +84,7 @@ export default class Profile extends Component {
 			timerRunning: false,
 			slideLoaded: false,
 			lightMode: false,
-			laserPointer: true
+			laserPointer: false
 		};
 
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -93,6 +98,7 @@ export default class Profile extends Component {
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
 		this.toggleLightMode = this.toggleLightMode.bind(this);
+		this.toggleLaserpointer = this.toggleLaserpointer.bind(this);
 		this.nextSlide = () => this.switchSlides('next');
 		this.previousSlide = () => this.switchSlides('back');
 		this.goHome = () => route('/');
@@ -100,7 +106,7 @@ export default class Profile extends Component {
 	}
 
 	componentWillMount() {
-		this.Socket = new WebSocket('ws://localhost:1337');
+		this.Socket = new WebSocket('wss://www.maniyt.de:61263');
 		this.Socket.onopen = () => {
 			this.Socket.send(JSON.stringify({
 				reason: 'register-controller',
@@ -182,7 +188,7 @@ export default class Profile extends Component {
 		let touchstartYpointer = 0;
 
 		this.onTouchStartPointer = e => {
-
+			e.preventDefault();
 			touchstartXpointer = e.changedTouches[0].clientX,
 			touchstartYpointer = e.changedTouches[0].clientY,
 
@@ -195,6 +201,7 @@ export default class Profile extends Component {
 		this.laserPointer.addEventListener('touchstart', this.onTouchStartPointer);
 
 		this.onTouchMovePointer = e => {
+			e.preventDefault();
 			this.Socket.send(JSON.stringify({
 				reason: 'laserpointer-move',
 				code: this.props.id,
@@ -206,6 +213,7 @@ export default class Profile extends Component {
 		this.laserPointer.addEventListener('touchmove', this.onTouchMovePointer);
 
 		this.onTouchEndPointer = e => {
+			e.preventDefault();
 			this.Socket.send(JSON.stringify({
 				reason: 'laserpointer-end',
 				code: this.props.id
@@ -246,6 +254,9 @@ export default class Profile extends Component {
 				<h1>
 					<i onClick={this.goHome} class="material-icons">home</i>
 					{this.state.title || 'Loading...'} {this.state.activeSlide}/{this.state.totalSlides}
+					<i onClick={this.toggleLaserpointer} class="material-icons" style={{ right: '38px', left: 'auto' }}>
+						{this.state.laserPointer ? 'notes' : 'touch_app'}
+					</i>
 					<i onClick={this.toggleLightMode} class="material-icons" style={{ right: '7px', left: 'auto' }}>
 						{this.state.lightMode ? 'brightness_7' : 'brightness_2'}
 					</i>

@@ -4,8 +4,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    
-
     "start": "per-env",
     "start:production": "npm run -s serve",
     "start:development": "npm run -s dev",
@@ -31,7 +29,6 @@
     "preact-render-spy": "^1.2.1"
   },
   "dependencies": {
-    "firebase": "^5.8.0",
     "node-sass": "^4.11.0",
     "postcss-preset-env": "^6.5.0",
     "preact": "^8.2.6",

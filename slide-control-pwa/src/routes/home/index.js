@@ -69,7 +69,7 @@ class Main extends Component {
 		};
 
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
-		this.Socket = new WebSocket('ws://localhost:1337');
+		this.Socket = new WebSocket('wss://www.maniyt.de:61263');
 		this.changeInput = this.changeInput.bind(this);
 		this.sendCode = this.sendCode.bind(this);
 	}
