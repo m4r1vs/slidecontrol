@@ -1,12 +1,7 @@
-
-
 // variables
 let path = window.location.pathname,
-	Socket = null,
-	laserpointerX = 100,
-	laserpointerY = 100,
-	_laserpointerX = 0,
-	_laserpointerY = 0
+		Socket = null,
+		laserpointer
 
 // Logger for info and errors
 const Logger = {
@@ -31,39 +26,119 @@ const getPresentationInfo = function () {
 	document.body.appendChild(script)
 	
 	// get info now and remove script again
-	let presentationInfo = JSON.parse(document.body.getAttribute("viewerData"))
+	let viewerData = JSON.parse(document.body.getAttribute("viewerData"))
+
 	script.remove()
 	document.body.removeAttribute("viewerData")
-	return presentationInfo
+
+	// parse information and return it
+	let googleSlideButton = document.querySelector(".goog-flat-menu-button-caption"), // Google button containing further info about slide
+			activeSlide = parseInt(googleSlideButton.getAttribute("aria-posinset")), // current Slide
+			totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")), // total Slides
+			notes = viewerData.docData[1][activeSlide - 1][9], // notes as HTML
+			title = document.querySelector('[property="og:title"]').content // title of presentation
+
+	return {
+		notes,
+		activeSlide,
+		totalSlides,
+		notes,
+		title
+	}
 }
 
 /**
  * Register slide to server
  */
 const registerSlide = () => {
+
+	// generate random code
 	let code = Math.floor(Math.random() * 100000)
 
+	// check quality of code
 	if (!code) registerSlide()
-    if (isNaN(code)) registerSlide()
+  if (isNaN(code)) registerSlide()
 	if (code < 1000 || code > 99999) registerSlide()
 	
 	Logger.log("Generated ID for slide: #" + code)
 
-	let googleSlideButton = document.querySelector(".goog-flat-menu-button-caption"), // Google button containing further info about slide
-		presentationInfo = getPresentationInfo(), // first get info about slide
-		activeSlide = parseInt(googleSlideButton.getAttribute("aria-posinset")), // current Slide
-		totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")), // total Slides
-		notes = presentationInfo.docData[1][activeSlide - 1][9], // notes as HTML
-		title = document.querySelector('[property="og:title"]').content // title of presentation
-
+	// query information about presentation and send it
 	Socket.send(JSON.stringify({
 		reason: 'new-slide',
 		code,
-		title,
-		notes,
-		activeSlide,
-		totalSlides
+		...getPresentationInfo()
 	}))
+}
+
+class Laserpointer {
+
+	constructor() {
+		
+		Logger.log("created laserpointer")
+		Logger.log("muhahahahahahahaaa")
+
+		this.element = document.createElement("div")
+		
+		this.element.id = "laserpointer"
+		this.element.style =  "position: relative;" +
+													"width: 14px;" +
+													"height: 14px;" +
+													"transition: opacity, transform .45s;" +
+													"background: red;" +
+													"border-radius: 7px;" +
+													"border-top-left-radius: 0;" +
+													"box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .87);" +
+													"z-index: 5;" +
+													"bottom: 100px;" +
+													"left: 100px"
+		
+		this.slideWrapper = document.querySelector(".punch-viewer-content")
+		this.slideWrapper.insertBefore(this.element, this.slideWrapper.firstChild)
+
+		this.x = 100,
+		this.y = 100,
+		this._x = 0,
+		this._y = 0
+	}
+
+	show() {
+
+		window.requestAnimationFrame(() => {
+			this.element.style.opacity = "1"
+			this.element.style.transform = "scale(8)"
+			setTimeout(() => {
+				this.element.style.transform = "scale(1)"
+			}, 150);
+		})
+	}
+
+	move(x, y) {
+
+		window.requestAnimationFrame(() => {
+			// cant got out of bounds
+			if ((this.x + x) < 0) this.x = 0
+			if ((this.y + y) < 0) this.y = 0
+			if ((this.x + x) > parseInt(this.slideWrapper.style.width)) this.x = parseInt(this.slideWrapper.style.width)
+			if ((this.y + y) > parseInt(this.slideWrapper.style.height)) this.y = parseInt(this.slideWrapper.style.height)
+	
+			this.element.style.left = `${this.x + x * 3}px`
+			this.element.style.top = `${this.y + y * 3}px`
+	
+			this._x = x * 3
+			this._y = y * 3
+		})
+
+	}
+
+	hide() {
+
+		window.requestAnimationFrame(() => {
+			this.x = this.x + this._x
+			this.y = this.y + this._y
+			this.element.style.opacity = "0.3"
+		})
+
+	}
 }
 
 /**
@@ -74,28 +149,34 @@ const handleMessage = message => {
 	Logger.log('recieved message: ' + message.reason)
 	if (!message || !message.reason) return
 
-	if (message.reason === "error-slide-code-taken") registerSlide()
-	if (message.reason === "slide-created") startSlidecontrol(message.code)
-	if (message.reason === "next-slide") switchSlide("next")
-	if (message.reason === "previous-slide") switchSlide("back")
-	if (message.reason === "new-device-synced") chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
-
-	if (message.reason === "laserpointer-down") document.querySelector("#laserpointer").style.opacity = "1"
-
-	if (message.reason === "laserpointer-move") {
-		let laserpointer = document.querySelector("#laserpointer")
-		if (laserpointerX + message.x < 0) laserpointerX = 0
-		if (laserpointerY + message.y < 0) laserpointery = 0
-		laserpointer.style.left = `${laserpointerX + message.x * 3}px`
-		laserpointer.style.top = `${laserpointerY + message.y * 3}px`
-		_laserpointerX = message.x * 3
-		_laserpointerY = message.y * 3
-	}
-	
-	if (message.reason === "laserpointer-up") {
-		laserpointerX = laserpointerX + _laserpointerX
-		laserpointerY = laserpointerY + _laserpointerY
-		document.querySelector("#laserpointer").style.opacity = "0.3"
+	switch (message.reason) {
+		case "error-slide-code-taken":
+			registerSlide()
+			break
+		case "slide-created":
+			startSlidecontrol(message.code)
+			break
+		case "next-slide":
+			switchSlide("next")
+			break
+		case "previous-slide":
+			switchSlide("back")
+			break
+		case "new-device-synced":
+			chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
+			break
+		case "laserpointer-down":
+			laserpointer.show()
+			break
+		case "laserpointer-move":
+			laserpointer.move(message.x, message.y)
+			break
+		case "laserpointer-up":
+			laserpointer.hide()
+			break
+		default:
+			Logger.log("Command ignored: " + message.reason)
+			break
 	}
 }
 
@@ -140,6 +221,7 @@ const main = function () {
 
 }
 
+// Initialize slidecontrol and connect to serva
 const initializeSlidecontrol = () => {
 	console.log('Initializing slidecontrol...')
 
@@ -157,37 +239,36 @@ const initializeSlidecontrol = () => {
 	}
 }
 
+// yap, finally we can have some fun:
 const startSlidecontrol = code => {
 	Logger.log("Started Slidecontrol with id #" + code)
+
+	// *pew* *pew* *pewww*
+	laserpointer = new Laserpointer()
 
 	// show notification with slide ID
 	chrome.runtime.sendMessage("Your code for this slide is " + code)
 
 	let startButton = document.querySelector("#slidecontrol-start-block"),
 		idContainer = document.querySelector("#slidecontrol-id-block"),
-		idText = document.querySelector("#slidecontrol-id-text"),
-		slideWrapper = document.querySelector(".punch-viewer-content")
+		idText = document.querySelector("#slidecontrol-id-text")
 
 	// hide the start button and show the ID
 	startButton.style.display = "none"
 	idContainer.style.display = "inline-block"
 	idText.innerHTML = code
 
-	let googleSlideButton = document.querySelector(".goog-flat-menu-button-caption") // Google button containing further info about slide
+	// Google button containing further info about slide
+	let googleSlideButton = document.querySelector(".goog-flat-menu-button-caption")
 
 	// in order to detect change of slides
 	const observer = new MutationObserver(() => {
 
 		Logger.log("Observed slide-change")
-
-		// update position and notes in firestore
-		let currentSlide = parseInt(googleSlideButton.getAttribute("aria-posinset"))
-			notes = getPresentationInfo().docData[1][currentSlide - 1][9]
 		
 		Socket.send(JSON.stringify({
 			reason: "slide-changed",
-			currentSlide,
-			notes
+			...getPresentationInfo()
 		}))
 
 	})
@@ -196,22 +277,6 @@ const startSlidecontrol = code => {
 	observer.observe(googleSlideButton, {
 		attributes: true
 	})
-
-	let laserpointer = document.createElement("div")
-
-	laserpointer.id = "laserpointer"
-	laserpointer.style = 	"position: relative;" +
-												"width: 10px;" +
-												"height: 10px;" +
-												"transition: opacity .25s;" +
-												"background: red;" +
-												"border-radius: 5px;" +
-												"box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .87);" +
-												"z-index: 5;" +
-												"bottom: 100px;" +
-												"left: 100px"
-
-	slideWrapper.insertBefore(laserpointer, slideWrapper.firstChild)
 }
 
 /**
@@ -243,7 +308,7 @@ const switchSlide = function (direction) {
 // only run all the stuff here if we are on an opened google slide
 if (path.includes("/presentation/d/")) {
 
-	Logger.log("Slidecontrol got evoked")
+	Logger.log("Slidecontrol got evoked, mothafucka")
 
 	const trimmedPath = path.replace("/presentation/d/", "")
 
@@ -254,27 +319,38 @@ if (path.includes("/presentation/d/")) {
 
 		// create stylesheet for button
 		let stylesheet = document.createElement("style")
-		stylesheet.innerHTML = 	"#slidecontrol-open-presentation-button {" +
-									"text-decoration: none !important}" +
-								"#slidecontrol-open-presentation-button-text {" +
-									"cursor: pointer;" +
-									"background-image: none;" +
-									"border-radius: 4px;" +
-									"box-shadow: none;" +
-									"box-sizing: border-box;" +
-									"font-family: var(--docs-material-header-font-family,Roboto,RobotoDraft,Helvetica,Arial,sans-serif);" +
-									"font-weight: var(--docs-material-font-weight-bold,500);" +
-									"font-size: 14px;" +
-									"height: 36px;" +
-									"letter-spacing: 0.25px;" +
-									"line-height: 16px;" +
-									"background: white;" +
-									"border: 1px solid #dadce0!important;" +
-									"color: #202124;" +
-									"padding: 9px 11px 10px 12px}" +
-								"#slidecontrol-open-presentation-button-text:hover {" +
-									"border: 1px solid #feedbc!important;" +
-									"background: #fffdf6}"
+		stylesheet.innerHTML = `
+			#slidecontrol-open-presentation-button {
+				text-decoration: none !important
+			}
+			#slidecontrol-open-presentation-button-text {
+				cursor: pointer;
+				background-image: none;
+				border-radius: 4px;
+		`
+		
+		
+		// "#slidecontrol-open-presentation-button {" +
+		// 							"text-decoration: none !important}" +
+		// 						"#slidecontrol-open-presentation-button-text {" +
+		// 							"cursor: pointer;" +
+		// 							"background-image: none;" +
+		// 							"border-radius: 4px;" +
+		// 							"box-shadow: none;" +
+		// 							"box-sizing: border-box;" +
+		// 							"font-family: var(--docs-material-header-font-family,Roboto,RobotoDraft,Helvetica,Arial,sans-serif);" +
+		// 							"font-weight: var(--docs-material-font-weight-bold,500);" +
+		// 							"font-size: 14px;" +
+		// 							"height: 36px;" +
+		// 							"letter-spacing: 0.25px;" +
+		// 							"line-height: 16px;" +
+		// 							"background: white;" +
+		// 							"border: 1px solid #dadce0!important;" +
+		// 							"color: #202124;" +
+		// 							"padding: 9px 11px 10px 12px}" +
+		// 						"#slidecontrol-open-presentation-button-text:hover {" +
+		// 							"border: 1px solid #feedbc!important;" +
+		// 							"background: #fffdf6}"
 
 		// place stylesheet
 		document.head.appendChild(stylesheet)

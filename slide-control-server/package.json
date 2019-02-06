@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/m4r1vs/slidecontrol#readme",
   "dependencies": {
-    "websocket": "^1.0.28",
     "ws": "^6.1.3"
   }
 }

@@ -141,9 +141,10 @@ export default class Profile extends Component {
 			}
 
 			if (message.reason === 'slide-changed') {
+				console.log(message)
 				this.notesContainer.innerHTML = message.notes;
 				this.setState({
-					activeSlide: message.currentSlide
+					activeSlide: message.activeSlide
 				});
 			}
 		};
@@ -258,7 +259,7 @@ export default class Profile extends Component {
 						{this.state.laserPointer ? 'notes' : 'touch_app'}
 					</i>
 					<i onClick={this.toggleLightMode} class="material-icons" style={{ right: '7px', left: 'auto' }}>
-						{this.state.lightMode ? 'brightness_7' : 'brightness_2'}
+						{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
 					</i>
 				</h1>
 
