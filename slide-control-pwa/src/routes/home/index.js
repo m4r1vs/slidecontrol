@@ -23,7 +23,12 @@ export default class Home extends Component {
 
 	sendCode(e) {
 		e.preventDefault();
-		if (!this.Socket.OPEN) alert('Server call made a fucky wucy :/'); // eslint-disable-line no-alert
+		if (!this.Socket.OPEN) this.props.showSnackbar(
+			'Server call made a wucy fucky :o',
+			'RELOAD',
+			3000,
+			location.reload
+		);
 		this.input.disabled = true;
 		this.Socket.send(JSON.stringify({
 			reason: 'check-slide-code',
@@ -58,7 +63,12 @@ export default class Home extends Component {
 				route(`/controller/${message.code}`);
 			}
 			if (message.reason === 'slide-code-not-ok') {
-				alert(`Hmm, seems like the code ${message.code} is not used by any presentation :/`); // eslint-disable-line no-alert
+				this.props.showSnackbar(
+					`Hmm, seems like the code ${message.code} is not used by any presentation :/`,
+					'HELP',
+					4000,
+					() => route('/help')
+				);
 				this.input.disabled = false;
 			}
 		};

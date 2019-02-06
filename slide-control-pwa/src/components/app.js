@@ -104,6 +104,23 @@ export default class App extends Component {
 		this.changeHeaderTitle = this.changeHeaderTitle.bind(this);
 		this.changeHeaderChildren = this.changeHeaderChildren.bind(this);
 		this.handleNavClick = this.handleNavClick.bind(this);
+
+	}
+
+	componentDidMount() {
+		window.addEventListener('online', () => this.showSnackbar(
+			'Connected to the internet',
+			null,
+			2500,
+			() => console.warn('Lol, y u c this?')
+		));
+
+		window.addEventListener('offline', () => this.showSnackbar(
+			'Lost connection to the internet',
+			'RELOAD',
+			4000,
+			location.reload
+		));
 	}
 
 	render() {
@@ -127,7 +144,7 @@ export default class App extends Component {
 
 				{/* Different routes */}
 				<Router onChange={this.handleRoute}>
-					<Home path="/" title="Slidecontrol" theme="#212121" transparentHeader />
+					<Home showSnackbar={this.showSnackbar} path="/" title="Slidecontrol" theme="#212121" transparentHeader />
 					<Help path="/help" title="Help" theme="#ffbc16" arrowHeader />
 					<Controller
 						smallHeader

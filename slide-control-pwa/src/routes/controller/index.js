@@ -124,6 +124,14 @@ export default class Profile extends Component {
 				code: this.props.id
 			}));
 		};
+		this.Socket.onclose = () => {
+			this.props.showSnackbar(
+				'Disconnected',
+				null,
+				1800,
+				location.reload
+			);
+		};
 	}
 
 	componentDidMount() {
