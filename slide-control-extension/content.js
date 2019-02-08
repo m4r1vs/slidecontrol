@@ -1,7 +1,8 @@
 // variables
 let path = window.location.pathname,
 		Socket = null,
-		laserpointer
+		laserpointer,
+		qrcodewindow
 
 // Logger for info and errors
 const Logger = {
@@ -70,6 +71,91 @@ const registerSlide = () => {
 	}))
 }
 
+class QRCodeWindow {
+
+	constructor(code) {
+
+		this.element = document.createElement("div")
+		this.background = document.createElement("div")
+
+		this.element.id = "qr-code-window"
+		this.background.id = "qr-code-window-background"
+
+		this.element.style = `
+			position: fixed;
+			z-index: 10;
+			border-radius: 28px;
+			opacity: 0;
+			display: none;
+			padding: 32px;
+			transition: opacity .32s;
+			top: calc(35vh - (272px / 2) - 32px);
+			left: calc(50vw - (272px / 2) - 32px);
+			width: 272px;
+			height: 272px;
+			background: #212121;
+		`
+
+		this.background.style = `
+			position: fixed;
+			opacity: 0;
+			transition: opacity .32s;
+			z-index: 9;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #000;
+			display: none;
+		`
+
+		this.background.addEventListener("click", this.hide.bind(this))
+
+		new QRCode(this.element, {
+			text: `slide-control-firebase.firebaseapp.com/controller/${code}`,
+			height: 272,
+			width: 272,
+			colorDark: '#ffbc16',
+			colorLight: '#212121',
+			correctLevel: QRCode.CorrectLevel.H
+		})
+
+		document.body.insertBefore(this.element, document.body.firstChild)
+		document.body.insertBefore(this.background, document.body.firstChild)
+	}
+
+	toggle() {
+		(this.element.style.display === "none") ? this.show() : this.hide()
+	}
+
+	show() {
+		if (this.element.style.display === "block") return
+
+		this.element.style.display = "block"
+		this.background.style.display = "block"
+
+		setTimeout(() => {
+			this.element.style.opacity = 1
+			this.background.style.opacity = 0.618
+		}, 20);
+
+		console.log("show")
+	}
+
+	hide() {
+		if (this.element.style.display === "none") return
+
+		this.element.style.opacity = "0"
+		this.background.style.opacity = "0"
+
+		setTimeout(() => {
+			this.element.style.display = "none"
+			this.background.style.display = "none"
+		}, 320);
+
+		console.log("hide")
+	}
+}
 class Laserpointer {
 
 	constructor() {
@@ -156,7 +242,10 @@ const handleMessage = message => {
 		"slide-created": () => startSlidecontrol(message.code),
 		"next-slide": () => switchSlide("next"),
 		"previous-slide": () => switchSlide("previous"),
-		"new-device-synced": () => chrome.runtime.sendMessage("New device synced to slide: #" + message.code),
+		"new-device-synced": () => {
+			qrcodewindow.hide()
+			chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
+		},
 		"laserpointer-down": () => laserpointer.show(),
 		"laserpointer-move": () => laserpointer.move(message.x, message.y),
 		"laserpointer-up": () => laserpointer.hide()
@@ -195,9 +284,13 @@ const main = function () {
 		
 		<div id="slidecontrol-id-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; line-height: 16px; cursor: text;">
 			<div>Your ID:</div>
-			<div id="slidecontrol-id-text" style="font-size: 16px; font-weight: 600;" />
+			<div id="slidecontrol-id-text" style="font-size: 16px; font-weight: 600;"></div>
 		</div>
-	`																
+
+		<div id="slidecontrol-qr-button-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; cursor: pointer; line-height: 28px; cursor: text;">
+			<div style="cursor: pointer;font-size: 14px;font-weight: 700;">QR-CODE</div>
+		</div>
+	`
 
 	googleSlideController.appendChild(slidecontrolProxy)
 
@@ -230,18 +323,24 @@ const startSlidecontrol = code => {
 
 	// *pew* *pew* *pewww*
 	laserpointer = new Laserpointer()
+	
+	qrcodewindow = new QRCodeWindow(code)
 
 	// show notification with slide ID
 	chrome.runtime.sendMessage("Your code for this slide is " + code)
 
 	let startButton = document.querySelector("#slidecontrol-start-block"),
 		idContainer = document.querySelector("#slidecontrol-id-block"),
-		idText = document.querySelector("#slidecontrol-id-text")
+		idText = document.querySelector("#slidecontrol-id-text"),
+		qrButtonContainer = document.querySelector("#slidecontrol-qr-button-block")
 
 	// hide the start button and show the ID
 	startButton.style.display = "none"
 	idContainer.style.display = "inline-block"
 	idText.innerHTML = code
+
+	qrButtonContainer.style.display = "inline-block"
+	qrButtonContainer.addEventListener("click", () => qrcodewindow.toggle())
 
 	// Google button containing further info about slide
 	let googleSlideButton = document.querySelector(".goog-flat-menu-button-caption")

@@ -1,0 +1,30 @@
+.about {
+	min-height: 100%;
+	width: 100%;
+	color: var(--primary-color);
+	
+	section {
+		
+		padding: 0 16px 16px;
+		border-bottom: 1px solid var(--primary-color-dark);
+
+		h1 {
+			text-align: center;
+			font-size: 26px;
+		}
+
+		h2 {
+			font-size: 20px;
+		}
+	
+		p {
+			line-height: 1.618;
+			text-align: justify;
+		}
+
+		&:last-of-type {
+			border-bottom: none;
+		}
+	}
+
+}

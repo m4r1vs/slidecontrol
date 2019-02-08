@@ -5,7 +5,7 @@
    },
    "content_scripts": [ {
       "all_frames": false,
-      "js": [ "content.js" ],
+      "js": [ "qrcodegen.js", "content.js" ],
       "matches": [ "https://docs.google.com/presentation/d/*" ],
       "run_at": "document_idle"
    } ],

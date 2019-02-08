@@ -37,7 +37,7 @@
 		}
 	}
 
-	.button {
+	.button, .scanButton {
 		cursor: pointer;
 		appearance: none;
 		background: var(--primary-color);
@@ -56,9 +56,30 @@
 		}
 	}
 
+	.scanButton {
+		height: 79px;
+    line-height: 79px;
+    border: none;
+    width: 42px;
+    color: grey;
+    background: transparent !important;
+    position: absolute;
+    margin: 0;
+    margin-left: -50px;
+		padding: 0;
+
+		i {
+			line-height: 79px;
+		}
+		
+		&:hover, &:active {
+			color: var(--primary-color)
+		}
+	}
+
 	input.code {
 		font-size: 42px;
-		width: 248px;
+		width: 272px;
 		-webkit-appearance: none;
 		background: none;
 		border: 3px solid grey;

@@ -1,16 +1,20 @@
 import { h, Component } from 'preact';
-import { Router } from 'preact-router';
+import { route, Router } from 'preact-router';
 
 // routes
 import Home from '../routes/home';
 import Help from '../routes/help';
 import Controller from '../routes/controller';
+import About from '../routes/about';
 
 // Components
 import Snackbar from '../components/snackbar';
 import Header from '../components/header';
 import Nav from '../components/nav';
 import Blank from '../routes/blank';
+import Settings from '../routes/settings';
+import Donate from '../routes/donate';
+import Scanner from '../routes/scanner';
 
 export default class App extends Component {
 	
@@ -45,12 +49,14 @@ export default class App extends Component {
 
 	handleRoute = route => {
 
+		document.body.style.background = '#212121';
 		let attributes = route.active[0].attributes;
 
 		this.setState({
 			headerTitle: attributes.title,
 			headerTransparent: !!attributes.transparentHeader,
 			headerArrow: !!attributes.arrowHeader,
+			headerColor: attributes.theme,
 			headerSmall: !!attributes.smallHeader,
 			headerChildren: !!attributes.changeHeaderChildren
 		});
@@ -60,7 +66,10 @@ export default class App extends Component {
 	}
 
 	handleNavClick = () => {
-		if (this.state.headerArrow) window.history.back();
+		if (this.state.headerArrow) {
+			if (window.history.length > 1) window.history.back();
+			else route('/');
+		}
 		else {
 			document.body.style.overflow = 'hidden';
 
@@ -134,6 +143,7 @@ export default class App extends Component {
 					small={this.state.headerSmall}
 					transparent={this.state.headerTransparent}
 					arrow={this.state.headerArrow}
+					color={this.state.headerColor}
 					onNavClick={this.handleNavClick}
 					title={this.state.headerTitle}
 					children={this.state.headerChildren}
@@ -156,7 +166,12 @@ export default class App extends Component {
 						title="Loading..."
 						arrowHeader
 					/>
+					<Settings path="/settings" title="Settings" theme="#212121" transparentHeader />
+					<Donate path="/donate" title="Donate <3" theme="#212121" transparentHeader />
+					<About path="/about" title="About" theme="#212121" transparentHeader />
+					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title="Scanner" theme="#ffbc16" arrowHeader />
 					<Blank default title="Error 404" theme="#212121" transparentHeader />
+	
 				</Router>
 			</div>
 		);

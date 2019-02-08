@@ -1,5 +1,7 @@
 import { h, Component } from 'preact';
 import { route, Link } from 'preact-router';
+import Button from '../../components/buttons';
+
 import style from './style.scss';
 
 // gets shown after onboarding
@@ -22,7 +24,7 @@ export default class Home extends Component {
 	}
 
 	sendCode(e) {
-		e.preventDefault();
+		if (e) e.preventDefault();
 		if (!this.Socket.OPEN) this.props.showSnackbar(
 			'Server call made a wucy fucky :o',
 			'RELOAD',
@@ -51,6 +53,7 @@ export default class Home extends Component {
 		this.Socket = new WebSocket('wss://www.maniyt.de:61263');
 		this.changeInput = this.changeInput.bind(this);
 		this.sendCode = this.sendCode.bind(this);
+		this.openScanner = () => route('/scanner');
 	}
 
 	componentDidMount() {
@@ -74,6 +77,7 @@ export default class Home extends Component {
 		};
 
 		this.Socket.onerror = error => console.error(error);
+
 	}
 
 	componentWillUnmount() {
@@ -81,8 +85,6 @@ export default class Home extends Component {
 	}
 
 	render() {
-
-		document.body.style.background = '#212121';
 
 		return (
 			<div class={style.home} fadeIn>
@@ -105,6 +107,10 @@ export default class Home extends Component {
 						required class={style.code}
 						type="number"
 					/>
+					
+					<button class={style.scanButton} onClick={this.openScanner} >
+						<i class="material-icons">photo_camera</i>
+					</button>
 
 					<br />
 

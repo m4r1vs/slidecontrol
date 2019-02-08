@@ -22,17 +22,6 @@ const Help = props => (
 			If everything worked as intended you should have a small code to be
 			entered <Link href="/">here</Link>.
 		</p>
-
-		<h1>HOW IT WORKS</h1>
-		<p>
-			Slidecontrol was developed by Niels Kapeller and Marius Niveri as a project
-			for German High School.
-		</p>
-		<p>
-			Under the hood it works by establishing a connection based on WebSockets to a small server
-			we are hosting. The server connects both app and extension by entered/generated ID and forwards
-			commands send from either to the other in realtime.
-		</p>
 		
 	</div>
 );

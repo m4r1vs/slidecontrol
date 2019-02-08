@@ -171,7 +171,6 @@ export default class Nav extends Component {
 						<div class={style.drawerSubContent} >
 
 							<Link activeClassName="active" href="/" onClick={this.closeDrawer}><div><span><i class="material-icons">home</i>Home</span></div></Link>
-							<Link activeClassName="active" href="/help" onClick={this.closeDrawer}><div><span><i class="material-icons">help</i>Help</span></div></Link>
 							<Link activeClassName="active" href="/settings" onClick={this.closeDrawer}><div><span><i class="material-icons">settings</i>Settings</span></div></Link>
 							<Link activeClassName="active" href="/about" onClick={this.closeDrawer}><div><span><i class="material-icons">info</i>About</span></div></Link>
 							<Link activeClassName="active" href="/donate" onClick={this.closeDrawer}><div><span><i class="material-icons">favorite</i>Donate</span></div></Link>
@@ -179,7 +178,7 @@ export default class Nav extends Component {
 
 						</div>
 
-						<span class={style.credits}>SLIDECONTROL © 2019<br />by Niels Kapeller & Marius Niveri</span>
+						<span class={style.credits}>SLIDECONTROL © {new Date().getFullYear()}<br />by Niels Kapeller & Marius Niveri</span>
 					</div>
 
 				</nav>

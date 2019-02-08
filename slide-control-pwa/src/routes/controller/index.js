@@ -136,6 +136,9 @@ export default class Profile extends Component {
 
 	componentDidMount() {
 
+		let  _tcfg = _tcfg || [];
+		_tcfg.push(['tags', 'controller']);
+
 		this.props.changeHeaderChildren(
 			<i onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ position: 'absolute', right: '7px', left: 'auto' }}>
 				{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
