@@ -2,9 +2,30 @@
 	min-height: 100%;
 	width: 100%;
 	color: var(--primary-color);
+	margin: auto;
+	max-width: 524px;
+
+	.loader {
+		position: absolute;
+		left: calc(50vw - 22px);
+		top: 40vh;
+	}
 
 	video {
+		display: none;
 		width: 100%;
 		height: auto;
+	}
+
+	.scanWindow {
+		display: none;
+		height: 222px;
+		width: 222px;
+		border: 3px solid var(--primary-color);
+		position: fixed;
+		top: calc(40vh - (222px / 2));
+		border-radius: 12px;
+		left: calc(50vw - (222px / 2));
+		box-shadow: 0px 0px 20px 4px rgba(0, 0, 0, .87);
 	}
 }

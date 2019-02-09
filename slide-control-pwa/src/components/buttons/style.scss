@@ -7,12 +7,34 @@
     line-height: 1;
     padding: 8px 16px;
     border-radius: 3px;
-    color: black;
-    transition: background .13s;
+    color: black !important;
+    transition: background filter .13s;
     margin-bottom: 16px;
+    text-decoration: none !important;
+    font-weight: normal !important;
     
-    &:hover, &:focus {
+    &:active, &:focus {
       outline: none;
       background: var(--primary-color-dark);
+    }
+
+    &[disabledCss=true] {
+      background: var(--primary-color-dark);
+      filter: brightness(.38);
+    }
+
+    &[inverse=true] {
+      background: transparent;
+      color: var(--primary-color) !important;
+      
+      &[disabledCss=true] {
+        color: grey !important;
+        background: none !important;
+      }
+
+      &:active, &:focus {
+        outline: none;
+        background: rgba(255,255,255, .12);
+      }
     }
 }

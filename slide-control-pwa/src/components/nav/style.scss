@@ -114,6 +114,10 @@
       a {
         text-decoration: none;
         color: inherit !important;
+
+        &:focus {
+          text-decoration: underline;
+        }
         
         &[class=active] div {
           color: var(--primary-color);
@@ -136,7 +140,7 @@
           user-select: none;
           cursor: pointer;
     
-          &:hover {
+          &:hover, &:focus, &:active {
             background: rgba(255, 255, 255, .05);
 
             @media (min-width: 1025px) {
@@ -145,7 +149,7 @@
 
           }
     
-          &:hover span i {
+          &:hover span i, &:focus span i, &:active span i {
             color: inherit !important;
           }
     
@@ -182,46 +186,5 @@ div.drawerBack {
 
   @media (min-width: 1025px) {
     display: none !important;
-  }
-}
-
-body[class=nightmode] {
-  .nav {
-    background: #303030 !important;
-
-    a[class=active] div {
-      background: rgba(255, 255, 255, .05) !important;
-      color: rgba(255,255,255,.87) !important;
-
-      @media (min-width: 1025px) {
-        background: rgba(255, 255, 255, .05) !important;
-      }
-
-      span i {
-        color: rgba(255, 255, 255, .87) !important;
-      }
-    }
-
-    hr {
-      @media (min-width: 1025px) {
-        border-top: 1px solid rgba(255, 255, 255, .12) !important;
-      }
-    }
-
-    a:hover div {
-      background-color: rgba(255, 255, 255, .05) !important;
-    }
-
-    div {
-      color: rgba(255, 255, 255, .57) !important;
-
-      &:hover {
-        color: rgba(255, 255, 255, .87) !important;
-      }
-
-      span i {
-        color: rgba(255,255,255,.57) !important;
-      }
-    }
   }
 }

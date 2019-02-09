@@ -1,15 +1,32 @@
 .help {
 	padding: 18px;
 	min-height: 100%;
-	width: 100%;
+	margin: auto;
+	max-width: 524px;
 	color: var(--primary-color);
 
 	h1 {
 		text-align: center;
 	}
 
-	p {
-		line-height: 1.618;
-		text-align: justify;
+	section {
+		p {
+			line-height: 1.618;
+			text-align: justify;
+		}
+	
+		span {
+			background: var(--primary-color-dark);
+			color: #212121;
+			padding: 2px 4px;
+			border-radius: 2px;
+		}
+	}
+
+	.buttons {
+		position: absolute;
+		bottom: 12px;
+		width: 100vw;
+		left: 0;
 	}
 }

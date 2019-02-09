@@ -1,6 +1,5 @@
 import { h, Component } from 'preact';
 import { route, Link } from 'preact-router';
-import Button from '../../components/buttons';
 
 import style from './style.scss';
 
@@ -69,7 +68,7 @@ export default class Home extends Component {
 				this.props.showSnackbar(
 					`Hmm, seems like the code ${message.code} is not used by any presentation :/`,
 					'HELP',
-					4000,
+					5000,
 					() => route('/help')
 				);
 				this.input.disabled = false;
@@ -108,7 +107,7 @@ export default class Home extends Component {
 						type="number"
 					/>
 					
-					<button class={style.scanButton} onClick={this.openScanner} >
+					<button type="button" class={style.scanButton} onClick={this.openScanner} >
 						<i class="material-icons">photo_camera</i>
 					</button>
 
@@ -118,7 +117,7 @@ export default class Home extends Component {
 					
 					<br />
 
-					<Link href="/help/">what code?</Link>
+					<Link href="/help/">SHOW ME HOW</Link>
 
 				</form>
 			</div>

@@ -44,8 +44,8 @@ export default class Donate extends Component {
 				</div>
 
 				<p>
-					The icons above will redirect you to PayPal which I think will be just fine for this purpose and even if you don't have an account you should be able to
-					just use a credit card without having to log in.
+					The icons above will redirect you to PayPal which we believe will be just fine for this purpose and even if you don't have an account you should be able to
+					just use a credit card without having to sign in.
 				</p>
 
 

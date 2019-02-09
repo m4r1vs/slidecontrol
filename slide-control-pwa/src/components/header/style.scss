@@ -94,6 +94,7 @@
 
 		&[id=navbtn-arrow] {
 			transform: rotate(180deg) !important;
+			cursor: pointer !important;
 
 			@media (min-width: 1025px) {
 				opacity: 1 !important;

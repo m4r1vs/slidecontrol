@@ -17,7 +17,7 @@ export default class Snackbar extends Component {
 				<span>{(text) ? text : null}</span>
 
 				{/* Optional Snackbar Action-button */}
-				<button onClick={clickAction}>
+				<button tabindex={actionText ? 0 : -1} onClick={clickAction}>
 					{(actionText) ? actionText : null}
 				</button>
 			</div>

@@ -23,9 +23,12 @@ body * {
 
 a {
 	color: var(--primary-color-dark);
+	text-decoration: none;
+	font-weight: bold;
 	
-	&:hover {
+	&:hover, &:focus, &:active {
 		color: var(--primary-color);
+		text-decoration: underline;
 	}
 }
 

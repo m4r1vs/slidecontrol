@@ -170,11 +170,11 @@ export default class Nav extends Component {
 
 						<div class={style.drawerSubContent} >
 
-							<Link activeClassName="active" href="/" onClick={this.closeDrawer}><div><span><i class="material-icons">home</i>Home</span></div></Link>
-							<Link activeClassName="active" href="/settings" onClick={this.closeDrawer}><div><span><i class="material-icons">settings</i>Settings</span></div></Link>
-							<Link activeClassName="active" href="/about" onClick={this.closeDrawer}><div><span><i class="material-icons">info</i>About</span></div></Link>
-							<Link activeClassName="active" href="/donate" onClick={this.closeDrawer}><div><span><i class="material-icons">favorite</i>Donate</span></div></Link>
-							<a href="https://chrome.google.com/webstore/detail/slidecontrol/ghfjfgbiehcemjfapohnnfngcbappodg" rel="noopener noreferrer" target="_blank"><div><span><i class="material-icons">extension</i>Get Extension</span></div></a>
+							<Link activeClassName="active" href="/" onClick={this.closeDrawer} tabindex="0"><div><span><i class="material-icons">home</i>Home</span></div></Link>
+							<Link activeClassName="active" href="/settings" onClick={this.closeDrawer} tabindex="0"><div><span><i class="material-icons">settings</i>Settings</span></div></Link>
+							<Link activeClassName="active" href="/about" onClick={this.closeDrawer} tabindex="0"><div><span><i class="material-icons">info</i>About</span></div></Link>
+							<Link activeClassName="active" href="/donate" onClick={this.closeDrawer} tabindex="0"><div><span><i class="material-icons">favorite</i>Donate</span></div></Link>
+							<a href="https://chrome.google.com/webstore/detail/slidecontrol/ghfjfgbiehcemjfapohnnfngcbappodg" rel="noopener noreferrer" target="_blank" tabindex="0"><div><span><i class="material-icons">extension</i>Get Extension</span></div></a>
 
 						</div>
 

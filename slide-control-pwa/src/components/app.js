@@ -6,6 +6,10 @@ import Home from '../routes/home';
 import Help from '../routes/help';
 import Controller from '../routes/controller';
 import About from '../routes/about';
+import AboutCredits from '../routes/about/credits';
+import AboutUs from '../routes/about/us';
+import AboutPrivacy from '../routes/about/privacy';
+import AboutCode from '../routes/about/code';
 
 // Components
 import Snackbar from '../components/snackbar';
@@ -49,6 +53,8 @@ export default class App extends Component {
 
 	handleRoute = route => {
 
+		document.body.focus();
+
 		document.body.style.background = '#212121';
 		let attributes = route.active[0].attributes;
 
@@ -85,6 +91,8 @@ export default class App extends Component {
 			greyback.style.opacity = '1';
 
 			drawer.style.marginLeft = '0px';
+
+			drawer.focus();
 		}
 	}
 
@@ -156,6 +164,8 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 					<Home showSnackbar={this.showSnackbar} path="/" title="Slidecontrol" theme="#212121" transparentHeader />
 					<Help path="/help" title="Help" theme="#ffbc16" arrowHeader />
+					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title="Scanner" theme="#ffbc16" arrowHeader />
+
 					<Controller
 						smallHeader
 						changeHeaderTitle={this.changeHeaderTitle}
@@ -166,10 +176,16 @@ export default class App extends Component {
 						title="Loading..."
 						arrowHeader
 					/>
+
 					<Settings path="/settings" title="Settings" theme="#212121" transparentHeader />
 					<Donate path="/donate" title="Donate <3" theme="#212121" transparentHeader />
+
 					<About path="/about" title="About" theme="#212121" transparentHeader />
-					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title="Scanner" theme="#ffbc16" arrowHeader />
+					<AboutUs path="/about/us" title="About us" theme="#ffbc16" arrowHeader />
+					<AboutCode path="/about/code" title="Our code" theme="#ffbc16" arrowHeader />
+					<AboutPrivacy path="/about/privacy" title="Privacy" theme="#ffbc16" arrowHeader />
+					<AboutCredits path="/about/credits" title="Credits" theme="#ffbc16" arrowHeader />
+
 					<Blank default title="Error 404" theme="#212121" transparentHeader />
 	
 				</Router>
