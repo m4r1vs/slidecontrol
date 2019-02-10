@@ -71,7 +71,15 @@ export default class Home extends Component {
 			}
 		};
 
-		this.Socket.onerror = error => console.error(error);
+		this.Socket.onerror = error => {
+			this.props.showSnackbar(
+				'We fucked up big here, server seems dead ass dead',
+				'TRY RELOAD',
+				5000,
+				location.reload
+			);
+			console.error('We fucked up big here: ', error);
+		};
 
 	}
 

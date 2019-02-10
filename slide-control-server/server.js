@@ -13,10 +13,12 @@ const httpsServer = new https.createServer({
 const server = new WebSocket.Server({ server: httpsServer })
 
 // object holds all currently synced presentations
-let slides = {}
+let slides = {},
+    connections = 0
 
 const Logger = {
-    log: log => console.log(`[${new Date()}] ${log}`)
+    log: log => console.log(`[${new Date()}] ${log}`),
+    debug: (log, data) => (process.env.DEBUG === 'true') && console.log(log, data)
 }
 
 /**
@@ -79,6 +81,7 @@ const handleNewController = (message, connection) => {
         // notify extension of new synced device
         server.clients.forEach(client => {
             if (client.slideCode && client.slideCode === code) {
+                connection.connectedConnection = client
                 client.send(JSON.stringify({
                     reason: 'new-device-synced',
                     code
@@ -96,14 +99,10 @@ const handleNewController = (message, connection) => {
 /**
  * Controller wants to change slide, do so.
  */
-const handleSwitchSlide = message => {
-    server.clients.forEach(client => {
-        if (client.slideCode && client.slideCode === parseInt(message.code)) {
-            client.send(JSON.stringify({
-                reason: message.reason
-            }))
-        }
-    })
+const handleSwitchSlide = (message, connection) => {
+    if (connection.connectedConnection.OPEN) connection.connectedConnection.send(JSON.stringify({
+        reason: message.reason
+    }))
 }
 
 /**
@@ -142,42 +141,30 @@ const checkSlideCode = (message, connection) => {
 /**
  * make extension show laserpointer
  */
-const handleLaserpointerStart = message => {
-    server.clients.forEach(client => {
-        if (client.slideCode && client.slideCode === parseInt(message.code)) {
-            client.send(JSON.stringify({
-                reason: 'laserpointer-down'
-            }))
-        }
-    })
+const handleLaserpointerStart = connection => {
+    if (connection.connectedConnection.OPEN) connection.connectedConnection.send(JSON.stringify({
+        reason: 'laserpointer-down'
+    }))
 }
 
 /**
  * let extension know that laserpointer shall be moved in given direction
  */
-const handleLaserpointerMove = message => {
-    server.clients.forEach(client => {
-        if (client.slideCode && client.slideCode === parseInt(message.code)) {
-            client.send(JSON.stringify({
-                reason: 'laserpointer-move',
-                x: message.x,
-                y: message.y
-            }))
-        }
-    })
+const handleLaserpointerMove = (message, connection) => {
+    if (connection.connectedConnection.OPEN) connection.connectedConnection.send(JSON.stringify({
+        reason: 'laserpointer-move',
+        x: message.x,
+        y: message.y
+    }))
 }
 
 /**
  * and hide the laser again
  */
-const handleLaserpointerEnd = message => {
-    server.clients.forEach(client => {
-        if (client.slideCode && client.slideCode === parseInt(message.code)) {
-            client.send(JSON.stringify({
-                reason: 'laserpointer-up'
-            }))
-        }
-    })
+const handleLaserpointerEnd = connection => {
+    if (connection.connectedConnection.OPEN) connection.connectedConnection.send(JSON.stringify({
+        reason: 'laserpointer-up'
+    }))
 }
 
 /**
@@ -186,6 +173,9 @@ const handleLaserpointerEnd = message => {
  * @param {Connection} connection the connection thats sending message
  */
 const handleMessage = (message, connection) => {
+
+    Logger.debug('New command recieved: ', message)
+
     if (!message) return
 
     const map = {
@@ -195,9 +185,9 @@ const handleMessage = (message, connection) => {
         'next-slide': () => handleSwitchSlide(message, connection),
         'previous-slide': () => handleSwitchSlide(message, connection),
         'slide-changed': () => handleSlideChange(message, connection),
-        'laserpointer-start': () => handleLaserpointerStart(message),
-        'laserpointer-move': () => handleLaserpointerMove(message),
-        'laserpointer-end': () => handleLaserpointerEnd(message)
+        'laserpointer-start': () => handleLaserpointerStart(connection),
+        'laserpointer-move': () => handleLaserpointerMove(message, connection),
+        'laserpointer-end': () => handleLaserpointerEnd(connection)
     }
 
     if (map[message.reason]) map[message.reason]()
@@ -209,15 +199,58 @@ const handleMessage = (message, connection) => {
  * @param {Connection} connection the closed connection
  */
 const handleClose = connection => {
-    Logger.log(`Connection closed`)
+    connections--
+    Logger.log(`Connection closed, now ${connections} connections`)
     if (connection.slideCode) slides[connection.slideCode] = null
 }
 
+/**
+ * Set is alive when pong is recieved
+ */
+const heartbeat = (connection, ip) => {
+    Logger.debug('Recieved heartbeat from ', ip)
+    connection.isAlive = true
+}
+
 // New connection established:
-server.on('connection', connection => {
+server.on('connection', (connection, req) => {
+    connections++
+    Logger.log(`${req.connection.remoteAddress} connected, now ${connections} connections`)
+    connection.isAlive = true
     connection.on('message', raw => handleMessage(JSON.parse(raw), connection))
     connection.on('close', () => handleClose(connection))
+    connection.on('pong', () => heartbeat(connection, req.connection.remoteAddress))
 })
+
+/**
+ * Ping all connected instances to check if alive
+ */
+const ping = () => {
+    
+    Logger.log(`Checking if ${connections} connections still alive...`)
+
+    server.clients.forEach(client => {
+
+        if (client.isAlive === false) {
+            Logger.log('    - Client dead, killed')
+            return client.terminate()
+        }
+
+        Logger.log('    - Client alive, kept alive')
+        
+        client.isAlive = false
+        client.ping()
+    })
+}
+
+// ping every minute
+setInterval(ping, 60000);
 
 // finally listen to the port:
 httpsServer.listen(PORT)
+
+console.log('==== SLIDECONTROL WEBSOCKET SERVER v1.2.6f ====')
+console.log('====                                       ====')
+console.log(`====        Listening on port ${PORT}        ====`)
+console.log('====                                       ====')
+console.log('===============================================\n\n')

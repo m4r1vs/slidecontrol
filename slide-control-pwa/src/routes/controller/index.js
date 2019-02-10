@@ -10,8 +10,7 @@ export default class Profile extends Component {
 	switchSlides = direction => {
 		if (navigator.vibrate) navigator.vibrate(10);
 		this.Socket.send(JSON.stringify({
-			reason: direction === 'next' ? 'next-slide' : 'previous-slide',
-			code: this.props.id
+			reason: direction === 'next' ? 'next-slide' : 'previous-slide'
 		}));
 
 	}
@@ -183,7 +182,15 @@ export default class Profile extends Component {
 			}
 		};
 
-		this.Socket.onerror = error => console.error(error);
+		this.Socket.onerror = error => {
+			this.props.showSnackbar(
+				'We fucked up big here, server seems dead ass dead',
+				'TRY RELOAD',
+				5000,
+				location.reload
+			);
+			console.error('We fucked up big here: ', error);
+		};
 
 		this.onKeyDown = key => {
 			if (key.code === 'KeyT') this.startTimer();
@@ -238,8 +245,7 @@ export default class Profile extends Component {
 			touchstartYpointer = e.changedTouches[0].clientY,
 
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-start',
-				code: this.props.id
+				reason: 'laserpointer-start'
 			}));
 		};
 
@@ -249,7 +255,6 @@ export default class Profile extends Component {
 			e.preventDefault();
 			this.Socket.send(JSON.stringify({
 				reason: 'laserpointer-move',
-				code: this.props.id,
 				x: e.changedTouches[0].clientX - touchstartXpointer,
 				y: e.changedTouches[0].clientY - touchstartYpointer
 			}));
@@ -260,8 +265,7 @@ export default class Profile extends Component {
 		this.onTouchEndPointer = e => {
 			e.preventDefault();
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-end',
-				code: this.props.id
+				reason: 'laserpointer-end'
 			}));
 		};
 
