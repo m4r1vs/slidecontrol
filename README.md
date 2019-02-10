@@ -32,9 +32,10 @@ And finally to run the WebSocket server on your machine you should `cd ./slide-c
 Then, in order to make the PWA and/or extension connect to the local server, you need to change the IP in the files.
 Maybe just `CTRL + F` 'maniyt.de' which is the domain of my experimental server the socket is hosted on.
 
-![Screenshot of slidecontrols QR-Scanner](https://maniyt.de/screenshot2.png)
+## Screenshots 📸
 *Slidecontrol has a build in QR-Scanner to connect to your presentation.*
-![Screenshot of slidecontrols controller](https://maniyt.de/screenshot3.png)
+![Screenshot of slidecontrols QR-Scanner](https://maniyt.de/screenshot2.png)
 *The speakers notes are synced on your phone as well.*
-![Screenshot of slidecontrols controller](https://maniyt.de/screenshot4.png)
+![Screenshot of slidecontrols controller](https://maniyt.de/screenshot3.png)
 *Finally there's also a laser-pointer which is controllable from the app.*
+![Screenshot of slidecontrols controller](https://maniyt.de/screenshot4.png)
