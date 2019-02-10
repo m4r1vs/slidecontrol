@@ -5,12 +5,12 @@ const fs = require('fs')
 const PORT = 61263
 
 // ssl-server so wss:// is possible
-const httpsServer = new https.createServer({
+const httpsServer = (process.env.LOCAL !== 'true') ? new https.createServer({
 	cert: fs.readFileSync('/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/cert.pem'),
 	key: fs.readFileSync('/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/privkey.pem')
-})
+}) : null
 
-const server = new WebSocket.Server({ server: httpsServer })
+const server = new WebSocket.Server((process.env.LOCAL !== 'true') ? { server: httpsServer } : { port: PORT })
 
 // object holds all currently synced presentations
 let slides = {},
@@ -247,7 +247,7 @@ const ping = () => {
 setInterval(ping, 60000);
 
 // finally listen to the port:
-httpsServer.listen(PORT)
+if (process.env.LOCAL !== 'true') httpsServer.listen(PORT)
 
 console.log('==== SLIDECONTROL WEBSOCKET SERVER v1.2.6f ====')
 console.log('====                                       ====')
