@@ -19,13 +19,13 @@ at [slidecontrol.niveri.xyz](https://sc.niveri.xyz).
 
 ![Screenshot of slidecontrols homescreen](https://maniyt.de/screenshot1.png)
 ## Contributing 😊
-To contribute to the PWA just
+To contribute to the PWA just run this:
 ```sh
 git clone https://github.com/m4r1vs/slidecontrol.git
 cd ./slidecontrol/slide-control-pwa
 npm run start
 ```
-To make help improve the extension you can install it locally.
+And to help improving the extension you can install it locally.
 [Here](https://blog.hunter.io/how-to-install-a-chrome-extension-without-using-the-chrome-web-store-31902c780034) you can learn how to do so.
 And finally to run the WebSocket server on your mashine you should `cd ./slide-control-server` and `LOCAL=true node server.js`.
 Then, in order to make the PWA and/or extension connect to the local server, you need to change the IP in the files.
