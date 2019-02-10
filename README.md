@@ -2,7 +2,7 @@
   <img title="slidecontrol logo" alt="Slidecontrol Logo" src="https://raw.githubusercontent.com/m4r1vs/slidecontrol/master/slide-control-pwa/src/assets/slidecontrol_logo_gh.png">
 </h1>
 <div align="center">
-  ⚠ Attention: slidecontrol is still in beta and there might be some bugs present! ⚠<br />
+  ⚠ slidecontrol is still work in progress, hence there might be some bugs present ⚠<br />
   <strong>SLIDECONTROL is a PWA and Chrome Extension which allows you to control your slides!</strong>
 </div>
 <div align="center">
