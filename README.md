@@ -16,3 +16,5 @@ by installing it locally (clone `/slide-control-extension` and add it to `chrome
 
 Following the steps after installation will lead you to our PWA `/slide-control-pwa`, available
 at [slidecontrol.niveri.xyz](https://sc.niveri.xyz).
+
+![Screenshot of slidecontrols homescreen](https://maniyt.de/screenshot1.png)
