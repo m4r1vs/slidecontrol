@@ -27,6 +27,7 @@ npm run start
 ```
 And to help improving the extension you can install it locally.
 [Here](https://blog.hunter.io/how-to-install-a-chrome-extension-without-using-the-chrome-web-store-31902c780034) you can learn how to do so.
-And finally to run the WebSocket server on your mashine you should `cd ./slide-control-server` and `LOCAL=true node server.js`.
+
+And finally to run the WebSocket server on your machine you should `cd ./slide-control-server` and `LOCAL=true node server.js`.
 Then, in order to make the PWA and/or extension connect to the local server, you need to change the IP in the files.
 Maybe just `CTRL + F` 'maniyt.de' which is the domain of my experimental server the socket is hosted on.
