@@ -4,7 +4,7 @@ import style from './style.scss';
 const AboutCredits = props => (
 	<div class={style.about} fadeIn>
 	
-		<section path="/about/credits">
+		<section>
 			<h1>
 				Who we depend on
 			</h1>
@@ -44,6 +44,7 @@ const AboutCredits = props => (
 			<p>
 				Thanks!
 			</p>
+
 		</section>
 	
 	</div>

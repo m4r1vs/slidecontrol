@@ -17,10 +17,6 @@ html, body {
 	transition: background .22s;
 }
 
-body * {
-	transition: all .22s;
-}
-
 a {
 	color: var(--primary-color-dark);
 	text-decoration: none;
@@ -34,7 +30,6 @@ a {
 
 * {
 	box-sizing: border-box;
-	user-select: none;
 	-webkit-tap-highlight-color: transparent;
 	outline: none !important;
 }

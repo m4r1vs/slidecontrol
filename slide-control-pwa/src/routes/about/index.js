@@ -33,6 +33,13 @@ const About = props => (
 			</span>
 		</Link>
 
+		<Link href="/about/licenses">
+			Open-Source Licenses<br />
+			<span>
+				The complete list of open-source projects we use and their licenses
+			</span>
+		</Link>
+
 		<a href="https://github.com/m4r1vs/slidecontrol" rel="noopener noreferrer" target="_blank">
 			slidecontrol app<br />
 			<span>Version {window.SLIDECONTROL.version}</span>

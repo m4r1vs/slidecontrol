@@ -112,7 +112,7 @@ class QRCodeWindow {
 		this.background.addEventListener("click", this.hide.bind(this))
 
 		new QRCode(this.element, {
-			text: `slide-control-firebase.firebaseapp.com/controller/${code}`,
+			text: `sc.niveri.xyz/controller/${code}`,
 			height: 272,
 			width: 272,
 			colorDark: '#ffbc16',

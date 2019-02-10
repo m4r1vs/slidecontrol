@@ -1,15 +1,15 @@
 .aboutList {
-	min-height: 100%;
-	width: 100%;
 	color: var(--primary-color);
 	margin: auto;
 	max-width: 524px;
 	padding-top: 12px;
+	padding-bottom: 12px;
 
 	a {
 		display: block;
 		padding: 22px 12px;
 		border-bottom: 1px solid #303030;
+		transition: box-shadow .12s;
 
 		&:first-of-type {
 			border-top: 1px solid #303030;
@@ -24,15 +24,13 @@
 		&:hover, &:active, &:focus {
 			text-decoration: none !important;
 			color: var(--primary-color);
-			box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.87);
+			box-shadow: 0 0 18px 1px rgba(0, 0, 0, 0.87);
 			border-color: #212121;
 		}
 	}
 }
 
 .about {
-	width: 100%;
-	color: var(--primary-color);
 	margin: auto;
 	max-width: 524px;
 	

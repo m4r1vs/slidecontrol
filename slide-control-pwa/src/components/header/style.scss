@@ -5,10 +5,11 @@
 	width: 100%;
 	height: 56px;
 	padding: 16px;
-	background: var(--primary-color);
+	background: transparent;
 	z-index: 50;
 	color: rgba(0, 0, 0, 0.87);
 	transition: height .22s, top .15s ease-in-out, background-color .22s, box-shadow .22s, color .22s;
+	user-select: none;
 
 	&[shadow=true] {
 		box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, .87);

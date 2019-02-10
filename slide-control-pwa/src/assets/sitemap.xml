@@ -1,0 +1,55 @@
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>1.00</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/settings</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.80</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/about</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.80</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/about/us</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.60</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/about/privacy</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.60</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/about/code</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.60</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/about/credits</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.60</priority>
+    </url>
+
+    <url>
+        <loc>https://slidecontrol.niveri.xyz/donate</loc>
+        <lastmod>2019-02-09T17:31:05+00:00</lastmod>
+        <priority>0.80</priority>
+    </url>
+
+</urlset>

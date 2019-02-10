@@ -17,6 +17,10 @@
     ],
     "rewrites": [
       {
+        "source": "/robots.txt",
+        "destination": "/assets/robots.txt"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

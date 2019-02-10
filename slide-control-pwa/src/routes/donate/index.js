@@ -48,7 +48,6 @@ export default class Donate extends Component {
 					just use a credit card without having to sign in.
 				</p>
 
-
 			</div>
 		);
 	}

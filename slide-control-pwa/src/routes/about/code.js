@@ -4,8 +4,8 @@ import style from './style.scss';
 const AboutCode = props => (
 	<div class={style.about} fadeIn>
 
-		<section path="/about/code">
-			<h1 style={{ fontFamily: 'Consolas, monospaced' }}>The code</h1>
+		<section>
+			<h1>The code</h1>
 			<p>
 				Basically slidecontrol consists of two (and a half) parts:
 				<ul>

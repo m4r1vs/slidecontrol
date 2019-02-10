@@ -70,6 +70,9 @@ export default class Nav extends Component {
 		});
   
 		panel.addEventListener('touchstart', (e) => {
+
+			if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) e.preventDefault();
+
 			let touchobj = e.changedTouches[0];
             
 			drawerTransition(false, false);
@@ -86,10 +89,13 @@ export default class Nav extends Component {
 				open = false;
 			}
 		}, {
-			passive: true
+			passive: !(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
 		});
   
 		panel.addEventListener('touchmove', (e) => {
+
+			if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) e.preventDefault();
+
 			let touchobj = e.changedTouches[0];
 			let dist = parseInt(touchobj.clientX, 10) - startx;
 			if (open) {
@@ -102,10 +108,13 @@ export default class Nav extends Component {
 				}
 			}
 		}, {
-			passive: true
+			passive: !(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
 		});
   
 		panel.addEventListener('touchend', (e) => {
+
+			if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) e.preventDefault();
+
 			drawerTransition(true, 'in');
 			let touchobj = e.changedTouches[0]; // Der erste Finger der den Bildschirm berührt wird gezählt
 			if (open) {
@@ -118,18 +127,24 @@ export default class Nav extends Component {
 				}
 			}
 		}, {
-			passive: true
+			passive: !(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
 		});
   
 		greyback.addEventListener('touchstart', (e) => {
+
+			if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) e.preventDefault();
+
 			drawerTransition(false, false);
 			let touchobj = e.changedTouches[0]; // Der erste Finger der den Bildschirm berührt wird gezählt
 			greybackstartx = parseInt(touchobj.clientX, 10);
 		}, {
-			passive: true
+			passive: !(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
 		});
         
 		greyback.addEventListener('touchmove', (e) => {
+
+			if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) e.preventDefault();
+
 			let touchobj = e.changedTouches[0];
 			distgrey = parseInt(touchobj.clientX, 10) - greybackstartx;
 			if (distgrey < 0) {
@@ -139,10 +154,13 @@ export default class Nav extends Component {
 				greyback.style.opacity = 1 - (Math.abs(distgrey / drawerwidth));
 			}
 		}, {
-			passive: true
+			passive: !(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
 		});
         
-		greyback.addEventListener('touchend', () => {
+		greyback.addEventListener('touchend', (e) => {
+
+			if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) e.preventDefault();
+
 			drawerwidth = drawer.offsetWidth;
             
 			if (distgrey > -80) {
@@ -154,7 +172,7 @@ export default class Nav extends Component {
 				drawerClosing();
 			}
 		}, {
-			passive: true
+			passive: !(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
 		});
 	}
     

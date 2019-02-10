@@ -10,6 +10,7 @@ import AboutCredits from '../routes/about/credits';
 import AboutUs from '../routes/about/us';
 import AboutPrivacy from '../routes/about/privacy';
 import AboutCode from '../routes/about/code';
+import Welcome from '../routes/welcome';
 
 // Components
 import Snackbar from '../components/snackbar';
@@ -19,9 +20,13 @@ import Blank from '../routes/blank';
 import Settings from '../routes/settings';
 import Donate from '../routes/donate';
 import Scanner from '../routes/scanner';
+import AboutLicenses from '../routes/about/licenses';
 
 export default class App extends Component {
 	
+	/**
+	 * This function will hide the snackbar
+	 */
 	hideSnackbar = () => {
 		this.setState({
 			notification: {
@@ -32,6 +37,9 @@ export default class App extends Component {
 		});
 	}
 
+	/**
+	 * Show the snackbar with given information
+	 */
 	showSnackbar = (text, actionText, delay, clickAction) => {
 
 		clearTimeout(this.timeout);
@@ -51,6 +59,9 @@ export default class App extends Component {
 		this.timeout = setTimeout(this.hideSnackbar, delay);
 	}
 
+	/**
+	 * Gets fired on route change
+	 */
 	handleRoute = route => {
 
 		document.body.focus();
@@ -71,6 +82,9 @@ export default class App extends Component {
 			.setAttribute('content', attributes.theme);
 	}
 
+	/**
+	 * What should happen when the nav button is clicked
+	 */
 	handleNavClick = () => {
 		if (this.state.headerArrow) {
 			if (window.history.length > 1) window.history.back();
@@ -78,20 +92,14 @@ export default class App extends Component {
 		}
 		else {
 			document.body.style.overflow = 'hidden';
-
 			const drawer = document.getElementById('drawer');
 			const greyback = document.getElementById('drawerback');
-
 			greyback.style.display = 'block';
-
 			drawer.style.transition = 'margin-left .16s cubic-bezier(0.0, 0.0, 0.2, 1)';
 			greyback.style.transition = 'opacity .16s linear';
-
 			drawer.style.opacity = '1';
 			greyback.style.opacity = '1';
-
 			drawer.style.marginLeft = '0px';
-
 			drawer.focus();
 		}
 	}
@@ -126,10 +134,10 @@ export default class App extends Component {
 
 	componentDidMount() {
 		window.addEventListener('online', () => this.showSnackbar(
-			'Connected to the internet',
-			null,
-			2500,
-			() => console.warn('Lol, y u c this?')
+			'Connected to the internet again',
+			'RELOAD',
+			4000,
+			location.reload
 		));
 
 		window.addEventListener('offline', () => this.showSnackbar(
@@ -145,8 +153,8 @@ export default class App extends Component {
 		return (
 			<div id="app">
 
+				{/* Global Components */}
 				<Nav />
-
 				<Header
 					small={this.state.headerSmall}
 					transparent={this.state.headerTransparent}
@@ -156,12 +164,10 @@ export default class App extends Component {
 					title={this.state.headerTitle}
 					children={this.state.headerChildren}
 				/>
-
-				{/* Global Components */}
 				<Snackbar {...this.state.notification} />
 
-				{/* Different routes */}
-				<Router onChange={this.handleRoute}>
+				{/* Different routes (ignored by prerender) */}
+				{typeof window !== 'undefined' && <Router onChange={this.handleRoute}>
 					<Home showSnackbar={this.showSnackbar} path="/" title="Slidecontrol" theme="#212121" transparentHeader />
 					<Help path="/help" title="Help" theme="#ffbc16" arrowHeader />
 					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title="Scanner" theme="#ffbc16" arrowHeader />
@@ -185,10 +191,13 @@ export default class App extends Component {
 					<AboutCode path="/about/code" title="Our code" theme="#ffbc16" arrowHeader />
 					<AboutPrivacy path="/about/privacy" title="Privacy" theme="#ffbc16" arrowHeader />
 					<AboutCredits path="/about/credits" title="Credits" theme="#ffbc16" arrowHeader />
+					<AboutLicenses path="/about/licenses" title="Open-Source Licenses" theme="#ffbc16" arrowHeader />
+					
+					<Welcome path="/welcome" title="Welcome :)" theme="#ffbc16" arrowHeader />
 
 					<Blank default title="Error 404" theme="#212121" transparentHeader />
 	
-				</Router>
+				</Router>}
 			</div>
 		);
 	}

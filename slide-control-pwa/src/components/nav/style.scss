@@ -46,53 +46,14 @@
       height: 100%;
       height: calc(100% + 1px);
       width: 100%;
-      
-      div.drawerHeaderProfilePic {
-        border-radius: 50%;
-        position: relative;
-        height: 64px;
-        width: 64px;
-        background-size: cover;
-        left: 16px;
-        top: 16px;
-      }
-  
-      span.drawerHeaderName {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 1);
-        position: absolute;
-        top: calc(138px - 32px);
-        left: 16px;
-      }
-  
-      span.drawerHeaderMail {
-        font-size: 14px;
-        color: rgba(255, 255, 255, .74);
-        position: absolute;
-        top: calc(138px - 16px);
-        left: 16px;
-      }
-  
-      i {
-        color: #fff;
-        position: absolute;
-        top: calc(138px - 28px);
-        right: 16px;
-        transition: .2s ease-in-out;
-        cursor: pointer;
-        user-select: none;
-      }
-  
-      i.drawerHeaderMore {
-        transform: rotate(180deg);
-      }
     }
   }
 
   div.drawerContent {
 
-    height: calc(100% - 155px);
+    height: auto;
     width: 100%;
+    position: relative;
 
     hr {
       display: none;
@@ -106,6 +67,8 @@
     }
 
     div.drawerSubContent {
+
+      padding-bottom: 56px;
 
       @media (min-width: 1025px) {
         display: block !important;

@@ -101,6 +101,7 @@ export default class Profile extends Component {
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
 		this.Socket = null;
 		this.notes = '';
+		this.onKeyDown = null;
 		this.onTouchStartNotes = null;
 		this.onTouchEndNotes = null;
 		this.onTouchStartPointer = null;
@@ -136,11 +137,10 @@ export default class Profile extends Component {
 
 	componentDidMount() {
 
-		let  _tcfg = _tcfg || [];
-		_tcfg.push(['tags', 'controller']);
+		document.getElementById('drawer').setAttribute('style', 'display: none !important');
 
 		this.props.changeHeaderChildren(
-			<i onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ position: 'absolute', right: '7px', left: 'auto' }}>
+			<i role="button" aria-label="toggle dark mode" onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '7px', left: 'auto', cursor: 'pointer' }}>
 				{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
 			</i>
 		);
@@ -185,6 +185,15 @@ export default class Profile extends Component {
 
 		this.Socket.onerror = error => console.error(error);
 
+		this.onKeyDown = key => {
+			if (key.code === 'KeyT') this.startTimer();
+			if (key.code === 'KeyM') this.toggleLightMode();
+			if (key.code === 'ArrowLeft') this.previousSlide();
+			if (key.code === 'ArrowRight' || key.code === 'Space') this.nextSlide();
+		};
+
+		window.addEventListener('keydown', this.onKeyDown);
+
 		let touchstartXnotes = 0;
 		let touchstartYnotes = 0;
 		let touchstartTimestamp = 0;
@@ -194,6 +203,7 @@ export default class Profile extends Component {
 			touchstartYnotes = e.changedTouches[0].screenY;
 			touchstartTimestamp = e.timeStamp;
 		};
+		
 
 		// listen for finger-move event
 		this.notesContainer.addEventListener('touchstart', this.onTouchStartNotes);
@@ -261,8 +271,10 @@ export default class Profile extends Component {
 
 	// clear some scheduled code when exiting component
 	componentWillUnmount() {
+		document.getElementById('drawer').setAttribute('style', '');
 		clearInterval(this.incrementer);
 		this.Socket.close();
+		window.removeEventListener('keydown', this.onKeyDown, false);
 		this.notesContainer.removeEventListener('touchstart', this.onTouchStartNotes, false);
 		this.notesContainer.removeEventListener('touchend', this.onTouchEndNotes, false);
 		this.laserPointer.removeEventListener('touchstart', this.onTouchStartPointer, false);

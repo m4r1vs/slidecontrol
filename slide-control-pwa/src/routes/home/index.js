@@ -25,7 +25,7 @@ export default class Home extends Component {
 	sendCode(e) {
 		if (e) e.preventDefault();
 		if (!this.Socket.OPEN) this.props.showSnackbar(
-			'Server call made a wucy fucky :o',
+			'Calling server returned a wucy fucky :o',
 			'RELOAD',
 			3000,
 			location.reload
@@ -35,10 +35,6 @@ export default class Home extends Component {
 			reason: 'check-slide-code',
 			code: this.state.input
 		}));
-	}
-
-	routeHelp() {
-		route('/help');
 	}
 
 	constructor(props) {
@@ -91,20 +87,22 @@ export default class Home extends Component {
 				<h1>{this.getGreeting()}</h1>
 
 				<p>
-					Now just open your slide and start slidecontrol there in order to get your code:<br />
+					Enter your slide's code here,<br />or let us show you <Link href="/help/">how to get your code</Link><br />
 				</p>
 
 				{/* Code input-field */}
-				<form onSubmit={this.sendCode}>
+				<form onSubmit={this.sendCode} autocomplete="off">
 
 					<input
 						name="code"
 						ref={input => this.input = input}
 						placeholder="0000"
+						aria-label="Your Slides Code"
 						value={this.state.input}
 						onChange={this.changeInput}
 						required class={style.code}
 						type="number"
+						autocomplete="off"
 					/>
 					
 					<button type="button" class={style.scanButton} onClick={this.openScanner} >
@@ -117,7 +115,7 @@ export default class Home extends Component {
 					
 					<br />
 
-					<Link href="/help/">SHOW ME HOW</Link>
+					<Link href="/help/">I NEED HELP</Link>
 
 				</form>
 			</div>

@@ -23,8 +23,8 @@ export default class Header extends Component {
 
 	render({ title, arrow, color, transparent, small, children, onNavClick }) {
 		return (
-			<header tabindex="1" shadow={this.state.shadow || !transparent} small={small} transparent={transparent} class={style.header} style={{ background: color }}>
-				<div role="button" ariaLabel={arrow ? 'go back' : 'toggle menu'} class={style.navbtn} id={arrow ? 'navbtn-arrow' : 'navbtn'} onClick={onNavClick}>
+			<header tabindex="0" shadow={this.state.shadow || !transparent} small={small} transparent={transparent} class={style.header} style={{ background: color }}>
+				<div role="button" aria-label={arrow ? 'go back' : 'toggle menu'} class={style.navbtn} id={arrow ? 'navbtn-arrow' : 'navbtn'} onClick={onNavClick}>
 					<span id="navbtn-span1" />
 					<span id="navbtn-span2" />
 					<span id="navbtn-span3" />

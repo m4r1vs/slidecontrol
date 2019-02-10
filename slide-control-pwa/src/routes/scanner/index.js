@@ -12,12 +12,12 @@ export default class Scanner extends Component {
 		this.props.showSnackbar(
 			'This On-Device-Scanner is an experimental feature and will not work on all devices',
 			null,
-			6000,
-			() => console.warn('woopsie')
+			8000,
+			() => console.warn('y u c this?!')
 		);
 
 		this.scanner = new QrScanner(this.video, result => {
-			if (result.split('/')[0] !== 'slide-control-firebase.firebaseapp.com' || result.split('/')[1] !== 'controller') this.props.showSnackbar(
+			if (result.split('/')[0] !== 'sc.niveri.xyz' || result.split('/')[1] !== 'controller') this.props.showSnackbar(
 				'Scanned code not readable: "' + result + '"',
 				null,
 				3500,
@@ -35,6 +35,7 @@ export default class Scanner extends Component {
 	}
 
 	componentDidMount() {
+		document.body.style.background = '#000';
 		if (!window.Worker) this.props.showSnackbar(
 			'Seems like your browser does not support WebWorkers, hence cannot read QR codes',
 			'BACK',
@@ -50,6 +51,7 @@ export default class Scanner extends Component {
 	}
 
 	componentWillUnmount() {
+		document.body.style.background = '#212121';
 		if (this.scanner) this.scanner.stop();
 	}
 
