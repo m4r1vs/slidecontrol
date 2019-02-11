@@ -12,9 +12,17 @@
 ## Getting started 🚀
 Slidecontrol's extension is available in
 the [Chrome webstore](https://chrome.google.com/webstore/detail/slidecontrol/ghfjfgbiehcemjfapohnnfngcbappodg) or
-by installing it locally (clone `/slide-control-extension` and add it to `chrome://extensions`).
+by installing it locally:
+```sh
+git clone https://github.com/m4r1vs/slidecontrol.git
+cd ./slidecontrol/slide-control-extension
+npm install
+npm run build
+```
+This build the extension into the folder `/slide-control-extension/build` which can then be added by navigating
+to `chrome://extensions` and clicking `Load unpacked`.
 
-Following the steps after installation will lead you to our PWA `/slide-control-pwa`, available
+Following the steps after installing the extension will lead you to our PWA (`/slide-control-pwa`), available
 at [slidecontrol.niveri.xyz](https://sc.niveri.xyz).
 
 ![Screenshot of slidecontrols homescreen](https://maniyt.de/screenshot1.png)
@@ -23,14 +31,21 @@ To contribute to the PWA just run this:
 ```sh
 git clone https://github.com/m4r1vs/slidecontrol.git
 cd ./slidecontrol/slide-control-pwa
+npm install
 npm run start
 ```
-And to help improving the extension you can install it locally.
-[Here](https://blog.hunter.io/how-to-install-a-chrome-extension-without-using-the-chrome-web-store-31902c780034) you can learn how to do so.
+And to help improving the extension you can install it locally as descrived above.
 
-And finally to run the WebSocket server on your machine you should `cd ./slide-control-server` and `LOCAL=true node server.js`.
-Then, in order to make the PWA and/or extension connect to the local server, you need to change the IP in the files.
-Maybe just `CTRL + F` 'maniyt.de' which is the domain of my experimental server the socket is hosted on.
+And finally to run the WebSocket on your machine you can just cd into it and run it:
+```sh
+git clone https://github.com/m4r1vs/slidecontrol.git
+cd ./slidecontrol/slide-control-server
+npm install
+node server.js
+```
+
+In order to connect to it with the PWA and/or extension you need to head into their options and enter your IP (or just `wss://localhost:PORT`)
+and everything should work out perfectly.
 
 ## Screenshots 📸
 *Slidecontrol has a build in QR-Scanner to connect to your presentation.*
