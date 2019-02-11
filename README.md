@@ -19,7 +19,7 @@ cd ./slidecontrol/slide-control-extension
 npm install
 npm run build
 ```
-This build the extension into the folder `/slide-control-extension/build` which can then be added by navigating
+This builds the extension into the folder `/slide-control-extension/build` which can then be added by navigating
 to `chrome://extensions` and clicking `Load unpacked`.
 
 Following the steps after installing the extension will lead you to our PWA (`/slide-control-pwa`), available
