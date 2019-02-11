@@ -2,8 +2,10 @@ const WebSocket = require('ws')
 const http = require('http')
 const fs = require('fs')
 
-var PORT = fs.readFileSync("port.config")
+// PORT is defined in ./port.config file
+var PORT = parseInt(fs.readFileSync("port.config"))
 
+// when someone requests the websocket server via HTTP(S)
 const httpHandler = (req, res) => {
     res.end('You weren\'t supposed to see this lol')
 }
@@ -14,9 +16,10 @@ const httpServer = http.createServer(httpHandler)
 const server = new WebSocket.Server({ server: httpServer })
 
 // object holds all currently synced presentations
-let slides = {},
+let presentations = {},
     connections = 0
 
+// start server with "DEBUG=true" to see debug logs
 const Logger = {
     log: log => console.log(`[${new Date()}] ${log}`),
     debug: (log, data) => (process.env.DEBUG === 'true') && console.log(log, data)
@@ -27,35 +30,35 @@ const Logger = {
  */
 const handleNewSlide = (message, connection) => {
 
-    const code = parseInt(message.code)
+    const presentationID = parseInt(message.code)
 
     // check for quality of code
-    if (!code) return
-    if (isNaN(code)) return
-    if (code < 1000 || code > 99999) return
-    if (slides[code]) {
+    if (!presentationID) return
+    if (isNaN(presentationID)) return
+    if (presentationID < 1000 || presentationID > 99999) return
+    if (presentations[presentationID]) {
         connection.send(JSON.stringify({
             reason: 'error-slide-code-taken'
         }))
         return
     }
 
-    connection.slideCode = code
+    connection.slideCode = presentationID
 
     // append presentation to object
-    slides[code] = {
+    presentations[presentationID] = {
         title: message.title,
         notes: message.notes,
         activeSlide: message.activeSlide,
         totalSlides: message.totalSlides
     }
 
-    Logger.log(`Created new slide with id #${code}`)
+    Logger.log(`Created new slide with id #${presentationID}`)
 
     // notify extension that slide got registered successfully
     connection.send(JSON.stringify({
         reason: 'slide-created',
-        code
+        code: presentationID
     }))
 }
 
@@ -64,28 +67,28 @@ const handleNewSlide = (message, connection) => {
  */
 const handleNewController = (message, connection) => {
     
-    const code = parseInt(message.code)
+    const presentationID = parseInt(message.code)
 
     // check if presentation exists under given code
-    if (slides[code]) {
-        connection.controllerCode = code
+    if (presentations[presentationID]) {
+        connection.controllerCode = presentationID
 
         // send initial info to app
         connection.send(JSON.stringify({
             reason: 'send-slide-info',
-            title: slides[code].title,
-            notes: slides[code].notes,
-            activeSlide: slides[code].activeSlide,
-            totalSlides: slides[code].totalSlides
+            title: presentations[presentationID].title,
+            notes: presentations[presentationID].notes,
+            activeSlide: presentations[presentationID].activeSlide,
+            totalSlides: presentations[presentationID].totalSlides
         }))
 
         // notify extension of new synced device
         server.clients.forEach(client => {
-            if (client.slideCode && client.slideCode === code) {
+            if (client.slideCode && client.slideCode === presentationID) {
                 connection.connectedConnection = client
                 client.send(JSON.stringify({
                     reason: 'new-device-synced',
-                    code
+                    code: presentationID
                 }))
             }
         })
@@ -112,8 +115,8 @@ const handleSwitchSlide = (message, connection) => {
 const handleSlideChange = (message, connection) => {
     server.clients.forEach(client => {
         if (client.controllerCode && client.controllerCode === connection.slideCode) {
-            slides[connection.slideCode].notes = message.notes
-            slides[connection.slideCode].activeSlide = message.activeSlide
+            presentations[connection.slideCode].notes = message.notes
+            presentations[connection.slideCode].activeSlide = message.activeSlide
             client.send(JSON.stringify({
                 reason: 'slide-changed',
                 notes: message.notes,
@@ -129,7 +132,7 @@ const handleSlideChange = (message, connection) => {
 const checkSlideCode = (message, connection) => {
     const code = parseInt(message.code)
 
-    if (slides[code]) connection.send(JSON.stringify({
+    if (presentations[code]) connection.send(JSON.stringify({
         reason: 'slide-code-ok',
         code
     }))
@@ -202,7 +205,7 @@ const handleMessage = (message, connection) => {
 const handleClose = connection => {
     connections--
     Logger.log(`Connection closed, now ${connections} connections`)
-    if (connection.slideCode) slides[connection.slideCode] = null
+    if (connection.slideCode) presentations[connection.slideCode] = null
 }
 
 /**
