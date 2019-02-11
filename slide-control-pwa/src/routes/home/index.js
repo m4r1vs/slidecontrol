@@ -26,9 +26,9 @@ export default class Home extends Component {
 		if (e) e.preventDefault();
 		if (!this.Socket.OPEN) this.props.showSnackbar(
 			'Calling server returned a wucy fucky :o',
-			'RELOAD',
+			'SETTINGS',
 			3000,
-			location.reload
+			() => route('/settings')
 		);
 		this.input.disabled = true;
 		this.Socket.send(JSON.stringify({
@@ -45,7 +45,18 @@ export default class Home extends Component {
 		};
 
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
-		this.Socket = new WebSocket('wss://www.maniyt.de:61263');
+		try {
+			this.Socket = new WebSocket(localStorage.getItem('slidecontrol-websocket-ip'));
+		}
+		catch (error) {
+			console.error(error);
+			this.props.showSnackbar(
+				'Error starting WebSocket :O',
+				'SETTINGS',
+				4000,
+				() => route('/settings')
+			);
+		}
 		this.changeInput = this.changeInput.bind(this);
 		this.sendCode = this.sendCode.bind(this);
 		this.openScanner = () => route('/scanner');
@@ -74,9 +85,9 @@ export default class Home extends Component {
 		this.Socket.onerror = error => {
 			this.props.showSnackbar(
 				'We fucked up big here, server seems dead ass dead',
-				'TRY RELOAD',
+				'SETTINGS',
 				5000,
-				location.reload
+				() => route('/settings')
 			);
 			console.error('We fucked up big here: ', error);
 		};

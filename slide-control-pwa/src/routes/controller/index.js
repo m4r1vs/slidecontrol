@@ -117,7 +117,18 @@ export default class Profile extends Component {
 	}
 
 	componentWillMount() {
-		this.Socket = new WebSocket('wss://www.maniyt.de:61263');
+		try {
+			this.Socket = new WebSocket(localStorage.getItem('slidecontrol-websocket-ip'));
+		}
+		catch (error) {
+			console.error(error);
+			this.props.showSnackbar(
+				'Error starting WebSocket :O',
+				'SETTINGS',
+				4000,
+				() => route('/settings')
+			);
+		}
 		this.Socket.onopen = () => {
 			this.Socket.send(JSON.stringify({
 				reason: 'register-controller',

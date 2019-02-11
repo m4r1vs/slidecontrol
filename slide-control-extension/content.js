@@ -138,8 +138,6 @@ class QRCodeWindow {
 			this.element.style.opacity = 1
 			this.background.style.opacity = 0.618
 		}, 20);
-
-		console.log("show")
 	}
 
 	hide() {
@@ -152,8 +150,6 @@ class QRCodeWindow {
 			this.element.style.display = "none"
 			this.background.style.display = "none"
 		}, 320);
-
-		console.log("hide")
 	}
 }
 class Laserpointer {
@@ -301,20 +297,26 @@ const main = function () {
 
 // Initialize slidecontrol and connect to serva
 const initializeSlidecontrol = () => {
-	console.log('Initializing slidecontrol...')
+	Logger.log('Initializing slidecontrol...')
 
-	Socket = new WebSocket('wss://www.maniyt.de:61263')
+	chrome.storage.sync.get({
+		websocketIP: 'wss://www.maniyt.de:61263'
+	}, settings => {
 
-	Socket.onopen = () => {
-		registerSlide()
-		Socket.onmessage = message => handleMessage(JSON.parse(message.data))
-	}
+		Logger.log('Connection to socket on server ' + settings.websocketIP)
+		Socket = new WebSocket(settings.websocketIP)
+	
+		Socket.onopen = () => {
+			registerSlide()
+			Socket.onmessage = message => handleMessage(JSON.parse(message.data))
+		}
+	
+		Socket.onerror = error => {
+			Logger.error(error)
+			alert(`Error connecting to slidecontrol server ${settings.websocketIP}. Maybe change servers at sc.niveri.xyz/settings`)
+		}
+	})
 
-	Socket.onerror = error => {
-		console.error(error)
-		alert("Error in slidecontrol: socket-error-connection")
-		location.reload()
-	}
 }
 
 // yap, finally we can have some fun:

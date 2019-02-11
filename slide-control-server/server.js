@@ -1,16 +1,17 @@
 const WebSocket = require('ws')
-const https = require('https')
+const http = require('http')
 const fs = require('fs')
 
-const PORT = 61263
+var PORT = fs.readFileSync("port.config")
+
+const httpHandler = (req, res) => {
+    res.end('You weren\'t supposed to see this lol')
+}
 
 // ssl-server so wss:// is possible
-const httpsServer = (process.env.LOCAL !== 'true') ? new https.createServer({
-	cert: fs.readFileSync('/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/cert.pem'),
-	key: fs.readFileSync('/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/privkey.pem')
-}) : null
+const httpServer = http.createServer(httpHandler)
 
-const server = new WebSocket.Server((process.env.LOCAL !== 'true') ? { server: httpsServer } : { port: PORT })
+const server = new WebSocket.Server({ server: httpServer })
 
 // object holds all currently synced presentations
 let slides = {},
@@ -247,10 +248,15 @@ const ping = () => {
 setInterval(ping, 60000);
 
 // finally listen to the port:
-if (process.env.LOCAL !== 'true') httpsServer.listen(PORT)
+httpServer.listen(PORT, error => {
 
-console.log('==== SLIDECONTROL WEBSOCKET SERVER v1.2.6f ====')
-console.log('====                                       ====')
-console.log(`====        Listening on port ${PORT}        ====`)
-console.log('====                                       ====')
-console.log('===============================================\n\n')
+    if (error) console.error('Error starting Server: ', error)
+    else {
+        console.log('==== SLIDECONTROL WEBSOCKET SERVER v1.2.6f ====')
+        console.log('====                                       ====')
+        console.log(`====        Listening on port ${PORT}         ====`)
+        console.log('====                                       ====')
+        console.log('===============================================\n\n')
+    }
+
+})

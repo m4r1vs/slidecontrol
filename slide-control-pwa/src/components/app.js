@@ -133,6 +133,9 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
+
+		if (!localStorage.getItem('slidecontrol-websocket-ip')) localStorage.setItem('slidecontrol-websocket-ip', 'wss://www.maniyt.de:61263');
+
 		window.addEventListener('online', () => this.showSnackbar(
 			'Connected to the internet again',
 			'RELOAD',
@@ -183,7 +186,7 @@ export default class App extends Component {
 						arrowHeader
 					/>
 
-					<Settings path="/settings" title="Settings" theme="#212121" transparentHeader />
+					<Settings path="/settings" title="Settings" showSnackbar={this.showSnackbar} theme="#212121" transparentHeader />
 					<Donate path="/donate" title="Donate <3" theme="#212121" transparentHeader />
 
 					<About path="/about" title="About" theme="#212121" transparentHeader />
