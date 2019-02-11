@@ -1,6 +1,8 @@
 import { h, Component } from 'preact';
 import { route, Router } from 'preact-router';
 
+import Localization from '../lib/localization';
+
 // routes
 import Home from '../routes/home';
 import Help from '../routes/help';
@@ -21,6 +23,8 @@ import Settings from '../routes/settings';
 import Donate from '../routes/donate';
 import Scanner from '../routes/scanner';
 import AboutLicenses from '../routes/about/licenses';
+
+import lang from './languages';
 
 export default class App extends Component {
 	
@@ -116,6 +120,8 @@ export default class App extends Component {
     
 	constructor(props) {
 		super(props);
+
+		if (typeof window !== 'undefined') window.slidecontrolLanguage = Localization.language;
         
 		this.state = {
 			headerTransparent: true,
@@ -139,15 +145,15 @@ export default class App extends Component {
 		if (!localStorage.getItem('slidecontrol-websocket-ip')) localStorage.setItem('slidecontrol-websocket-ip', 'wss://www.maniyt.de:61263');
         
 		window.addEventListener('online', () => this.showSnackbar(
-			'Connected to the internet again',
-			'RELOAD',
+			lang.notifications.internet.connected,
+			lang.notifications.internet.reload,
 			4000,
 			location.reload
 		));
             
 		window.addEventListener('offline', () => this.showSnackbar(
-			'Lost connection to the internet',
-			'RELOAD',
+			lang.notifications.internet.disconnected,
+			lang.notifications.internet.reload,
 			4000,
 			location.reload
 		));
@@ -173,9 +179,9 @@ export default class App extends Component {
                     
 				{/* Different routes (ignored by prerender) */}
 				{typeof window !== 'undefined' && <Router onChange={this.handleRoute}>
-					<Home showSnackbar={this.showSnackbar} path="/" title="Slidecontrol" theme="#212121" transparentHeader />
-					<Help path="/help" title="Help" theme="#ffbc16" arrowHeader />
-					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title="Scanner" theme="#ffbc16" arrowHeader />
+					<Home showSnackbar={this.showSnackbar} path="/" title={lang.titles.home} theme="#212121" transparentHeader />
+					<Help path="/help" title={lang.titles.help} theme="#ffbc16" arrowHeader />
+					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title={lang.titles.scanner} theme="#ffbc16" arrowHeader />
                     
 					<Controller
 						smallHeader
@@ -184,23 +190,23 @@ export default class App extends Component {
 						showSnackbar={this.showSnackbar}
 						path="/controller/:id"
 						theme="#ffbc16"
-						title="Loading..."
+						title={lang.titles.controller}
 						arrowHeader
 					/>
                     
-					<Settings path="/settings" title="Settings" showSnackbar={this.showSnackbar} theme="#212121" transparentHeader />
-					<Donate path="/donate" title="Donate <3" theme="#212121" transparentHeader />
+					<Settings path="/settings" title={lang.titles.settings} showSnackbar={this.showSnackbar} theme="#212121" transparentHeader />
+					<Donate path="/donate" title={lang.titles.donate} theme="#212121" transparentHeader />
                     
-					<About path="/about" title="About" theme="#212121" transparentHeader />
-					<AboutUs path="/about/us" title="About us" theme="#ffbc16" arrowHeader />
-					<AboutCode path="/about/code" title="Our code" theme="#ffbc16" arrowHeader />
-					<AboutPrivacy path="/about/privacy" title="Privacy" theme="#ffbc16" arrowHeader />
-					<AboutCredits path="/about/credits" title="Credits" theme="#ffbc16" arrowHeader />
-					<AboutLicenses path="/about/licenses" title="Open-Source Licenses" theme="#ffbc16" arrowHeader />
+					<About path="/about" title={lang.titles.about} theme="#212121" transparentHeader />
+					<AboutUs path="/about/us" title={lang.titles.aboutUs} theme="#ffbc16" arrowHeader />
+					<AboutCode path="/about/code" title={lang.titles.aboutCode} theme="#ffbc16" arrowHeader />
+					<AboutPrivacy path="/about/privacy" title={lang.titles.aboutPrivacy} theme="#ffbc16" arrowHeader />
+					<AboutCredits path="/about/credits" title={lang.titles.aboutCredits} theme="#ffbc16" arrowHeader />
+					<AboutLicenses path="/about/licenses" title={lang.titles.aboutLicenses} theme="#ffbc16" arrowHeader />
 					
-					<Welcome path="/welcome" title="Welcome :)" theme="#ffbc16" arrowHeader />
+					<Welcome path="/welcome" title={lang.titles.welcome} theme="#ffbc16" arrowHeader />
                     
-					<Blank default title="Error 404" theme="#212121" transparentHeader />
+					<Blank default title={lang.titles.blank} theme="#212121" transparentHeader />
                     
 				</Router>}
 			</div>

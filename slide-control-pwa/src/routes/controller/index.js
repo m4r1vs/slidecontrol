@@ -1,7 +1,8 @@
 import { h, Component } from 'preact';
-
 import style from './style.scss';
 import { route } from 'preact-router';
+
+import lang from './languages';
 
 const formattedSeconds = sec => Math.floor(sec / 60) + ':' + ('0' + sec % 60).slice(-2);
 
@@ -30,7 +31,7 @@ export default class Profile extends Component {
 				});
 
 				this.props.showSnackbar(
-					'Started new timer for you',
+					lang.notifications.timer.started,
 					null,
 					2000,
 					() => console.warn('App did big oopsie doopsie')
@@ -39,7 +40,7 @@ export default class Profile extends Component {
 			}
 
 			else this.props.showSnackbar(
-				`Resumed timer for you at ${formattedSeconds(this.state.secondsElapsed)}`,
+				lang.notifications.timer.resumed(formattedSeconds(this.state.secondsElapsed)),
 				null,
 				2000,
 				() => console.warn('App did big oopsie doopsie vol. II')
@@ -57,7 +58,7 @@ export default class Profile extends Component {
 				timerRunning: false
 			});
 
-			this.props.showSnackbar(`Paused timer for you at ${formattedSeconds(this.state.secondsElapsed)}`, 'RESET IT', 3500, () => this.setState({
+			this.props.showSnackbar(lang.notifications.timer.paused.msg(formattedSeconds(this.state.secondsElapsed)), lang.notifications.timer.paused.action, 3500, () => this.setState({
 				secondsElapsed: 0
 			}));
 
@@ -123,8 +124,8 @@ export default class Profile extends Component {
 		catch (error) {
 			console.error(error);
 			this.props.showSnackbar(
-				'Error starting WebSocket :O',
-				'SETTINGS',
+				lang.errors.socketClosed.msg,
+				lang.errors.socketClosed.action,
 				4000,
 				() => route('/settings')
 			);
@@ -137,7 +138,7 @@ export default class Profile extends Component {
 		};
 		this.Socket.onclose = () => {
 			this.props.showSnackbar(
-				'Disconnected',
+				lang.notifications.disconnected,
 				null,
 				1800,
 				location.reload
@@ -150,7 +151,7 @@ export default class Profile extends Component {
 		document.getElementById('drawer').setAttribute('style', 'display: none !important');
 
 		this.props.changeHeaderChildren(
-			<i role="button" aria-label="toggle dark mode" onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '7px', left: 'auto', cursor: 'pointer' }}>
+			<i role="button" aria-label={lang.page.toggleDarkModeButton} onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '7px', left: 'auto', cursor: 'pointer' }}>
 				{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
 			</i>
 		);
@@ -160,8 +161,8 @@ export default class Profile extends Component {
 			
 			if (message.reason === 'slide-code-not-found') {
 				this.props.showSnackbar(
-					`You just did a big oopsie doopsie, cz the code you entered (${this.props.id}) is invalid.`,
-					'FUCK, GO BACK!',
+					lang.errors.wrongCode.msg(this.props.id),
+					lang.errors.wrongCode.action,
 					8000,
 					() => route('/')
 				);
@@ -169,7 +170,7 @@ export default class Profile extends Component {
 
 			if (message.reason === 'send-slide-info') {
 				this.props.showSnackbar(
-					`Synced to "${message.title}" (#${this.props.id})`,
+					lang.notifications.synced(message.title,this.props.id),
 					null,
 					3500,
 					() => console.warn('Wait, you were not supposed to read this, lol')
@@ -195,10 +196,10 @@ export default class Profile extends Component {
 
 		this.Socket.onerror = error => {
 			this.props.showSnackbar(
-				'We fucked up big here, server seems dead ass dead',
-				'TRY RELOAD',
+				lang.errors.socketError.msg,
+				lang.errors.socketError.action,
 				5000,
-				location.reload
+				() => route('/settings')
 			);
 			console.error('We fucked up big here: ', error);
 		};
@@ -210,7 +211,7 @@ export default class Profile extends Component {
 			if (key.code === 'ArrowRight' || key.code === 'Space') this.nextSlide();
 		};
 
-		window.addEventListener('keydown', this.onKeyDown);
+		document.body.addEventListener('keydown', this.onKeyDown);
 
 		let touchstartXnotes = 0;
 		let touchstartYnotes = 0;
@@ -289,7 +290,7 @@ export default class Profile extends Component {
 		document.getElementById('drawer').setAttribute('style', '');
 		clearInterval(this.incrementer);
 		this.Socket.close();
-		window.removeEventListener('keydown', this.onKeyDown, false);
+		document.body.removeEventListener('keydown', this.onKeyDown, false);
 		this.notesContainer.removeEventListener('touchstart', this.onTouchStartNotes, false);
 		this.notesContainer.removeEventListener('touchend', this.onTouchEndNotes, false);
 		this.laserPointer.removeEventListener('touchstart', this.onTouchStartPointer, false);
@@ -305,14 +306,14 @@ export default class Profile extends Component {
 				{/* timer */}
 				{this.state.slideLoaded && (
 					<span fadeIn onClick={this.startTimer} class={style.timer}>
-						{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : 'start timer' }
+						{this.state.secondsElapsed > 0 ? formattedSeconds(this.state.secondsElapsed) : lang.page.startTimerButton }
 					</span>)
 				}
 				
 				{/* laserpointer button */}
 				{this.state.slideLoaded && (
 					<span style={{ left: 'auto', right: '18px' }} fadeIn onClick={this.toggleLaserpointer} class={style.timer}>
-						{this.state.laserPointer ? 'show notes' : 'laserpointer'}
+						{this.state.laserPointer ? lang.page.showNotesButton : lang.page.showLaserpointerButton}
 					</span>
 				)}
 

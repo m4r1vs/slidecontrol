@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import { route, Link } from 'preact-router';
+import lang from './languages';
 
 import style from './style.scss';
 
@@ -8,12 +9,12 @@ export default class Home extends Component {
 
 	getGreeting() {
 		let h = new Date().getHours();
-		if (h < 3) return 'Good Night,';
-		else if (h < 10) return 'Good Morning,';
-		else if (h < 13) return 'Hey there,';
-		else if (h < 18) return 'Good Afternoon,';
-		else if (h < 22) return 'Good Evening,';
-		return 'Good Night,';
+		if (h < 3) return lang.greetings.night;
+		else if (h < 10) return lang.greetings.morning;
+		else if (h < 13) return lang.greetings.day;
+		else if (h < 18) return lang.greetings.afternoon;
+		else if (h < 22) return lang.greetings.evening;
+		return lang.greetings.night;
 	}
 
 	changeInput(e) {
@@ -25,8 +26,8 @@ export default class Home extends Component {
 	sendCode(e) {
 		if (e) e.preventDefault();
 		if (!this.Socket.OPEN) this.props.showSnackbar(
-			'Calling server returned a wucy fucky :o',
-			'SETTINGS',
+			lang.errors.socketClosed.msg,
+			lang.errors.socketClosed.action,
 			3000,
 			() => route('/settings')
 		);
@@ -51,8 +52,8 @@ export default class Home extends Component {
 		catch (error) {
 			console.error(error);
 			this.props.showSnackbar(
-				'Error starting WebSocket :O',
-				'SETTINGS',
+				lang.errors.socketClosed.msg,
+				lang.errors.socketClosed.action,
 				4000,
 				() => route('/settings')
 			);
@@ -73,8 +74,8 @@ export default class Home extends Component {
 			}
 			if (message.reason === 'slide-code-not-ok') {
 				this.props.showSnackbar(
-					`Hmm, seems like the code ${message.code} is not used by any presentation :/`,
-					'HELP',
+					lang.errors.wrongCode.msg(message.code),
+					lang.errors.wrongCode.action,
 					5000,
 					() => route('/help')
 				);
@@ -84,12 +85,12 @@ export default class Home extends Component {
 
 		this.Socket.onerror = error => {
 			this.props.showSnackbar(
-				'We fucked up big here, server seems dead ass dead',
-				'SETTINGS',
+				lang.errors.socketError.msg,
+				lang.errors.socketError.action,
 				5000,
 				() => route('/settings')
 			);
-			console.error('We fucked up big here: ', error);
+			console.error('socket-error: ', error);
 		};
 
 	}
@@ -106,7 +107,7 @@ export default class Home extends Component {
 				<h1>{this.getGreeting()}</h1>
 
 				<p>
-					Enter your slide's code here,<br />or let us show you <Link href="/help/">how to get your code</Link><br />
+					{lang.page.enterCode[0]}<br />{lang.page.enterCode[1]}<Link href="/help/">{lang.page.enterCode[2]}</Link><br />
 				</p>
 
 				{/* Code input-field */}
@@ -116,7 +117,7 @@ export default class Home extends Component {
 						name="code"
 						ref={input => this.input = input}
 						placeholder="0000"
-						aria-label="Your Slides Code"
+						aria-label={lang.page.codeLabel}
 						value={this.state.input}
 						onChange={this.changeInput}
 						required class={style.code}
@@ -130,11 +131,11 @@ export default class Home extends Component {
 
 					<br />
 
-					<input class={style.button} type="submit" value="LET'S GO" />
+					<input class={style.button} type="submit" value={lang.page.submitCodeButton} />
 					
 					<br />
 
-					<Link href="/help/">I NEED HELP</Link>
+					<Link href="/help/">{lang.page.helpButton}</Link>
 
 				</form>
 			</div>
