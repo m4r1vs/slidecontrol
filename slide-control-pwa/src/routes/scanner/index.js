@@ -2,6 +2,8 @@ import { h, Component } from 'preact';
 import { route } from 'preact-router';
 import style from './style.scss';
 
+import lang from './languages';
+
 import QrScanner from 'qr-scanner';
 QrScanner.WORKER_PATH = '/assets/qr-scanner-worker.js';
 
@@ -10,7 +12,7 @@ export default class Scanner extends Component {
 	scanCode() {
 
 		this.props.showSnackbar(
-			'This On-Device-Scanner is an experimental feature and will not work on all devices',
+			lang.notifications.experiment,
 			null,
 			8000,
 			() => console.warn('y u c this?!')
@@ -18,7 +20,7 @@ export default class Scanner extends Component {
 
 		this.scanner = new QrScanner(this.video, result => {
 			if (result.split('/')[0] !== 'sc.niveri.xyz' || result.split('/')[1] !== 'controller') this.props.showSnackbar(
-				'Scanned code not readable: "' + result + '"',
+				lang.errors.notReadable(result),
 				null,
 				3500,
 				() => console.warn('wait what')
@@ -37,14 +39,14 @@ export default class Scanner extends Component {
 	componentDidMount() {
 		document.body.style.background = '#000';
 		if (!window.Worker) this.props.showSnackbar(
-			'Seems like your browser does not support WebWorkers, hence cannot read QR codes',
-			'BACK',
+			lang.errors.webWorkersNotSupported.msg,
+			lang.errors.webWorkersNotSupported.action,
 			7000,
 			() => route('/')
 		);
 		else QrScanner.hasCamera().then(hasCamera => hasCamera ? this.scanCode() : this.props.showSnackbar(
-			'Seems like your device has no camera to be accessed',
-			'BACK',
+			lang.errors.noCamera.msg,
+			lang.errors.noCamera.action,
 			4500,
 			() => route('/')
 		));
