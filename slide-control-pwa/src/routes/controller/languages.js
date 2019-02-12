@@ -69,4 +69,4 @@ const languages = {
 	}
 };
 
-export default languages[window.slidecontrolLanguage];
+export default languages[(typeof window === 'undefined') ? 'en' : window.slidecontrolLanguage];

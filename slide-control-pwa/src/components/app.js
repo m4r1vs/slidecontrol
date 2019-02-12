@@ -179,11 +179,12 @@ export default class App extends Component {
                     
 				{/* Different routes (ignored by prerender) */}
 				{typeof window !== 'undefined' && <Router onChange={this.handleRoute}>
-					<Home showSnackbar={this.showSnackbar} path="/" title={lang.titles.home} theme="#212121" transparentHeader />
+					<Home languages={['en', 'de']} showSnackbar={this.showSnackbar} path="/" title={lang.titles.home} theme="#212121" transparentHeader />
 					<Help path="/help" title={lang.titles.help} theme="#ffbc16" arrowHeader />
 					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title={lang.titles.scanner} theme="#ffbc16" arrowHeader />
                     
 					<Controller
+						languages={['en', 'de']}
 						smallHeader
 						changeHeaderTitle={this.changeHeaderTitle}
 						changeHeaderChildren={this.changeHeaderChildren}
@@ -194,7 +195,7 @@ export default class App extends Component {
 						arrowHeader
 					/>
                     
-					<Settings path="/settings" title={lang.titles.settings} showSnackbar={this.showSnackbar} theme="#212121" transparentHeader />
+					<Settings languages={['en', 'de']} path="/settings" title={lang.titles.settings} showSnackbar={this.showSnackbar} theme="#212121" transparentHeader />
 					<Donate path="/donate" title={lang.titles.donate} theme="#212121" transparentHeader />
                     
 					<About path="/about" title={lang.titles.about} theme="#212121" transparentHeader />

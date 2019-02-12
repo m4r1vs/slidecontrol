@@ -24,6 +24,6 @@ export default new class Localization {
 
 	set language(lang) {
 		localStorage.setItem('slidecontrol-language', lang);
-		window.slidecontrolLanguage = lang;
+		if (typeof window !== 'undefined') window.slidecontrolLanguage = lang;
 	}
 }();

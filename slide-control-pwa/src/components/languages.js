@@ -24,8 +24,6 @@ const languages = {
 				disconnected: 'Lost connection to the internet',
 				reload: 'RELOAD'
 			}
-		},
-		errors: {
 		}
 	},
 	de: {
@@ -53,10 +51,8 @@ const languages = {
 				disconnected: 'Internetverbindung verloren',
 				reload: 'NEULADEN'
 			}
-		},
-		errors: {
 		}
 	}
 };
 
-export default languages[window.slidecontrolLanguage];
+export default languages[(typeof window === 'undefined') ? 'en' : window.slidecontrolLanguage];

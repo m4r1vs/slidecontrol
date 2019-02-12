@@ -3,6 +3,7 @@ import style from './style.scss';
 import Button from '../../components/buttons';
 
 import Localization from '../../lib/localization';
+import lang from './language';
 
 export default class Settings extends Component {
 
@@ -18,7 +19,7 @@ export default class Settings extends Component {
 		});
 
 		this.props.showSnackbar(
-			'Changed server to ' + ip,
+			lang.notifications.serverSaved(ip),
 			null,
 			3500,
 			() => console.warn('hey there dude(tte)')
@@ -76,59 +77,55 @@ export default class Settings extends Component {
 
 				<section>
 
-					WebSocket Server
-					
-					<br /><br />
+					<h3>{lang.page.server.title}</h3>
 
-					<span>
-						If you are having problems connecting to our server you can try connecting to a different one here.<br /><br />
-						Just remember to also change to the chosen server in slidecontrol's extension settings as well (click on the icon in Chrome's menu and then "Options").<br /><br />
-						WebSocket server to connect to:
-					</span>
+					{/* Description */}
+					<div>
+						<p>{lang.page.server.description[0]}</p>
+						<p>{lang.page.server.description[1]}</p>
+					</div>
 
-					<br />
+					<p>{lang.page.server.select.title}</p>
 
-					<select id="server-options" ref={select => this.serverIpSelectElement = select} value={this.state.serverIpSelect} onChange={this.changeServerIpSelect}>
+					<select
+						id="server-options"
+						ref={select => this.serverIpSelectElement = select}
+						value={this.state.serverIpSelect}
+						onChange={this.changeServerIpSelect}
+					>
 						<option value="wss://www.maniyt.de:61263">wss://www.maniyt.de:61263</option>
 						<option value="wss://mn.uber.space/slidecontrol-socket">wss://mn.uber.space/slidecontrol-socket</option>
 					</select>
 
-					<br /><br />
+					<p>{lang.page.server.input.title}</p>
 					
-					<span>Or if you run your server locally (dont forget "ws(s)://"):</span>
-					
-					<br />
-					
-					<input ref={input => this.serverIpInputElement = input} onChange={this.changeServerIpInput} aria-label="Or local server" type="text" placeholder="ws://localhost:1337" id="server-local" />
+					<input
+						ref={input => this.serverIpInputElement = input}
+						onChange={this.changeServerIpInput}
+						aria-label="Or local server"
+						type="text"
+						placeholder="ws://localhost:1337"
+						id="server-local"
+					/>
 
-					<br /><br />
+					<p>{lang.page.server.description[2](this.state.serverIp)}</p>
 
-					Current server: <span>{this.state.serverIp}</span>
-					
-					<br /><br />
-
-					<div id="status" />
-					<Button text="save" action={this.saveServer} />
+					<Button text={lang.page.server.buttonSave} action={this.saveServer} />
 
 				</section>
 
 				<section>
-					Language
 
-					<br /><br />
+					<h3>{lang.page.language.title}</h3>
 
-					<span>
-						Slidecontrol is available in different languages, choose yours here. If you want to add a language or just help to translate slidecontrol, raise a GitHub issue please.
-					</span>
-
-					<br /><br />
+					<div>
+						<p>{lang.page.language.description}</p>
+					</div>
 
 					<select id="server-options" ref={select => this.languageSelectElement = select} value={this.state.languageSelect} onChange={this.changeLanguage}>
-						<option value="en">English</option>
-						<option value="de">German</option>
+						<option value="en">{lang.page.language.languages.en}</option>
+						<option value="de">{lang.page.language.languages.de}</option>
 					</select>
-
-					<br /><br />
 
 				</section>
 

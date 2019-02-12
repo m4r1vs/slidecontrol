@@ -11,15 +11,19 @@
 		border-bottom: 1px solid #303030;
 		transition: box-shadow .12s;
 
+		h3 {
+			margin: 0;
+		}
+
 		input {
 			appearance: none;
 			background: transparent;
-			padding: 4px 8px;
+			padding: 6px 10px;
 			color: var(--primary-color);
-			margin: 4px;
-			border-radius: 25px;
+			margin: 0;
+			border-radius: 12px;
 			border: 2px solid var(--primary-color-dark);
-			font-size: 14px;
+			font-size: 16px;
 			transition: border-color .22s;
 
 			&:focus, &:active {
@@ -28,17 +32,15 @@
 		}
 
 		select {
-			-webkit-appearance: none;
 			background: transparent;
 			border: 2px solid var(--primary-color-dark);
-			padding: 4px 8px;
-			border-radius: calc(27px /2);
+			padding: 6px 10px;
+			border-radius: 12px;
 			color: var(--primary-color);
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
-			margin: 4px;
-			font-size: 14px;
+			margin: 0;
+			font-size: 16px;
 			cursor: pointer;
+			margin-bottom: 16px;
 
 			option {
 				color: black;
@@ -50,10 +52,12 @@
 			border-top: 1px solid #303030;
 		}
 
+		div {
+			color: var(--primary-color-dark)
+		}
+
 		span {
-			text-decoration: none !important;
-			font-weight: normal !important;
-			color: var(--primary-color-dark);
+			color: var(--primary-color-dark)
 		}
 
 	}
