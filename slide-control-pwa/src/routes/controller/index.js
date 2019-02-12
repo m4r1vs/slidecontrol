@@ -73,7 +73,7 @@ export default class Profile extends Component {
 		this.setState({
 			lightMode
 		});
-		document.body.style.background = lightMode ? '#fafafa' : '#212121';
+		document.body.style.background = lightMode ? '#fafafa' : 'var(--background-color)';
 	}
 
 	toggleLaserpointer = () => {

@@ -51,7 +51,7 @@ export default class Scanner extends Component {
 	}
 
 	componentWillUnmount() {
-		document.body.style.background = '#212121';
+		document.body.style.background = 'var(--background-color)';
 		if (this.scanner) this.scanner.stop();
 	}
 

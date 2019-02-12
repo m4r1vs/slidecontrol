@@ -33,7 +33,7 @@
 		min-height: calc(100vh - 162px - 12px - 72px);
 
 		&[light=true] {
-			color: #212121 !important;
+			color: var(--background-color) !important;
 		}
 
 		@media screen and (orientation: landscape) {
@@ -62,7 +62,7 @@
 		border: 1px var(--primary-color) solid;
 
 		&[light=true] {
-			border: 1px #212121 solid;
+			border: 1px var(--background-color) solid;
 		}
 
 		@media screen and (orientation: landscape) {

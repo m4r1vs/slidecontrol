@@ -70,7 +70,7 @@ export default class App extends Component {
         
 		document.body.focus();
         
-		document.body.style.background = '#212121';
+		document.body.style.background = 'var(--background-color)';
 		let attributes = route.active[0].attributes;
         
 		this.setState({
@@ -117,6 +117,16 @@ export default class App extends Component {
 	changeHeaderChildren = children => this.setState({
 		headerChildren: children
 	})
+
+	makeItLit(litness) {
+		if (litness && (typeof window !== 'undefined')) {
+			console.error('This is too lit for the console to handle');
+			localStorage.setItem('slidecontrolLit', 'totally');
+			document.documentElement.style.setProperty('--primary-color', '#2eff21');
+			document.documentElement.style.setProperty('--primary-color-dark', '#099400');
+			document.documentElement.style.setProperty('--background-color', '#020e00');
+		}
+	}
     
 	constructor(props) {
 		super(props);
@@ -137,12 +147,16 @@ export default class App extends Component {
 		this.changeHeaderTitle = this.changeHeaderTitle.bind(this);
 		this.changeHeaderChildren = this.changeHeaderChildren.bind(this);
 		this.handleNavClick = this.handleNavClick.bind(this);
+		this.makeItLit = this.makeItLit.bind(this);
         
 	}
     
 	componentDidMount() {
-        
-		if (!localStorage.getItem('slidecontrol-websocket-ip')) localStorage.setItem('slidecontrol-websocket-ip', 'wss://www.maniyt.de:61263');
+		
+		if (typeof window !== 'undefined') {
+			if (!localStorage.getItem('slidecontrol-websocket-ip')) localStorage.setItem('slidecontrol-websocket-ip', 'wss://www.maniyt.de:61263');
+			if (localStorage.getItem('slidecontrolLit') === 'totally') this.makeItLit(true);
+		}
         
 		window.addEventListener('online', () => this.showSnackbar(
 			lang.notifications.internet.connected,
@@ -179,9 +193,9 @@ export default class App extends Component {
                     
 				{/* Different routes (ignored by prerender) */}
 				{typeof window !== 'undefined' && <Router onChange={this.handleRoute}>
-					<Home languages={['en', 'de']} showSnackbar={this.showSnackbar} path="/" title={lang.titles.home} theme="#212121" transparentHeader />
-					<Help path="/help" title={lang.titles.help} theme="#ffbc16" arrowHeader />
-					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title={lang.titles.scanner} theme="#ffbc16" arrowHeader />
+					<Home makeItLit={this.makeItLit} languages={['en', 'de']} showSnackbar={this.showSnackbar} path="/" title={lang.titles.home} theme="var(--background-color)" transparentHeader />
+					<Help path="/help" title={lang.titles.help} theme="var(--primary-color)" arrowHeader />
+					<Scanner showSnackbar={this.showSnackbar} path="/scanner" title={lang.titles.scanner} theme="var(--primary-color)" arrowHeader />
                     
 					<Controller
 						languages={['en', 'de']}
@@ -190,24 +204,24 @@ export default class App extends Component {
 						changeHeaderChildren={this.changeHeaderChildren}
 						showSnackbar={this.showSnackbar}
 						path="/controller/:id"
-						theme="#ffbc16"
+						theme="var(--primary-color)"
 						title={lang.titles.controller}
 						arrowHeader
 					/>
                     
-					<Settings languages={['en', 'de']} path="/settings" title={lang.titles.settings} showSnackbar={this.showSnackbar} theme="#212121" transparentHeader />
-					<Donate path="/donate" title={lang.titles.donate} theme="#212121" transparentHeader />
+					<Settings languages={['en', 'de']} path="/settings" title={lang.titles.settings} showSnackbar={this.showSnackbar} theme="var(--background-color)" transparentHeader />
+					<Donate path="/donate" title={lang.titles.donate} theme="var(--background-color)" transparentHeader />
                     
-					<About path="/about" title={lang.titles.about} theme="#212121" transparentHeader />
-					<AboutUs path="/about/us" title={lang.titles.aboutUs} theme="#ffbc16" arrowHeader />
-					<AboutCode path="/about/code" title={lang.titles.aboutCode} theme="#ffbc16" arrowHeader />
-					<AboutPrivacy path="/about/privacy" title={lang.titles.aboutPrivacy} theme="#ffbc16" arrowHeader />
-					<AboutCredits path="/about/credits" title={lang.titles.aboutCredits} theme="#ffbc16" arrowHeader />
-					<AboutLicenses path="/about/licenses" title={lang.titles.aboutLicenses} theme="#ffbc16" arrowHeader />
+					<About path="/about" title={lang.titles.about} theme="var(--background-color)" transparentHeader />
+					<AboutUs path="/about/us" title={lang.titles.aboutUs} theme="var(--primary-color)" arrowHeader />
+					<AboutCode path="/about/code" title={lang.titles.aboutCode} theme="var(--primary-color)" arrowHeader />
+					<AboutPrivacy path="/about/privacy" title={lang.titles.aboutPrivacy} theme="var(--primary-color)" arrowHeader />
+					<AboutCredits path="/about/credits" title={lang.titles.aboutCredits} theme="var(--primary-color)" arrowHeader />
+					<AboutLicenses path="/about/licenses" title={lang.titles.aboutLicenses} theme="var(--primary-color)" arrowHeader />
 					
-					<Welcome path="/welcome" title={lang.titles.welcome} theme="#ffbc16" arrowHeader />
+					<Welcome path="/welcome" title={lang.titles.welcome} theme="var(--primary-color)" arrowHeader />
                     
-					<Blank default title={lang.titles.blank} theme="#212121" transparentHeader />
+					<Blank default title={lang.titles.blank} theme="var(--background-color)" transparentHeader />
                     
 				</Router>}
 			</div>

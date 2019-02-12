@@ -25,6 +25,23 @@ export default class Home extends Component {
 
 	sendCode(e) {
 		if (e) e.preventDefault();
+
+		if (parseInt(this.state.input, 10) === 420) {
+			if (localStorage.getItem('slidecontrolLit') === 'totally') {
+				localStorage.setItem('slidecontrolLit', 'yes');
+				location.reload();
+			}
+			else {
+				this.props.showSnackbar(
+					'Error #420, too lit for our servers to handle',
+					'FUCK IT',
+					6000,
+					() => this.props.makeItLit(true)
+				);
+			}
+			return;
+		}
+
 		if (!this.Socket.OPEN) this.props.showSnackbar(
 			lang.errors.socketClosed.msg,
 			lang.errors.socketClosed.action,

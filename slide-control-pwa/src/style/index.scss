@@ -1,6 +1,7 @@
 :root {
 	--primary-color: #ffbc16;
 	--primary-color-dark: #c78c00;
+	--background-color: #212121;
 }
 
 html, body {
@@ -8,7 +9,7 @@ html, body {
 	width: 100%;
 	padding: 0;
 	margin: 0;
-	background: #212121;
+	background: var(--background-color);
 	font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', arial, sans-serif;
 	font-weight: 400;
 	color: var(--primary-color);
