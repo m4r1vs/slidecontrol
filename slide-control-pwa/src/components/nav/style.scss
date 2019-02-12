@@ -1,5 +1,5 @@
 .nav {
-  background: #303030;
+  background: var(--background-color);
   width: 95%; // Fallback
   width: calc(100vw - 56px);
   position: fixed;
@@ -29,13 +29,13 @@
     border-bottom: 1px solid #000;
     height: 146px;
     width: 100%;
-    background-size: 8px;
+    background-size: 12px;
     background-color: var(--background-color);
     background-position: center;
     overflow: hidden;
     display: block;
     margin-bottom: 8px;
-    background-image: url("/assets/logo_ohnekontur.png");
+    background-image: url("/assets/logo_small_as_hell.png");
 
     @media (min-width: 1025px) {
       display: none !important;

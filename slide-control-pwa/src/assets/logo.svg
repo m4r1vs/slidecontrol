@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" ariaLabelledby="title" ariaDescribedby="desc" role="img">
+    <title>Slidecontrol logo</title>
+    <desc>The logo of slidecontrol</desc>
+    <path data-name="layer1" d="M30 0 L0 33 L30 66 H60 L30 33 L60 0" fill="#ffbc16"/>
+    <path data-name="layer2" d="M70 33 L100 66 L70 99 H40 L70 66 L40 33" fill="#ffbc16"/>
+</svg>

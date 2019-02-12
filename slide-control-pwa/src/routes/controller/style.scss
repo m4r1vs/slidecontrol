@@ -80,7 +80,7 @@
 		position: fixed;
 		bottom: 0;
 		left: 0;
-		background: #323232;
+		background: var(--background-color-light);
 		right: 0;
 		box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
 		border-top-left-radius: 34px;
@@ -113,12 +113,13 @@
 		}
 
 		div.previousButton {
-			background-image: url(https://i.ibb.co/HFPD3cb/left2.png);
+			background-image: url('/assets/previous_slide.svg');
+			background-size: 42px;
 
 			@media screen and (orientation: landscape) {
 				position: fixed;
 				box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
-				background-color: #323232;
+				background-color: var(--background-color-light);
 				border-radius: 50%;
 				height: 15vw;
 				max-height: 162px;
@@ -130,12 +131,13 @@
 		}
 
 		div.nextButton {
-			background-image: url(https://i.ibb.co/0m1Gt02/right2.png);
+			background-image: url('/assets/next_slide.svg');
+			background-size: 42px;
 			margin-left: 16px;
 
 			@media screen and (orientation: landscape) {
 				position: fixed;
-				background-color: #323232;
+				background-color: var(--background-color-light);
 				border-radius: 50%;
 				height: 15vw;
 				max-height: 162px;
