@@ -5,7 +5,7 @@
     "display": "standalone",
     "orientation": "any",
     "background_color": "#212121",
-    "version": "2.3.0",
+    "version": "2.3.1d",
     "theme_color": "#212121",
     "icons": [
         {

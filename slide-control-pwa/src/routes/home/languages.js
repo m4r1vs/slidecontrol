@@ -29,6 +29,10 @@ const languages = {
 			socketError: {
 				msg: 'We fucked up big here, server seems dead ass dead',
 				action: 'SETTINGS'
+			},
+			tooLit: {
+				msg: 'Error #420, too lit for our servers to handle',
+				action: 'FUCK IT'
 			}
 		}
 	},
@@ -62,6 +66,10 @@ const languages = {
 			socketError: {
 				msg: 'Server hat sich verasbchiedet, tut uns ja leid :/',
 				action: 'EINSTELLUNGEN'
+			},
+			tooLit: {
+				msg: 'Fehler #420, zu lit für unsere Server',
+				action: 'SCHEISS DRAUF'
 			}
 		}
 	}

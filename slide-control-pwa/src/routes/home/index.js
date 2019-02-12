@@ -33,8 +33,8 @@ export default class Home extends Component {
 			}
 			else {
 				this.props.showSnackbar(
-					'Error #420, too lit for our servers to handle',
-					'FUCK IT',
+					lang.errors.tooLit.msg,
+					lang.errors.tooLit.action,
 					6000,
 					() => this.props.makeItLit(true)
 				);

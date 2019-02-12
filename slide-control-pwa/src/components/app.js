@@ -82,8 +82,12 @@ export default class App extends Component {
 			headerChildren: !!attributes.changeHeaderChildren
 		});
         
-		document.querySelector('meta[name=theme-color]')
-			.setAttribute('content', attributes.theme);
+		if (typeof window !== 'undefined') {
+			let color = attributes.theme.split('(')[1];
+			color = color.substring(0, color.length-1);
+			color = window.getComputedStyle(document.documentElement).getPropertyValue(color);
+			document.querySelector('meta[name=theme-color]').setAttribute('content', color);
+		}
 	}
     
 	/**
@@ -125,6 +129,7 @@ export default class App extends Component {
 			document.documentElement.style.setProperty('--primary-color', '#2eff21');
 			document.documentElement.style.setProperty('--primary-color-dark', '#099400');
 			document.documentElement.style.setProperty('--background-color', '#020e00');
+			document.querySelector('meta[name=theme-color]').setAttribute('content', '#020e00');
 		}
 	}
     
