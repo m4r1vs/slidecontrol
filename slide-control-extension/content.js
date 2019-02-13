@@ -128,6 +128,42 @@ const handleMessage = message => {
 }
 
 /**
+ * Show a watermark
+ * @param {Number} presentationID the code to be shown
+ */
+const toggleWatermark = presentationID => {
+    if (document.getElementById('slidecontrol-watermark')) document.getElementById('slidecontrol-watermark').remove()
+    else {
+        const watermark = document.createElement('div')
+        watermark.id = 'slidecontrol-watermark'
+        watermark.style = `
+            position: fixed;
+            bottom: 24px;
+            text-align: center;
+            right: 24px;
+            height: 96px;
+            width: 96px;
+            opacity: .57;
+            user-select: none;
+            background: #000;
+            border-radius: 139px;
+            padding: 10px 8px 4px 8px;
+            border: 1px solid #ffbc16;
+            color: #ffbc16;
+            line-height: 42px;
+            font-size: 22px;
+            font-weight: 100;
+            font-family: Roboto, Helvetica, Arial;
+        `
+        watermark.innerHTML = `
+            <div style='background: url(https://slidecontrol.niveri.xyz/assets/logo.svg); margin: auto; background-size: contain; height: 48px; width: 48px;'> </div>
+            <span>#${presentationID}</span>
+        `
+        document.body.appendChild(watermark)
+    }
+}
+
+/**
  * Add button to start slidecontrol (when presentation is opened is present-mode)
  */
 const main = () => {
@@ -229,6 +265,9 @@ const startSlidecontrol = presentationID => {
     startButton.style.display = "none"
     idContainer.style.display = "inline-block"
     idText.innerHTML = presentationID
+
+    // watermark
+    idContainer.addEventListener('click', () => toggleWatermark(presentationID))
 
     // add button for QR-Code
     qrButtonContainer.style.display = "inline-block"
