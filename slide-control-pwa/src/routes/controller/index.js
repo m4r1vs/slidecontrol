@@ -156,8 +156,21 @@ export default class Profile extends Component {
 			</i>
 		);
 
+		window.toggleWebsite = url => {
+			this.Socket.send(JSON.stringify({
+				reason: 'toggle-webpage',
+				url
+			}));
+		};
+
+		const urlify = string => {
+			const urlRegex = /(https?:\/\/[^\s]+)/g;
+			return string.replace(urlRegex, url => '<a href="javascript:void(0)" onclick="window.toggleWebsite(this.textContent)">' + url + '</a>');
+		};
+
 		this.Socket.onmessage = message => {
 			message = JSON.parse(message.data);
+
 			
 			if (message.reason === 'slide-code-not-found') {
 				this.props.showSnackbar(
@@ -175,7 +188,7 @@ export default class Profile extends Component {
 					3500,
 					() => console.warn('Wait, you were not supposed to read this, lol')
 				);
-				this.notesContainer.innerHTML = message.notes;
+				this.notesContainer.innerHTML = urlify(message.notes);
 				this.props.changeHeaderTitle(`${message.title} (${message.activeSlide}/${message.totalSlides})`);
 				this.setState({
 					totalSlides: message.totalSlides,
@@ -186,7 +199,7 @@ export default class Profile extends Component {
 			}
 
 			if (message.reason === 'slide-changed') {
-				this.notesContainer.innerHTML = message.notes;
+				this.notesContainer.innerHTML = urlify(message.notes);
 				this.props.changeHeaderTitle(`${this.state.title} (${message.activeSlide}/${this.state.totalSlides})`);
 				this.setState({
 					activeSlide: message.activeSlide

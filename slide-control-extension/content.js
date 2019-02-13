@@ -119,12 +119,36 @@ const handleMessage = message => {
             qrcodewindow.hide()
             chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
         },
+        "toggle-webpage": () => toggleWebpage(message.url),
         "laserpointer-down": () => laserpointer.show(),
         "laserpointer-move": () => laserpointer.move(message.x, message.y),
         "laserpointer-up": () => laserpointer.hide()
     }
 
     if (map[message.reason]) map[message.reason]()
+}
+
+/**
+ * Toggle a webpage as iframe in the presentation
+ * @param {String} url the url to the page
+ */
+const toggleWebpage = url => {
+    if (document.getElementById('slidecontrol-iframe')) document.getElementById('slidecontrol-iframe').remove()
+    else {
+        const iframe = document.createElement('iframe')
+        iframe.id = 'slidecontrol-iframe'
+        iframe.style = `
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: 1000;
+            display: block;
+        `
+        iframe.setAttribute('src', url)
+        document.body.appendChild(iframe)
+    }
 }
 
 /**

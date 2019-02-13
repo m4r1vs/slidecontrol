@@ -172,6 +172,16 @@ const handleLaserpointerEnd = connection => {
 }
 
 /**
+ * Toggle the given webpage in the chrome extension
+ */
+const handleWebpageToggle = (message, connection) => {
+    if (connection.connectedConnection.OPEN) connection.connectedConnection.send(JSON.stringify({
+        reason: 'toggle-webpage',
+        url: message.url
+    }))
+}
+
+/**
  * Map the right action to the recieved message
  * @param {Object} message the message from sender
  * @param {Connection} connection the connection thats sending message
@@ -191,7 +201,8 @@ const handleMessage = (message, connection) => {
         'slide-changed': () => handleSlideChange(message, connection),
         'laserpointer-start': () => handleLaserpointerStart(connection),
         'laserpointer-move': () => handleLaserpointerMove(message, connection),
-        'laserpointer-end': () => handleLaserpointerEnd(connection)
+        'laserpointer-end': () => handleLaserpointerEnd(connection),
+        'toggle-webpage': () => handleWebpageToggle(message, connection)
     }
 
     if (map[message.reason]) map[message.reason]()
