@@ -2,17 +2,17 @@ import { h } from 'preact';
 import style from './style.scss';
 import Button from '../../components/buttons';
 
+import lang from './languages';
+
 const Welcome = props => (
 	<div class={style.welcome} fadeIn>
 
 		<h1>
-			Welcome to slidecontrol!
+			{lang.page.title}
 		</h1>
 
 		<p>
-			Now that you have installed our Chrome Extension you are almost ready to control
-			your slides.
-			You just gotta visit slidecontrol on your phone now and follow the three steps there:
+			{lang.page.description}
 		</p>
 		
 		<div class={style.qr} />
