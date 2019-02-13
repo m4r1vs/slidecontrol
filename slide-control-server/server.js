@@ -3,7 +3,7 @@ const http = require('http')
 const fs = require('fs')
 
 // PORT is defined in ./port.config file
-var PORT = parseInt(fs.readFileSync("port.config"))
+var PORT = parseInt(fs.readFileSync("./port.config"))
 
 // when someone requests the websocket server via HTTP(S)
 const httpHandler = (req, res) => {
