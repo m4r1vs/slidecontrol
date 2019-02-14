@@ -52,6 +52,16 @@ export default class Settings extends Component {
 		location.reload();
 	}
 
+	toggleSpeechToText = () => {
+		if (localStorage.getItem('slidecontrol-cc') === 'true') {
+			localStorage.setItem('slidecontrol-cc', 'false');
+		}
+		else localStorage.setItem('slidecontrol-cc', 'true');
+		this.setState(state => ({
+			speechToTextEnabled: !state.speechToTextEnabled
+		}));
+	}
+
 	constructor(props) {
 		super(props);
 
@@ -59,9 +69,11 @@ export default class Settings extends Component {
 			serverIpInput: '',
 			serverIpSelect: 'wss://www.maniyt.de:61263',
 			serverIp: 'wss://www.maniyt.de:61263',
-			languageSelect: window.slidecontrolLanguage
+			languageSelect: window.slidecontrolLanguage,
+			speechToTextEnabled: (localStorage.getItem('slidecontrol-cc') === 'true')
 		};
 
+		this.toggleSpeechToText = this.toggleSpeechToText.bind(this);
 		this.serverIpSelectElement = null;
 	}
 
@@ -126,6 +138,18 @@ export default class Settings extends Component {
 						<option value="en">{lang.page.language.languages.en}</option>
 						<option value="de">{lang.page.language.languages.de}</option>
 					</select>
+
+				</section>
+
+				<section>
+
+					<h3>{lang.page.speechToText.title}</h3>
+
+					<div>
+						<p>{lang.page.speechToText.description}</p>
+					</div>
+
+					<Button text={this.state.speechToTextEnabled ? lang.page.speechToText.buttonDisable : lang.page.speechToText.buttonEnable} action={this.toggleSpeechToText} />
 
 				</section>
 

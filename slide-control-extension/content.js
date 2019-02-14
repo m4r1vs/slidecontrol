@@ -120,6 +120,7 @@ const handleMessage = message => {
             chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
         },
         "toggle-webpage": () => toggleWebpage(message.url),
+        "show-closed-captions": () => showClosedCaptions(message.cc),
         "laserpointer-down": () => laserpointer.show(),
         "laserpointer-move": () => laserpointer.move(message.x, message.y),
         "laserpointer-up": () => laserpointer.hide()
@@ -150,6 +151,32 @@ const toggleWebpage = url => {
         document.body.appendChild(iframe)
     }
 }
+
+const showClosedCaptions = cc => {
+    let ccContainer = document.getElementById('slidecontrol-cc')
+    if (!ccContainer) {
+        ccContainer = document.createElement('span')
+        ccContainer.id = 'slidecontrol-cc'
+        ccContainer.style = `
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            height: auto;
+            width: 100vw;
+            z-index: 2000;
+            display: block;
+            padding: 12px 26px;
+            pointer-events: none;
+            font-size: 32px;
+            color: #fff;
+            text-align: center;
+            background: rgba(0,0,0,.57);
+        `
+        document.body.appendChild(ccContainer)
+    }
+    ccContainer.textContent = cc
+}
+window.showClosedCaptions = showClosedCaptions
 
 /**
  * Show a watermark
@@ -246,9 +273,11 @@ const initializeSlidecontrol = () => {
     }, settings => {
 
         Logger.log('Connecting to socket on server: ' + settings.websocketIP)
+
         Socket = new WebSocket(settings.websocketIP)
     
         Socket.onopen = () => {
+            console.log("iughweoiu")
             registerPresentation()
             Socket.onmessage = message => handleMessage(JSON.parse(message.data))
         }

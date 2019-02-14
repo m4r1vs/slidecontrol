@@ -4,7 +4,8 @@ const languages = {
 			toggleDarkModeButton: 'Toggle dark-mode',
 			startTimerButton: 'start timer',
 			showNotesButton: 'show notes',
-			showLaserpointerButton: 'laserpointer'
+			showLaserpointerButton: 'laserpointer',
+			toggleClosedCaptions: 'Toggle Closed Captioning'
 		},
 		notifications: {
 			timer: {
@@ -15,6 +16,10 @@ const languages = {
 					action: 'RESET IT'
 				}
 			},
+			closedCaptions: {
+				started: 'Started speech to text engine.',
+				stoped: 'Stoped closed captioning'
+			},
 			synced: (title, code) => `Synced to "${title}" (#${code})`,
 			disconnected: 'Disconnected'
 		},
@@ -23,6 +28,7 @@ const languages = {
 				msg: 'Calling server returned a wucy fucky :o',
 				action: 'SETTINGS'
 			},
+			closedCaptions: 'Error during closed captioning.',
 			wrongCode: {
 				msg: code => `You just did a big oopsie doopsie, cz the code you entered (${code}) is invalid.`,
 				action: 'FUCK, GO BACK!'
@@ -38,7 +44,8 @@ const languages = {
 			toggleDarkModeButton: 'Wechsel zwischen hellem und dunklem Modus',
 			startTimerButton: 'starte Timer',
 			showNotesButton: 'Notizen',
-			showLaserpointerButton: 'Laserpointer'
+			showLaserpointerButton: 'Laserpointer',
+			toggleClosedCaptions: 'Untertitel An/Aus'
 		},
 		notifications: {
 			timer: {
@@ -49,6 +56,10 @@ const languages = {
 					action: 'ZURÜCKSETZEN'
 				}
 			},
+			closedCaptions: {
+				started: 'Untertitel wurden gestarted',
+				stoped: 'Untertitel gestoppt.'
+			},
 			synced: (title, code) => `Verbunden mit "${title}" (#${code})`,
 			disconnected: 'Verbindung getrennt'
 		},
@@ -57,6 +68,7 @@ const languages = {
 				msg: 'Herr Server ist gerade nicht erreichbar. Bitte versuchen Sie es später erneut',
 				action: 'EINSTELLUNGEN'
 			},
+			closedCaptions: 'Fehler beim erstellen der Untertitel',
 			wrongCode: {
 				msg: code => `Sieht ganz danach aus, dass der code #${code} falsch ist :o`,
 				action: 'RÜCKZUG'

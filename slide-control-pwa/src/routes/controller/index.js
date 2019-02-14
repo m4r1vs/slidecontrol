@@ -83,6 +83,82 @@ export default class Profile extends Component {
 		});
 	}
 
+	toggleClosedCaptions = () => {
+		if (this.stream) {
+			this.stream.stop();
+			this.stream = null;
+			this.setState({
+				CC: ''
+			});
+			this.Socket.send(JSON.stringify({
+				reason: 'show-closed-captions',
+				cc: ''
+			}));
+			this.props.showSnackbar(
+				lang.notifications.closedCaptions.stoped,
+				null,
+				3000,
+				() => console.warn('lololol')
+			);
+		}
+		else {
+
+			let url = localStorage.getItem('slidecontrol-websocket-ip');
+
+			if (url.substring(0, 6) === 'wss://') url = url.replace('wss://', 'https://');
+			else if (url.substring(0, 5) === 'ws://') url = url.replace('ws://', 'http://');
+
+			fetch(url + '/ibm-access-token')
+				.then(res => res.text())
+				.then(res => {
+	
+					const token = JSON.parse(res).access_token;
+	
+					this.stream = window.WatsonSpeech.SpeechToText.recognizeMicrophone({
+						access_token: token,
+						url: 'wss://stream-fra.watsonplatform.net/speech-to-text/api/v1/recognize'
+					});
+	
+					this.stream.on('data', uint8array => {
+						let string = new TextDecoder('utf-8').decode(uint8array);
+						this.Socket.send(JSON.stringify({
+							reason: 'show-closed-captions',
+							cc: string
+						}));
+						this.setState({
+							CC: string
+						});
+					});
+
+					this.props.showSnackbar(
+						lang.notifications.closedCaptions.started,
+						null,
+						3000,
+						() => console.warn('lololol')
+					);
+	
+					this.stream.on('error', error => {
+						console.error('Error during streaming: ', error);
+						this.props.showSnackbar(
+							lang.errors.closedCaptions,
+							null,
+							3000,
+							() => console.warn('lololol')
+						);
+					});
+				})
+				.catch(err => {
+					console.error('Error getting access token: ', err);
+					this.props.showSnackbar(
+						lang.errors.closedCaptions,
+						null,
+						3000,
+						() => console.warn('lololol')
+					);
+				});
+		}
+	}
+
 	constructor(props) {
 
 		super(props);
@@ -95,7 +171,8 @@ export default class Profile extends Component {
 			timerRunning: false,
 			slideLoaded: false,
 			lightMode: false,
-			laserPointer: false
+			laserPointer: false,
+			CC: ''
 		};
 
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -110,10 +187,12 @@ export default class Profile extends Component {
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
 		this.toggleLightMode = this.toggleLightMode.bind(this);
+		this.toggleClosedCaptions = this.toggleClosedCaptions.bind(this);
 		this.toggleLaserpointer = this.toggleLaserpointer.bind(this);
 		this.nextSlide = () => this.switchSlides('next');
 		this.previousSlide = () => this.switchSlides('back');
 		this.goHome = () => route('/');
+		this.stream = null;
 
 	}
 
@@ -151,9 +230,14 @@ export default class Profile extends Component {
 		document.getElementById('drawer').setAttribute('style', 'display: none !important');
 
 		this.props.changeHeaderChildren(
-			<i role="button" aria-label={lang.page.toggleDarkModeButton} onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '7px', left: 'auto', cursor: 'pointer' }}>
-				{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
-			</i>
+			<div>
+				{(localStorage.getItem('slidecontrol-cc') === 'true') ? <i role="button" aria-label={lang.page.toggleClosedCaptions} onClick={this.toggleClosedCaptions} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '36px', left: 'auto', cursor: 'pointer' }}>
+					closed_caption
+				</i> : null}
+				<i role="button" aria-label={lang.page.toggleDarkModeButton} onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '7px', left: 'auto', cursor: 'pointer' }}>
+					{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
+				</i>
+			</div>
 		);
 
 		window.toggleWebsite = url => {
@@ -300,6 +384,7 @@ export default class Profile extends Component {
 
 	// clear some scheduled code when exiting component
 	componentWillUnmount() {
+		if (this.stream) this.toggleClosedCaptions();
 		document.getElementById('drawer').setAttribute('style', '');
 		clearInterval(this.incrementer);
 		this.Socket.close();
@@ -352,6 +437,7 @@ export default class Profile extends Component {
 					<div class={style.container}>
 						<div class={style.previousButton} onClick={this.previousSlide} />
 						<div class={style.nextButton} onClick={this.nextSlide} />
+						<span class={style.closedCaptions}>{this.state.CC}</span>
 					</div></div>}
 
 			</div>

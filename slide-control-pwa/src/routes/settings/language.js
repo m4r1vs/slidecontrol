@@ -23,6 +23,12 @@ const languages = {
 					en: 'English',
 					de: 'German'
 				}
+			},
+			speechToText: {
+				title: 'Closed Captions',
+				description: 'Toggle the experimental feature to show closed captions.',
+				buttonEnable: 'Turn On',
+				buttonDisable: 'Turn Off'
 			}
 		},
 		notifications: {
@@ -53,6 +59,12 @@ const languages = {
 					en: 'Englisch',
 					de: 'Deutsch'
 				}
+			},
+			speechToText: {
+				title: 'Untertitel',
+				description: 'Schalte die experimentelle Funktion ein, bzw. aus Untertitel zu generieren.',
+				buttonEnable: 'Schalte Ein',
+				buttonDisable: 'Schalte Aus'
 			}
 		},
 		notifications: {

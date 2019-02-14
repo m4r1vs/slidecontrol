@@ -1,14 +1,39 @@
 const WebSocket = require('ws')
+const fetch = require('node-fetch')
 const http = require('http')
 const fs = require('fs')
 const path = require('path')
 
-// PORT is defined in ./port.config file
-var PORT = parseInt(fs.readFileSync(path.join(__dirname, 'port.config')))
+// PORT is defined in ./port.config file, key in ./ibm-api-key.key (you must create your own)
+const PORT = parseInt(fs.readFileSync(path.join(__dirname, 'port.config')))
+const IBM_API_KEY = fs.readFileSync(path.join(__dirname, 'ibm-api-key.key')) 
+
+/**
+ * Get IBM api access_token with API key in ibm-api-key.key file
+ */
+const returnApiToken = res => {
+    
+    res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Request-Method', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+	res.setHeader('Access-Control-Allow-Headers', '*');
+
+	fetch('https://iam.bluemix.net/identity/token?grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=' + IBM_API_KEY, {
+		method: 'POST',
+		mode: 'cors',
+		headers: {
+			"Accept": "application/json",
+			"Content-Type": "application/x-www-form-urlencoded"
+		}}).then(data => data.json()).then(json => {
+			res.write(JSON.stringify(json))
+			res.end()
+		})
+}
 
 // when someone requests the websocket server via HTTP(S)
 const httpHandler = (req, res) => {
-    res.end('You weren\'t supposed to see this lol')
+    if (req.url.split('/')[req.url.split('/').length - 1] === 'ibm-access-token') returnApiToken(res)
+    else res.end('You weren\'t supposed to see this lol')
 }
 
 // ssl-server so wss:// is possible
@@ -183,6 +208,16 @@ const handleWebpageToggle = (message, connection) => {
 }
 
 /**
+ * Toggle the given webpage in the chrome extension
+ */
+const handleClosedCaptions = (message, connection) => {
+    if (connection.connectedConnection.OPEN) connection.connectedConnection.send(JSON.stringify({
+        reason: 'show-closed-captions',
+        cc: message.cc
+    }))
+}
+
+/**
  * Map the right action to the recieved message
  * @param {Object} message the message from sender
  * @param {Connection} connection the connection thats sending message
@@ -203,7 +238,8 @@ const handleMessage = (message, connection) => {
         'laserpointer-start': () => handleLaserpointerStart(connection),
         'laserpointer-move': () => handleLaserpointerMove(message, connection),
         'laserpointer-end': () => handleLaserpointerEnd(connection),
-        'toggle-webpage': () => handleWebpageToggle(message, connection)
+        'toggle-webpage': () => handleWebpageToggle(message, connection),
+        'show-closed-captions': () => handleClosedCaptions(message, connection)
     }
 
     if (map[message.reason]) map[message.reason]()

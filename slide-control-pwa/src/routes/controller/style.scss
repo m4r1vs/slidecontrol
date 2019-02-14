@@ -148,6 +148,14 @@
 				bottom: 12px;
 			}
 		}
+
+		span.closedCaptions {
+			position: fixed;
+			bottom: 0;
+			width: 100vw;
+			left: 0;
+			text-align: center;
+		}
 	}
 }
 
