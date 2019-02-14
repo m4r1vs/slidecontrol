@@ -37,6 +37,9 @@ const languages = {
 				msg: 'We fucked up big here, server seems dead ass dead',
 				action: 'SETTINGS'
 			}
+		},
+		meta: {
+			sttModel: 'en-US_BroadbandModel'
 		}
 	},
 	de: {
@@ -77,6 +80,9 @@ const languages = {
 				msg: 'Server hat sich verasbchiedet, tut uns ja leid :/',
 				action: 'EINSTELLUNGEN'
 			}
+		},
+		meta: {
+			sttModel: 'de-DE_BroadbandModel'
 		}
 	}
 };

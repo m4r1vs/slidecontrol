@@ -116,7 +116,8 @@ export default class Profile extends Component {
 	
 					this.stream = window.WatsonSpeech.SpeechToText.recognizeMicrophone({
 						access_token: token,
-						url: 'wss://stream-fra.watsonplatform.net/speech-to-text/api/v1/recognize'
+						url: 'wss://stream-fra.watsonplatform.net/speech-to-text/api/v1/recognize',
+						model: lang.meta.sttModel
 					});
 	
 					this.stream.on('data', uint8array => {
