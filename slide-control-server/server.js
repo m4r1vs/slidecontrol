@@ -1,9 +1,10 @@
 const WebSocket = require('ws')
 const http = require('http')
 const fs = require('fs')
+const path = require('path')
 
 // PORT is defined in ./port.config file
-var PORT = parseInt(fs.readFileSync("port.config"))
+var PORT = parseInt(fs.readFileSync(path.join(__dirname, 'port.config')))
 
 // when someone requests the websocket server via HTTP(S)
 const httpHandler = (req, res) => {
