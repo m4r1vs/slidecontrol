@@ -12,8 +12,16 @@
         "destination": "/assets/robots.txt"
       },
       {
+        "source": "/.well-known/assetlinks.json",
+        "destination": "/assets/assetlinks.json"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
+      },
+      {
+        "source": "/.well-known/assetlinks.json",
+        "destination": "/assets/assetlinks.json"
       }
     ]
   }
