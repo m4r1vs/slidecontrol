@@ -11,7 +11,7 @@
     "watch": "webpack --config webpack.config.js --mode development --watch"
   },
   "author": "Marius Niveri <marius.niveri@gmail.com>",
-  "license": "MIT",
+  "license": "LGPL-3.0-only",
   "devDependencies": {
     "copy-webpack-plugin": "^4.6.0",
     "webpack": "^4.29.3",

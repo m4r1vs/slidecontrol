@@ -11,6 +11,7 @@ const AboutUs = props => (
 				We are both students from Hamburg, Germany. Currently visiting the 11th grade of a physics class,
 				we realized, how often we are given the assignment to create a presentation.
 			</p>
+			<img src="/assets/about_art.svg" />
 			<p>
 				Since this can be a rather difficult task, we thought about making it easier.
 				Most of the presentation software is already advanced and quite often even free.

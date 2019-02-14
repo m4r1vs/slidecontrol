@@ -6,7 +6,6 @@ import lang from './languages';
 
 const Welcome = props => (
 	<div class={style.welcome} fadeIn>
-
 		<h1>
 			{lang.page.title}
 		</h1>

@@ -11,7 +11,7 @@
     "url": "git+https://github.com/m4r1vs/slidecontrol.git"
   },
   "author": "Marius Niveri <marius.niveri@gmail.com>",
-  "license": "MIT",
+  "license": "LGPL-3.0-only",
   "bugs": {
     "url": "https://github.com/m4r1vs/slidecontrol/issues"
   },

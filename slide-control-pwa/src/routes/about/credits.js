@@ -9,9 +9,11 @@ const AboutCredits = props => (
 				Who we depend on
 			</h1>
 			<p>
-				We decided to dedicate this section to the projects we are using and used to create slidecontrol:
+				We decided to dedicate this section to the awesome projects (and people behind them) we are using and used to create slidecontrol.
 			</p>
+
 			
+			<img src="/assets/open_source_art.svg" />
 			<h2>Uberspace</h2>
 			<p>
 				The amazing people over

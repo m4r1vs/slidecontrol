@@ -11,6 +11,7 @@ const AboutPrivacy = props => (
 				and position to be accessed. However they only live in our servers
 				(hosted on <a href="https://uberspace.de/" rel="noopener noreferrer" target="_blank">uberspace.de</a>) RAM until you close your connection from the computer.
 			</p>
+			<img src="/assets/gdpr_art.svg" />
 			<p>
 				You can also <a href="https://github.com/m4r1vs/slidecontrol/" rel="noopener noreferrer" target="_blank">visit our GitHub</a> to get further insight
 				in what exactly goes on under the hood if you are curious, of course.

@@ -36,7 +36,7 @@ const About = props => (
 		<Link href="/about/licenses">
 			Open-Source Licenses<br />
 			<span>
-				The complete list of open-source projects we use and their licenses
+				Our license and the complete list of open-source projects we use and their licenses
 			</span>
 		</Link>
 

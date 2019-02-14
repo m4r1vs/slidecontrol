@@ -4,6 +4,8 @@ import { Link } from 'preact-router';
 
 const Blank = props => (
 	<div class={style.blank} fadeIn>
+		
+		<div class={style.art} />
 
 		<p>
 			Huh, I don't exist here :/<br /><br />

@@ -6,6 +6,10 @@
 	max-width: 524px;
 	text-align: center;
 
+	img {
+		width: 100%;
+	}
+
 	.qr {
 		background-image: url("/assets/slidecontrol-help-qr.svg");
 		height: 172px;

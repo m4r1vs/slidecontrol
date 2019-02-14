@@ -14,6 +14,7 @@ const AboutCode = props => (
 				</ul>
 				Those two you should already know. They handle almost all of slidecontrols logic, too.
 			</p>
+			<img src="/assets/code_art.svg" />
 			<p>
 				The only thing you do not see directly is the server that is handling the communication between the app and extension.
 				Everytime one wants to inform the other of something they send that something to the server and it then broadcasts it
