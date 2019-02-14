@@ -18,7 +18,7 @@ export default class Laserpointer {
             border-radius: 7px;
             border-top-left-radius: 0;
             box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, .87);
-            z-index: 5;
+            z-index: 50000;
             bottom: 100px;
             left: 100px;
         `
