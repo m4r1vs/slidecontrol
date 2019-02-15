@@ -1,11 +1,14 @@
 {
   "name": "slide-control-server",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Server for slide-control",
   "main": "server.js",
   "scripts": {
-    "start": "node ./server.js"
+    "build": "webpack --config webpack.config.js --mode production",
+    "watch": "webpack --config webpack.config.js --mode development --watch"
   },
+  "port": 1337,
+  "presentationIDlength": 5,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/m4r1vs/slidecontrol.git"
@@ -19,5 +22,10 @@
   "dependencies": {
     "node-fetch": "^2.3.0",
     "ws": "^6.1.3"
+  },
+  "devDependencies": {
+    "webpack": "^4.29.4",
+    "webpack-cli": "^3.2.3",
+    "webpack-node-externals": "^1.7.2"
   }
 }

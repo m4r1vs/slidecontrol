@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 
 ibm-api-key.key
+ibm-api-key.js
 
 # Runtime data
 pids
