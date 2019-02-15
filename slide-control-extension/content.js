@@ -76,21 +76,10 @@ const getPresentationInfo = () => {
  */
 const registerPresentation = () => {
 
-    // generate random code
-    let presentationID = Math.floor(Math.random() * 100000)
-
-    // check quality of code
-    if (!presentationID) registerPresentation()
-    if (isNaN(presentationID)) registerPresentation()
-    if (presentationID < 1000 || presentationID > 99999) registerPresentation()
-    
-    Logger.log("Generated ID for slide: #" + presentationID)
-
     // query information about presentation and send it
     Socket.send(JSON.stringify({
-        reason: 'new-slide',
-        code: presentationID,
-        ...getPresentationInfo()
+        command: 'add-new-presentation',
+        data: getPresentationInfo()
     }))
 }
 
@@ -120,32 +109,42 @@ const switchSlide = function (direction) {
     script.remove()
 }
 
+const handleNotification = data => {
+    const map = {
+        "next-slide": () => switchSlide("next"),
+        "previous-slide": () => switchSlide("previous"),
+        "toggle-webpage": () => toggleWebpage(data.url),
+        "show-closed-captions": () => showClosedCaptions(data.cc),
+        "laserpointer-down": () => laserpointer.show(),
+        "laserpointer-move": () => laserpointer.move(data.x, data.y),
+        "laserpointer-up": () => laserpointer.hide()
+    }
+
+    if (map[data.why]) map[data.why]()
+} 
+
 /**
  * Runs whenever message from server is recieved
  * @param {Object} message message from server
  */
 const handleMessage = message => {
 
-    Logger.debug('recieved message: ' + message.reason)
-    if (!message || !message.reason) return
+    Logger.debug('recieved message: ' + message.command)
+    if (!message || !message.command) return
 
-    const map = {
-        "error-slide-code-taken": () => registerPresentation(),
-        "slide-created": () => startSlidecontrol(message.code),
-        "next-slide": () => switchSlide("next"),
-        "previous-slide": () => switchSlide("previous"),
-        "new-device-synced": () => {
+    const commandMap = {
+        "new-presentation-added": () => startSlidecontrol(message.data.presentationID),
+        "new-controller-synced": () => {
             qrcodewindow.hide()
-            chrome.runtime.sendMessage("New device synced to slide: #" + message.code)
+            chrome.runtime.sendMessage("New device synced to presentation")
         },
-        "toggle-webpage": () => toggleWebpage(message.url),
-        "show-closed-captions": () => showClosedCaptions(message.cc),
-        "laserpointer-down": () => laserpointer.show(),
-        "laserpointer-move": () => laserpointer.move(message.x, message.y),
-        "laserpointer-up": () => laserpointer.hide()
+        "controller-disconnected": () => {
+            chrome.runtime.sendMessage("Device disconnected from presentation")
+        },
+        "notify-extension": () => handleNotification(message.data)
     }
 
-    if (map[message.reason]) map[message.reason]()
+    if (commandMap[message.command]) commandMap[message.command]()
 }
 
 /**
@@ -296,7 +295,6 @@ const initializeSlidecontrol = () => {
         Socket = new WebSocket(settings.websocketIP)
     
         Socket.onopen = () => {
-            console.log("iughweoiu")
             registerPresentation()
             Socket.onmessage = message => handleMessage(JSON.parse(message.data))
         }
@@ -355,8 +353,8 @@ const startSlidecontrol = presentationID => {
         
         // notify WebSocket of slide change
         Socket.send(JSON.stringify({
-            reason: "slide-changed",
-            ...getPresentationInfo()
+            command: "update-presentation",
+            data: getPresentationInfo()
         }))
 
     })

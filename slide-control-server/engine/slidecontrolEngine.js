@@ -145,11 +145,13 @@ module.exports = class SlidecontrolEngine {
 	checkPresentationID(data, connection) {
 		Logger.debug('Running checkPresentationID() with data:', data)
 
-		if (!data) return
 		if (!data.presentationID) return
 
 		sendData(connection, {
-			command: (this.presentations[data.presentationID]) ? 'presentation-id-ok' : 'presentation-id-unknown'
+			command: (this.presentations[data.presentationID]) ? 'presentation-id-ok' : 'presentation-id-unknown',
+			data: {
+				presentationID: data.presentationID
+			}
 		})
 	}
 
@@ -161,7 +163,6 @@ module.exports = class SlidecontrolEngine {
 	addNewController(data, connection) {
 		Logger.debug('Running addNewController() with data:', data)
 
-		if (!data) return
 		if (!data.presentationID) return
 		if (connection.__presentationID__) return
 		if (!this.presentations[data.presentationID]) return sendData(connection, {
@@ -190,7 +191,6 @@ module.exports = class SlidecontrolEngine {
 	notifyExtension(data, connection) {
 		Logger.debug('Running notifyExtension() with data:', data)
 
-		if (!data) return
 		if (!connection.__presentationID__) return
 		if (connection.__type__ !== 'controller') return
 		if (!this.presentations[connection.__presentationID__]) return

@@ -11,7 +11,10 @@ export default class Profile extends Component {
 	switchSlides = direction => {
 		if (navigator.vibrate) navigator.vibrate(10);
 		this.Socket.send(JSON.stringify({
-			reason: direction === 'next' ? 'next-slide' : 'previous-slide'
+			command: 'notify-extension',
+			data: {
+				why: direction === 'next' ? 'next-slide' : 'previous-slide'
+			}
 		}));
 
 	}
@@ -91,8 +94,11 @@ export default class Profile extends Component {
 				CC: ''
 			});
 			this.Socket.send(JSON.stringify({
-				reason: 'show-closed-captions',
-				cc: ''
+				command: 'notify-extension',
+				data: {
+					why: 'show-closed-captions',
+					cc: ''
+				}
 			}));
 			this.props.showSnackbar(
 				lang.notifications.closedCaptions.stoped,
@@ -123,8 +129,11 @@ export default class Profile extends Component {
 					this.stream.on('data', uint8array => {
 						let string = new TextDecoder('utf-8').decode(uint8array);
 						this.Socket.send(JSON.stringify({
-							reason: 'show-closed-captions',
-							cc: string
+							command: 'notify-extension',
+							data: {
+								why: 'show-closed-captions',
+								cc: string
+							}
 						}));
 						this.setState({
 							CC: string
@@ -212,8 +221,10 @@ export default class Profile extends Component {
 		}
 		this.Socket.onopen = () => {
 			this.Socket.send(JSON.stringify({
-				reason: 'register-controller',
-				code: this.props.id
+				command: 'add-new-controller',
+				data: {
+					presentationID: this.props.id
+				}
 			}));
 		};
 		this.Socket.onclose = () => {
@@ -243,8 +254,11 @@ export default class Profile extends Component {
 
 		window.toggleWebsite = url => {
 			this.Socket.send(JSON.stringify({
-				reason: 'toggle-webpage',
-				url
+				command: 'notify-extension',
+				data: {
+					why: 'toggle-webpage',
+					url
+				}
 			}));
 		};
 
@@ -257,7 +271,7 @@ export default class Profile extends Component {
 			message = JSON.parse(message.data);
 
 			
-			if (message.reason === 'slide-code-not-found') {
+			if (message.command === 'slide-code-not-found') {
 				this.props.showSnackbar(
 					lang.errors.wrongCode.msg(this.props.id),
 					lang.errors.wrongCode.action,
@@ -266,28 +280,28 @@ export default class Profile extends Component {
 				);
 			}
 
-			if (message.reason === 'send-slide-info') {
+			if (message.command === 'new-controller-added') {
 				this.props.showSnackbar(
-					lang.notifications.synced(message.title,this.props.id),
+					lang.notifications.synced(message.data.title,this.props.id),
 					null,
 					3500,
 					() => console.warn('Wait, you were not supposed to read this, lol')
 				);
-				this.notesContainer.innerHTML = urlify(message.notes);
-				this.props.changeHeaderTitle(`${message.title} (${message.activeSlide}/${message.totalSlides})`);
+				this.notesContainer.innerHTML = urlify(message.data.notes);
+				this.props.changeHeaderTitle(`${message.data.title} (${message.data.activeSlide}/${message.data.totalSlides})`);
 				this.setState({
-					totalSlides: message.totalSlides,
-					activeSlide: message.activeSlide,
+					totalSlides: message.data.totalSlides,
+					activeSlide: message.data.activeSlide,
 					slideLoaded: true,
-					title: message.title
+					title: message.data.title
 				});
 			}
 
-			if (message.reason === 'slide-changed') {
-				this.notesContainer.innerHTML = urlify(message.notes);
-				this.props.changeHeaderTitle(`${this.state.title} (${message.activeSlide}/${this.state.totalSlides})`);
+			if (message.command === 'presentation-updated') {
+				this.notesContainer.innerHTML = urlify(message.data.notes);
+				this.props.changeHeaderTitle(`${this.state.title} (${message.data.activeSlide}/${this.state.totalSlides})`);
 				this.setState({
-					activeSlide: message.activeSlide
+					activeSlide: message.data.activeSlide
 				});
 			}
 		};
@@ -355,7 +369,10 @@ export default class Profile extends Component {
 			touchstartYpointer = e.changedTouches[0].clientY,
 
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-start'
+				command: 'notify-extension',
+				data: {
+					why: 'laserpointer-down'
+				}
 			}));
 		};
 
@@ -364,9 +381,12 @@ export default class Profile extends Component {
 		this.onTouchMovePointer = e => {
 			e.preventDefault();
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-move',
-				x: e.changedTouches[0].clientX - touchstartXpointer,
-				y: e.changedTouches[0].clientY - touchstartYpointer
+				command: 'notify-extension',
+				data: {
+					why: 'laserpointer-move',
+					x: e.changedTouches[0].clientX - touchstartXpointer,
+					y: e.changedTouches[0].clientY - touchstartYpointer
+				}
 			}));
 		};
 
@@ -375,7 +395,10 @@ export default class Profile extends Component {
 		this.onTouchEndPointer = e => {
 			e.preventDefault();
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-end'
+				command: 'notify-extension',
+				data: {
+					why: 'laserpointer-up'
+				}
 			}));
 		};
 

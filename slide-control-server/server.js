@@ -20,8 +20,6 @@
 // Libs
 const WebSocket = require('ws')
 const http = require('http')
-const fs = require('fs')
-const path = require('path')
 
 // SlideControl server
 const SlidecontrolServer = require('./slidecontrolServer')
