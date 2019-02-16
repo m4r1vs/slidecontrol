@@ -90,7 +90,7 @@ export default class QRCodeWindow {
 		setTimeout(() => {
 			this.element.style.opacity = 1
 			this.background.style.opacity = 0.618
-		}, 20);
+		}, 20)
 	}
 	
 	/**
@@ -105,6 +105,6 @@ export default class QRCodeWindow {
 		setTimeout(() => {
 			this.element.style.display = "none"
 			this.background.style.display = "none"
-		}, 320);
+		}, 320)
 	}
 }

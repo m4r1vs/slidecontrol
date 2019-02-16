@@ -83,6 +83,11 @@ module.exports = class SlidecontrolServer {
 		else Logger.error('Sent command not valid: ', message)
 	}
 	
+	/**
+	 * Add event listeners to new connection, let connectionGuardian apply life-support
+	 * @param {Object} connection The new connection
+	 * @param {Object} request The request of the connection
+	 */
 	handleNewConnection(connection, request) {
 
 		Logger.log(`New connection established from IP: ${request.connection.remoteAddress}`)
@@ -90,7 +95,7 @@ module.exports = class SlidecontrolServer {
 		// Increase connections for the guard
 		connectionGuardian.increaseConnections()
 
-		connection.on('message', raw => this.handleMessage(decodeRawMessage(raw), connection))
+		connection.on('message', raw => this.handleMessage(decodeRawMessage(raw, connection), connection))
 		connection.on('close', () => this.handleClose(connection, request))
 		connection.on('pong', () => connectionGuardian.heartbeat(connection, request))
 

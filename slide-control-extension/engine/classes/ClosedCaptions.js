@@ -51,7 +51,7 @@ export default class ClosedCaptions {
 	show(cc) {
 		this.ccContainer.style.display = 'block'
 		this.ccContainer.textContent = cc
-		this.timeout = setTimeout(() => this.hide(false), 4500);
+		this.timeout = setTimeout(() => this.hide(false), 4500)
 	}
 	
 	/**

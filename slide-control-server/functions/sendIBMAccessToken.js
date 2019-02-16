@@ -30,12 +30,6 @@ module.exports = sendIBMAccessToken = (req, res) => {
 
 	Logger.debug('Will get IBM access_token, with key: ', `"${IBM_API_KEY}"`)
 
-	// enable cross origin requests
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Request-Method', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-	res.setHeader('Access-Control-Allow-Headers', '*');
-
 	// get token from IBM and send as response
 	fetch('https://iam.bluemix.net/identity/token?grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=' + IBM_API_KEY, {
 		method: 'POST',

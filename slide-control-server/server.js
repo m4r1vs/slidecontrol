@@ -55,6 +55,6 @@ httpServer.listen(CONFIG.port, error => {
 
     if (error) return Logger.error('Error starting Server: ', error)
     
-    Logger.log(`Server v${CONFIG.version} is listening on port ${CONFIG.port}`)
+    Logger.log(`Server v${CONFIG.version}-${__webpack_hash__} is listening on port ${CONFIG.port}`)
 
 })

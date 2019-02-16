@@ -228,6 +228,7 @@ export default class Profile extends Component {
 			}));
 		};
 		this.Socket.onclose = () => {
+			route('/');
 			this.props.showSnackbar(
 				lang.notifications.disconnected,
 				null,
@@ -271,7 +272,7 @@ export default class Profile extends Component {
 			message = JSON.parse(message.data);
 
 			
-			if (message.command === 'slide-code-not-found') {
+			if (message.command === 'presentation-id-unknown') {
 				this.props.showSnackbar(
 					lang.errors.wrongCode.msg(this.props.id),
 					lang.errors.wrongCode.action,

@@ -58,7 +58,7 @@ export default class Laserpointer {
 			this.element.style.transform = "scale(8)"
 			setTimeout(() => {
 				this.element.style.transform = "scale(1)"
-			}, 150);
+			}, 150)
 		})
 	}
 

@@ -18,10 +18,12 @@
  */
 
 const sendIBMAccessToken = require('./sendIBMAccessToken')
+const sendServerVersion = require('./sendServerVersion')
 
 // HTTP routes
 const routes = {
 	'ibm-access-token': sendIBMAccessToken,
+	'server-version': sendServerVersion,
 	default: (req, res) => res.end('You weren\'t supposed to see this lol')
 }
 
@@ -32,6 +34,12 @@ const routes = {
  * @param {Object} routes An Object of the routes.
  */
 module.exports = httpRouter = (req, res) => {
+
+	// enable cross origin requests
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Request-Method', '*')
+	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET')
+	res.setHeader('Access-Control-Allow-Headers', '*')
 
 	// e.g. if req.url == "/foo/bar", route = routes['bar']
 	const route = routes[req.url.split('/')[req.url.split('/').length - 1]]

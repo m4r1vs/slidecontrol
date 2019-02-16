@@ -24,7 +24,7 @@ module.exports = class ConnectionGuardian {
 
 	constructor() {
 		this.connections = 0
-		setInterval(this.ping, 60000);
+		setInterval(this.ping, 60000)
 	}
 
 	increaseConnections() { this.connections++ }

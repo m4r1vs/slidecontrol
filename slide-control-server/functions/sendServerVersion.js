@@ -18,16 +18,13 @@
  */
 
 /**
- * Decode raw message to JSON. Return false and error if not JSON
- * @param {String} raw The raw string recieved by the socket
+ * Respond with current server version
+ * @param {Object} res The response the version is sent to
  */
-module.exports = decodeRawMessage = (raw, connection) => {
-	try {
-		return JSON.parse(raw)
-	}
-	catch (error) {
-		Logger.error('Error decoding message, killing connection: ', error)
-		connection.terminate()
-	}
-	return false
+module.exports = sendServerVersion = (req, res) => {
+	res.write(JSON.stringify({
+		version: CONFIG.version,
+		hash: __webpack_hash__
+	}))
+	res.end()
 }
