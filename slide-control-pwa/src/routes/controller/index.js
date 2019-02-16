@@ -16,7 +16,6 @@ export default class Profile extends Component {
 				type: direction === 'next' ? 'next-slide' : 'previous-slide'
 			}
 		}));
-
 	}
 
 	startTimer = () => {
@@ -52,7 +51,6 @@ export default class Profile extends Component {
 			this.incrementer = setInterval(() => {
 				this.setState(state => ({ secondsElapsed: state.secondsElapsed + 1 }));
 			}, 1000);
-
 		}
 
 		else {
@@ -66,7 +64,6 @@ export default class Profile extends Component {
 			}));
 
 			clearInterval(this.incrementer);
-
 		}
 	}
 
@@ -240,8 +237,10 @@ export default class Profile extends Component {
 
 	componentDidMount() {
 
+		// hide navigation drawer
 		document.getElementById('drawer').setAttribute('style', 'display: none !important');
 
+		// show buttons in header
 		this.props.changeHeaderChildren(
 			<div>
 				{(localStorage.getItem('slidecontrol-cc') === 'true') ? <i role="button" aria-label={lang.page.toggleClosedCaptions} onClick={this.toggleClosedCaptions} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '36px', left: 'auto', cursor: 'pointer' }}>
@@ -252,7 +251,8 @@ export default class Profile extends Component {
 				</i>
 			</div>
 		);
-
+		
+		// add global toggleWEbsite() function
 		window.toggleWebsite = url => {
 			this.Socket.send(JSON.stringify({
 				command: 'notify-extension',
@@ -263,15 +263,17 @@ export default class Profile extends Component {
 			}));
 		};
 
+		// make links in notes html text show website onscreen
 		const urlify = string => {
 			const urlRegex = /(https?:\/\/[^\s]+)/g;
+			string = string.replace('href', 'href_alt');
 			return string.replace(urlRegex, url => '<a href="javascript:void(0)" onclick="window.toggleWebsite(this.textContent)">' + url + '</a>');
 		};
 
+		// handle message by server
 		this.Socket.onmessage = message => {
 			message = JSON.parse(message.data);
 
-			
 			if (message.command === 'presentation-id-unknown') {
 				this.props.showSnackbar(
 					lang.errors.wrongCode.msg(this.props.id),
@@ -317,6 +319,7 @@ export default class Profile extends Component {
 			console.error('We fucked up big here: ', error);
 		};
 
+		// add key commands
 		this.onKeyDown = key => {
 			if (key.code === 'KeyT') this.startTimer();
 			if (key.code === 'KeyM') this.toggleLightMode();
@@ -335,7 +338,6 @@ export default class Profile extends Component {
 			touchstartYnotes = e.changedTouches[0].screenY;
 			touchstartTimestamp = e.timeStamp;
 		};
-		
 
 		// listen for finger-move event
 		this.notesContainer.addEventListener('touchstart', this.onTouchStartNotes);
@@ -409,10 +411,20 @@ export default class Profile extends Component {
 
 	// clear some scheduled code when exiting component
 	componentWillUnmount() {
+
+		// hide closed captions on exit
 		if (this.stream) this.toggleClosedCaptions();
+
+		// show drawer again
 		document.getElementById('drawer').setAttribute('style', '');
+
+		// clear timer
 		clearInterval(this.incrementer);
+
+		// close connection to server
 		this.Socket.close();
+
+		// remove event listeners
 		document.body.removeEventListener('keydown', this.onKeyDown, false);
 		this.notesContainer.removeEventListener('touchstart', this.onTouchStartNotes, false);
 		this.notesContainer.removeEventListener('touchend', this.onTouchEndNotes, false);
@@ -421,7 +433,7 @@ export default class Profile extends Component {
 		this.laserPointer.removeEventListener('touchend', this.onTouchEndPointer, false);
 	}
 	
-	render({ id }) {
+	render() {
 
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>

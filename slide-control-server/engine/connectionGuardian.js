@@ -24,16 +24,28 @@ module.exports = class ConnectionGuardian {
 
 	constructor() {
 		this.connections = 0
+
+		this.increaseConnections = this.increaseConnections.bind(this)
+		this.decreaseConnections = this.decreaseConnections.bind(this)
+		this.ping = this.ping.bind(this)
+		this.heartbeat = this.heartbeat.bind(this)
+
 		setInterval(this.ping, 60000)
 	}
 
-	increaseConnections() { this.connections++ }
-	decreaseConnections() { this.connections-- }
+	increaseConnections() { 
+		console.log(this.connections)
+		this.connections++ }
+	decreaseConnections() { 
+		console.log(this.connections)
+		this.connections-- }
 
 	/**
 	 * Ping every connection every minute
 	 */
 	ping() {
+
+		if (!this.connections) return
 
 		Logger.log(`Checking if ${this.connections} connections still alive...`)
 

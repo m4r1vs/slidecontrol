@@ -24,7 +24,7 @@ const sendServerVersion = require('./sendServerVersion')
 const routes = {
 	'ibm-access-token': sendIBMAccessToken,
 	'server-version': sendServerVersion,
-	default: (req, res) => res.end('You weren\'t supposed to see this lol')
+	default: (req, res) => res.end(`Slidecontrol backend server v${CONFIG.version}-${__webpack_hash__}`)
 }
 
 /**
