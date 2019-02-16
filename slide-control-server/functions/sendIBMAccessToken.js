@@ -17,8 +17,6 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-const fs = require('fs')
-const path = require('path')
 const fetch = require('node-fetch')
 
 // the IBM api key in /slide-control-server/ibm-api-key.key

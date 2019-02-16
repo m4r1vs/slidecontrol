@@ -84,6 +84,7 @@ module.exports = class SlidecontrolServer {
 	}
 	
 	handleNewConnection(connection, request) {
+
 		Logger.log(`New connection established from IP: ${request.connection.remoteAddress}`)
 
 		// Increase connections for the guard

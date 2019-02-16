@@ -13,7 +13,7 @@ export default class Profile extends Component {
 		this.Socket.send(JSON.stringify({
 			command: 'notify-extension',
 			data: {
-				why: direction === 'next' ? 'next-slide' : 'previous-slide'
+				type: direction === 'next' ? 'next-slide' : 'previous-slide'
 			}
 		}));
 
@@ -96,7 +96,7 @@ export default class Profile extends Component {
 			this.Socket.send(JSON.stringify({
 				command: 'notify-extension',
 				data: {
-					why: 'show-closed-captions',
+					type: 'show-closed-captions',
 					cc: ''
 				}
 			}));
@@ -131,7 +131,7 @@ export default class Profile extends Component {
 						this.Socket.send(JSON.stringify({
 							command: 'notify-extension',
 							data: {
-								why: 'show-closed-captions',
+								type: 'show-closed-captions',
 								cc: string
 							}
 						}));
@@ -256,7 +256,7 @@ export default class Profile extends Component {
 			this.Socket.send(JSON.stringify({
 				command: 'notify-extension',
 				data: {
-					why: 'toggle-webpage',
+					type: 'toggle-webpage',
 					url
 				}
 			}));
@@ -371,7 +371,7 @@ export default class Profile extends Component {
 			this.Socket.send(JSON.stringify({
 				command: 'notify-extension',
 				data: {
-					why: 'laserpointer-down'
+					type: 'laserpointer-down'
 				}
 			}));
 		};
@@ -383,7 +383,7 @@ export default class Profile extends Component {
 			this.Socket.send(JSON.stringify({
 				command: 'notify-extension',
 				data: {
-					why: 'laserpointer-move',
+					type: 'laserpointer-move',
 					x: e.changedTouches[0].clientX - touchstartXpointer,
 					y: e.changedTouches[0].clientY - touchstartYpointer
 				}
@@ -397,7 +397,7 @@ export default class Profile extends Component {
 			this.Socket.send(JSON.stringify({
 				command: 'notify-extension',
 				data: {
-					why: 'laserpointer-up'
+					type: 'laserpointer-up'
 				}
 			}));
 		};
