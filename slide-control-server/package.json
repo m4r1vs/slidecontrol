@@ -8,6 +8,9 @@
     "watch": "webpack --config webpack.config.js --mode development --watch"
   },
   "port": 1337,
+  "legacySSL": false,
+  "sslCertLocation": "/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/cert.pem",
+  "sslKeyLocation": "/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/privkey.pem",
   "presentationIDlength": 5,
   "repository": {
     "type": "git",

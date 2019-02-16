@@ -19,7 +19,9 @@
 
 // Libs
 const WebSocket = require('ws')
+const fs = require('fs')
 const http = require('http')
+const https = require('https')
 
 // SlideControl server
 const SlidecontrolServer = require('./slidecontrolServer')
@@ -36,7 +38,12 @@ global.Logger = Logger
 global.CONFIG = CONFIG
 
 // create servers
-const httpServer = new http.createServer((req, res) => httpRouter(req, res))
+const httpServer = CONFIG.legacySSL
+    ? new https.createServer({
+        cert: fs.readFileSync(CONFIG.sslCertificateLocation),
+        key: fs.readFileSync(CONFIG.sslKeyLocation)
+    })
+    : new http.createServer((req, res) => httpRouter(req, res))
 const wssServer = new WebSocket.Server({ server: httpServer })
 
 // make WebSocket server available for children:
