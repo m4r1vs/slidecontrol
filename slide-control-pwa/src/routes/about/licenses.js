@@ -5,12 +5,15 @@ const AboutLicenses = props => (
 	<div class={style.about} fadeIn>
 
 		<section>
-			<a href="http://slidecontrol.niveri.xyz" rel="noopener noreferrer" target="_blank"><h2>Slidecontrol</h2></a>
+			<a href="http://slidecontrol.niveri.xyz" rel="noopener noreferrer" target="_blank">
+				<h1>
+                    Slidecontrol - The open-source remote control solution.
+				</h1>
+			</a>
+			<h2>
+                Copyright (C) 2019 Marius Niveri {'<'}marius.niveri@gmail.com{'>'}
+			</h2>
 			<p>
-
-                Slidecontrol - The open-source remote control solution<br />
-                Copyright (C) 2019 Marius Niveri {'<'}marius.niveri@gmail.com{'>'}<br /><br />
-
                 This program is free software: you can redistribute it and/or modify
                 it under the terms of the GNU Affero General Public License as published
                 by the Free Software Foundation, version 3 of the License.<br /><br />

@@ -14,7 +14,7 @@ export default class Scanner extends Component {
 		this.props.showSnackbar(
 			lang.notifications.experiment,
 			null,
-			8000,
+			4000,
 			() => console.warn('y u c this?!')
 		);
 

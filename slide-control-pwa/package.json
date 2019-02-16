@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "slide-control-pwa",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "license": "LGPL-3.0-only",
   "scripts": {
     "start": "per-env",
@@ -23,8 +23,8 @@
     "eslint": "^4.9.0",
     "eslint-config-synacor": "^2.0.2",
     "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.1.0",
     "per-env": "^1.0.2",
-    "jest": "^21.2.1",
     "preact-cli": "^2.1.0",
     "preact-render-spy": "^1.2.1"
   },
@@ -35,7 +35,6 @@
     "preact-compat": "^3.17.0",
     "preact-router": "^2.5.7",
     "qr-scanner": "^1.0.0",
-    "sass-loader": "^7.1.0",
-    "watson-speech": "^0.35.4"
+    "sass-loader": "^7.1.0"
   }
 }

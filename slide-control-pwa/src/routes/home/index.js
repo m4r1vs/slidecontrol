@@ -50,8 +50,10 @@ export default class Home extends Component {
 		);
 		this.input.disabled = true;
 		this.Socket.send(JSON.stringify({
-			reason: 'check-slide-code',
-			code: this.state.input
+			command: 'check-presentation-id',
+			data: {
+				presentationID: this.state.input
+			}
 		}));
 	}
 
@@ -86,10 +88,10 @@ export default class Home extends Component {
 
 		this.Socket.onmessage = message => {
 			message = JSON.parse(message.data);
-			if (message.reason === 'slide-code-ok') {
-				route(`/controller/${message.code}`);
+			if (message.command === 'presentation-id-ok') {
+				route(`/controller/${message.data.presentationID}`);
 			}
-			if (message.reason === 'slide-code-not-ok') {
+			if (message.command === 'presentation-id-unknown') {
 				this.props.showSnackbar(
 					lang.errors.wrongCode.msg(message.code),
 					lang.errors.wrongCode.action,

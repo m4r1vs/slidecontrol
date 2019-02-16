@@ -11,9 +11,11 @@ export default class Profile extends Component {
 	switchSlides = direction => {
 		if (navigator.vibrate) navigator.vibrate(10);
 		this.Socket.send(JSON.stringify({
-			reason: direction === 'next' ? 'next-slide' : 'previous-slide'
+			command: 'notify-extension',
+			data: {
+				type: direction === 'next' ? 'next-slide' : 'previous-slide'
+			}
 		}));
-
 	}
 
 	startTimer = () => {
@@ -49,7 +51,6 @@ export default class Profile extends Component {
 			this.incrementer = setInterval(() => {
 				this.setState(state => ({ secondsElapsed: state.secondsElapsed + 1 }));
 			}, 1000);
-
 		}
 
 		else {
@@ -63,7 +64,6 @@ export default class Profile extends Component {
 			}));
 
 			clearInterval(this.incrementer);
-
 		}
 	}
 
@@ -91,8 +91,11 @@ export default class Profile extends Component {
 				CC: ''
 			});
 			this.Socket.send(JSON.stringify({
-				reason: 'show-closed-captions',
-				cc: ''
+				command: 'notify-extension',
+				data: {
+					type: 'show-closed-captions',
+					cc: ''
+				}
 			}));
 			this.props.showSnackbar(
 				lang.notifications.closedCaptions.stoped,
@@ -123,8 +126,11 @@ export default class Profile extends Component {
 					this.stream.on('data', uint8array => {
 						let string = new TextDecoder('utf-8').decode(uint8array);
 						this.Socket.send(JSON.stringify({
-							reason: 'show-closed-captions',
-							cc: string
+							command: 'notify-extension',
+							data: {
+								type: 'show-closed-captions',
+								cc: string
+							}
 						}));
 						this.setState({
 							CC: string
@@ -212,11 +218,14 @@ export default class Profile extends Component {
 		}
 		this.Socket.onopen = () => {
 			this.Socket.send(JSON.stringify({
-				reason: 'register-controller',
-				code: this.props.id
+				command: 'add-new-controller',
+				data: {
+					presentationID: this.props.id
+				}
 			}));
 		};
 		this.Socket.onclose = () => {
+			route('/');
 			this.props.showSnackbar(
 				lang.notifications.disconnected,
 				null,
@@ -228,8 +237,10 @@ export default class Profile extends Component {
 
 	componentDidMount() {
 
+		// hide navigation drawer
 		document.getElementById('drawer').setAttribute('style', 'display: none !important');
 
+		// show buttons in header
 		this.props.changeHeaderChildren(
 			<div>
 				{(localStorage.getItem('slidecontrol-cc') === 'true') ? <i role="button" aria-label={lang.page.toggleClosedCaptions} onClick={this.toggleClosedCaptions} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '36px', left: 'auto', cursor: 'pointer' }}>
@@ -240,24 +251,30 @@ export default class Profile extends Component {
 				</i>
 			</div>
 		);
-
+		
+		// add global toggleWEbsite() function
 		window.toggleWebsite = url => {
 			this.Socket.send(JSON.stringify({
-				reason: 'toggle-webpage',
-				url
+				command: 'notify-extension',
+				data: {
+					type: 'toggle-webpage',
+					url
+				}
 			}));
 		};
 
+		// make links in notes html text show website onscreen
 		const urlify = string => {
 			const urlRegex = /(https?:\/\/[^\s]+)/g;
+			string = string.replace('href', 'href_alt');
 			return string.replace(urlRegex, url => '<a href="javascript:void(0)" onclick="window.toggleWebsite(this.textContent)">' + url + '</a>');
 		};
 
+		// handle message by server
 		this.Socket.onmessage = message => {
 			message = JSON.parse(message.data);
 
-			
-			if (message.reason === 'slide-code-not-found') {
+			if (message.command === 'presentation-id-unknown') {
 				this.props.showSnackbar(
 					lang.errors.wrongCode.msg(this.props.id),
 					lang.errors.wrongCode.action,
@@ -266,28 +283,28 @@ export default class Profile extends Component {
 				);
 			}
 
-			if (message.reason === 'send-slide-info') {
+			if (message.command === 'new-controller-added') {
 				this.props.showSnackbar(
-					lang.notifications.synced(message.title,this.props.id),
+					lang.notifications.synced(message.data.title,this.props.id),
 					null,
 					3500,
 					() => console.warn('Wait, you were not supposed to read this, lol')
 				);
-				this.notesContainer.innerHTML = urlify(message.notes);
-				this.props.changeHeaderTitle(`${message.title} (${message.activeSlide}/${message.totalSlides})`);
+				this.notesContainer.innerHTML = urlify(message.data.notes);
+				this.props.changeHeaderTitle(`${message.data.title} (${message.data.activeSlide}/${message.data.totalSlides})`);
 				this.setState({
-					totalSlides: message.totalSlides,
-					activeSlide: message.activeSlide,
+					totalSlides: message.data.totalSlides,
+					activeSlide: message.data.activeSlide,
 					slideLoaded: true,
-					title: message.title
+					title: message.data.title
 				});
 			}
 
-			if (message.reason === 'slide-changed') {
-				this.notesContainer.innerHTML = urlify(message.notes);
-				this.props.changeHeaderTitle(`${this.state.title} (${message.activeSlide}/${this.state.totalSlides})`);
+			if (message.command === 'presentation-updated') {
+				this.notesContainer.innerHTML = urlify(message.data.notes);
+				this.props.changeHeaderTitle(`${this.state.title} (${message.data.activeSlide}/${this.state.totalSlides})`);
 				this.setState({
-					activeSlide: message.activeSlide
+					activeSlide: message.data.activeSlide
 				});
 			}
 		};
@@ -302,6 +319,7 @@ export default class Profile extends Component {
 			console.error('We fucked up big here: ', error);
 		};
 
+		// add key commands
 		this.onKeyDown = key => {
 			if (key.code === 'KeyT') this.startTimer();
 			if (key.code === 'KeyM') this.toggleLightMode();
@@ -320,7 +338,6 @@ export default class Profile extends Component {
 			touchstartYnotes = e.changedTouches[0].screenY;
 			touchstartTimestamp = e.timeStamp;
 		};
-		
 
 		// listen for finger-move event
 		this.notesContainer.addEventListener('touchstart', this.onTouchStartNotes);
@@ -355,7 +372,10 @@ export default class Profile extends Component {
 			touchstartYpointer = e.changedTouches[0].clientY,
 
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-start'
+				command: 'notify-extension',
+				data: {
+					type: 'laserpointer-down'
+				}
 			}));
 		};
 
@@ -364,9 +384,12 @@ export default class Profile extends Component {
 		this.onTouchMovePointer = e => {
 			e.preventDefault();
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-move',
-				x: e.changedTouches[0].clientX - touchstartXpointer,
-				y: e.changedTouches[0].clientY - touchstartYpointer
+				command: 'notify-extension',
+				data: {
+					type: 'laserpointer-move',
+					x: e.changedTouches[0].clientX - touchstartXpointer,
+					y: e.changedTouches[0].clientY - touchstartYpointer
+				}
 			}));
 		};
 
@@ -375,7 +398,10 @@ export default class Profile extends Component {
 		this.onTouchEndPointer = e => {
 			e.preventDefault();
 			this.Socket.send(JSON.stringify({
-				reason: 'laserpointer-end'
+				command: 'notify-extension',
+				data: {
+					type: 'laserpointer-up'
+				}
 			}));
 		};
 
@@ -385,10 +411,20 @@ export default class Profile extends Component {
 
 	// clear some scheduled code when exiting component
 	componentWillUnmount() {
+
+		// hide closed captions on exit
 		if (this.stream) this.toggleClosedCaptions();
+
+		// show drawer again
 		document.getElementById('drawer').setAttribute('style', '');
+
+		// clear timer
 		clearInterval(this.incrementer);
+
+		// close connection to server
 		this.Socket.close();
+
+		// remove event listeners
 		document.body.removeEventListener('keydown', this.onKeyDown, false);
 		this.notesContainer.removeEventListener('touchstart', this.onTouchStartNotes, false);
 		this.notesContainer.removeEventListener('touchend', this.onTouchEndNotes, false);
@@ -397,7 +433,7 @@ export default class Profile extends Component {
 		this.laserPointer.removeEventListener('touchend', this.onTouchEndPointer, false);
 	}
 	
-	render({ id }) {
+	render() {
 
 		return (
 			<div class={style.controller} ref={div => this.controller = div}>
