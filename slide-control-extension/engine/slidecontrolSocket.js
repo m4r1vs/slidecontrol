@@ -41,12 +41,12 @@ export default class SlidecontrolSocket {
 
 		// get user chosen server from storage and connect
 		chrome.storage.sync.get({
-			websocketIP: 'wss://www.maniyt.de:61263'
+			backendIP: 'wss://www.maniyt.de:61263'
 		}, settings => {
 
-			Logger.log('Connecting to socket on server: ' + settings.websocketIP)
+			Logger.log('Connecting to socket on server: ' + settings.backendIP)
 
-			this.Connection = new WebSocket(settings.websocketIP)
+			this.Connection = new WebSocket(settings.backendIP)
 
 			this.Connection.onopen = () => {
 
@@ -59,7 +59,7 @@ export default class SlidecontrolSocket {
 
 			this.Connection.onerror = error => {
 				Logger.error(error)
-				alert(`Error connecting to slidecontrol server ${settings.websocketIP}. Maybe change servers at sc.niveri.xyz/settings`)
+				alert(`Error connecting to slidecontrol server ${settings.backendIP}. Maybe change servers at sc.niveri.xyz/settings`)
 			}
 		})
 	}

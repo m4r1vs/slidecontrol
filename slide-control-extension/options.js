@@ -31,7 +31,7 @@ const save_ip = () => {
 	
 	// put IP in chrome storage
 	chrome.storage.sync.set({
-		websocketIP: ip
+		backendIP: ip
 	}, () => {
 		
 		// then tell user that it got updated
@@ -50,16 +50,16 @@ const save_ip = () => {
  */
 const restore_options = () => {
 	chrome.storage.sync.get({
-		websocketIP: 'wss://www.maniyt.de:61263'
+		backendIP: 'wss://www.maniyt.de:61263'
 	}, settings => {
 		
-		document.getElementById('current-server').textContent = settings.websocketIP
+		document.getElementById('current-server').textContent = settings.backendIP
 		
-		if (settings.websocketIP === 'wss://www.maniyt.de:61263' || settings.websocketIP === 'wss://mn.uber.space/slidecontrol-socket') {
-			document.getElementById('server-options').value = settings.websocketIP
+		if (settings.backendIP === 'wss://www.maniyt.de:61263' || settings.backendIP === 'wss://mn.uber.space/slidecontrol-socket') {
+			document.getElementById('server-options').value = settings.backendIP
 		}
 		else {
-			document.getElementById('server-local').value = settings.websocketIP
+			document.getElementById('server-local').value = settings.backendIP
 		}
 	})
 }

@@ -1,6 +1,6 @@
 {
   "name": "slide-control-extension",
-  "version": "2.1.3",
+  "version": "2.5.5",
   "description": "The extension for slidecontrol",
   "main": "content.js",
   "directories": {
