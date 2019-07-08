@@ -20,9 +20,11 @@
 const ConnectionGuardian = require('./engine/connectionGuardian')
 const decodeRawMessage = require('./engine/decodeRawMessage')
 const SlidecontrolEngine = require('./engine/slidecontrolEngine')
+const StatsGuardian = require('./engine/statsGuardian')
 
 const slidecontrolEngine = new SlidecontrolEngine()
 const connectionGuardian = new ConnectionGuardian()
+const statsGuardian = new StatsGuardian()
 
 module.exports = class SlidecontrolServer {
 
@@ -67,8 +69,14 @@ module.exports = class SlidecontrolServer {
 		const commandMap = {
 
 			// from extension:
-			'add-new-presentation': () => slidecontrolEngine.addNewPresentation(message.data, connection),
-			'update-presentation': () => slidecontrolEngine.updatePresentation(message.data, connection),
+			'add-new-presentation': () => {
+				slidecontrolEngine.addNewPresentation(message.data, connection)
+				statsGuardian.increaseStat('presentationsCreated', 1)
+			},
+			'update-presentation': () => {
+				slidecontrolEngine.updatePresentation(message.data, connection)
+				statsGuardian.increaseStat('slidesUpdated', 1)
+			},
 			
 			// from PWA/home:
 			'check-presentation-id': () => slidecontrolEngine.checkPresentationID(message.data, connection),

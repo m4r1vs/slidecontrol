@@ -8,6 +8,8 @@ yarn-error.log*
 ibm-api-key.key
 ibm-api-key.js
 
+stats.json
+
 # Runtime data
 pids
 *.pid
