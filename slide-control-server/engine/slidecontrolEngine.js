@@ -151,7 +151,8 @@ module.exports = class SlidecontrolEngine {
 			command: (this.presentations[data.presentationID]) ? 'presentation-id-ok' : 'presentation-id-unknown',
 			data: {
 				presentationID: data.presentationID
-			}
+			},
+			code: data.presentationID // TODO: remove dis and update PWA
 		})
 	}
 

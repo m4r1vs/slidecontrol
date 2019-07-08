@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --mode production",
-    "watch": "webpack --config webpack.config.js --mode development --watch"
+    "watch": "webpack --config webpack.config.js --mode development --watch",
+    "dev": "webpack --config webpack.config.js --mode development"
   },
-  "port": 1337,
+  "port": 8888,
   "legacySSL": false,
   "sslCertificateLocation": "/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/cert.pem",
   "sslKeyLocation": "/home/m4r1vs/.config/letsencrypt/live/www.maniyt.de/privkey.pem",

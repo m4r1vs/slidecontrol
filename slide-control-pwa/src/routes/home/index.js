@@ -93,7 +93,7 @@ export default class Home extends Component {
 			}
 			if (message.command === 'presentation-id-unknown') {
 				this.props.showSnackbar(
-					lang.errors.wrongCode.msg(message.code),
+					lang.errors.wrongCode.msg(message.data.presentationID),
 					lang.errors.wrongCode.action,
 					5000,
 					() => route('/help')
