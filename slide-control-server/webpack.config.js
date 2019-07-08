@@ -4,7 +4,7 @@ const ExtendedAPIPlugin = require('webpack').ExtendedAPIPlugin
 
 module.exports = () => ({
 	target: "node",
-	entry: './server.js',
+	entry: path.resolve(__dirname, 'server.js'),
 	output: {
 		filename: 'server.bundle.js',
 		path: path.resolve(__dirname, 'build')
@@ -12,5 +12,8 @@ module.exports = () => ({
 	plugins: [
 		new ExtendedAPIPlugin()
 	],
+	node: {
+		__dirname: false
+	},
 	externals: [nodeExternals()]
 })

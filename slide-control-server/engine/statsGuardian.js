@@ -18,6 +18,9 @@
  */
 
 const fs = require('fs')
+const path = require('path')
+
+const STATFILE_PATH = path.join(__dirname, '..', 'stats.json')
 
 module.exports = class StatsGuardian {
 
@@ -25,8 +28,8 @@ module.exports = class StatsGuardian {
 
 		this.stats = {}
 
-		if (fs.existsSync('../stats.json')) {
-			let stats = fs.readFileSync("../stats.json")
+		if (fs.existsSync(STATFILE_PATH)) {
+			let stats = fs.readFileSync(STATFILE_PATH)
 			this.stats = JSON.parse(stats)
 			console.log('Got old stats file', this.stats)
 		} else {
@@ -65,8 +68,8 @@ module.exports = class StatsGuardian {
 	 */
 	saveStats() {
 		Logger.debug('Saving stats', JSON.stringify(this.stats))
-		fs.writeFile('../stats.json', JSON.stringify(this.stats), err => {
-			if (err) Logger.error('Could not save stats:', this.stats.toString())
+		fs.writeFile(STATFILE_PATH, JSON.stringify(this.stats), err => {
+			if (err) Logger.error('Could not save stats:', err)
 			Logger.debug("Saved stats:", this.stats)
 		})
 	}
