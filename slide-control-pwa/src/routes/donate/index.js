@@ -24,15 +24,29 @@ export default class Donate extends Component {
 			<div class={style.donate}>
 
 				<p>
-					Hi there, we are very flattered that you are thinking of giving us a small tip for our work!
+					Hi there, we are very, very flattered that you are thinking about supporting us and the devlopment of this small app!
 				</p>
 				<p>
-					Maintaining open source projects like slidecontrol is fun and important but bills still have
-					to be payed so every donation is very much appreciated.
+					Before you continue we would like to get a chance of introducing us to you though. You should know who your tip goes to:
 				</p>
 				<p>
-					You can either choose one of the things below
-					or <a target="_blank" rel="noopener noreferrer" href="https://www.paypal.me/MariusNiveri/">set the amount you wish to tip</a> :)
+					We are Niels and Marius,
+					both {new Date().getFullYear() - 2002} years old students from the north of Germany. We initially developed slidecontrol
+					as a side project for high school but decided to continue working on it afterwards when we realized that we filled a gap. But how much does it cost us?
+				</p>
+				<p>
+					Keeping slidecontrol running costs us exactly 8€ (and some of our free time of course) a month for our server which we happily pay on our own.
+					However since we don't like the idea of ads and other privacy-nightmares
+					like Analytics we draw this motivation from you (bills don't pay themselves unfortunately).
+				</p>	
+				<p>
+					If you are a student like us or just going through tough times you do not have to pay anything of course,
+					giving us an honest review on the <a target="_blank" rel="noopener noreferrer" href="https://play.google.com/store/apps/details?id=xyz.appmaker.ozgstz">Play Store</a> is
+					just as much appreciated!
+				</p>
+				<p>
+					But if you now decided to give us a tip, you can either choose one of the things below
+					or <a target="_blank" rel="noopener noreferrer" href="https://www.paypal.me/MariusNiveri/">set the amount on your own</a>, love you x3000 :)
 				</p>
 
 				<div class={style.icons}>
@@ -44,8 +58,10 @@ export default class Donate extends Component {
 				</div>
 
 				<p>
-					The icons above will redirect you to PayPal which we believe will be just fine for this purpose and even if you don't have an account you should be able to
-					just use a credit card without having to sign in.
+					The icons above will redirect you to PayPal which should be fine for most. If you got some crypto currencies laying around,
+					we do also
+					have <a href="#BTC" onClick={() => alert('BTC: 1GWG2p1coBJjXv4N6AoktHntfeE94Z2ZsA')}>Bitcoin</a> and <a href="#ETH" onClick={() => alert('ETH: 0x035B4C8a05676e2063006f33C5BF2b6215a9A482')}>Ethereum</a> wallets.
+					If your prefered way is not on the list, just <a href="mailto:marius.niveri@gmail.com">let us know by mail</a> and we will figure it out together. Thanks!
 				</p>
 
 			</div>
