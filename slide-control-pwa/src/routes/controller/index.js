@@ -18,6 +18,17 @@ export default class Profile extends Component {
 		}));
 	}
 
+	jumpSlides = slideNumber => {
+		if (navigator.vibrate) navigator.vibrate(10);
+		this.Socket.send(JSON.stringify({
+			command: 'notify-extension',
+			data: {
+				type: 'jump-slide',
+				slideNumber
+			}
+		}));
+	}
+
 	startTimer = () => {
 
 		if (!this.state.timerRunning) {
@@ -65,6 +76,11 @@ export default class Profile extends Component {
 
 			clearInterval(this.incrementer);
 		}
+	}
+
+	promptSlideJump = () => {
+		const slideNumber = parseInt(prompt("Enter the slide number you want to jump to"));
+		this.jumpSlides(slideNumber);
 	}
 
 	toggleLightMode = () => {
@@ -193,9 +209,11 @@ export default class Profile extends Component {
 		this.onTouchEndPointer = null;
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
+		this.promptSlideJump = this.promptSlideJump.bind(this);
 		this.toggleLightMode = this.toggleLightMode.bind(this);
 		this.toggleClosedCaptions = this.toggleClosedCaptions.bind(this);
 		this.toggleLaserpointer = this.toggleLaserpointer.bind(this);
+		this.jumpSlides = this.jumpSlides.bind(this);
 		this.nextSlide = () => this.switchSlides('next');
 		this.previousSlide = () => this.switchSlides('back');
 		this.goHome = () => route('/');
@@ -243,9 +261,12 @@ export default class Profile extends Component {
 		// show buttons in header
 		this.props.changeHeaderChildren(
 			<div>
-				{(localStorage.getItem('slidecontrol-cc') === 'true') ? <i role="button" aria-label={lang.page.toggleClosedCaptions} onClick={this.toggleClosedCaptions} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '36px', left: 'auto', cursor: 'pointer' }}>
+				{(localStorage.getItem('slidecontrol-cc') === 'true') ? <i role="button" aria-label={lang.page.toggleClosedCaptions} onClick={this.toggleClosedCaptions} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '65px', left: 'auto', cursor: 'pointer' }}>
 					closed_caption
 				</i> : null}
+				<i role="button" aria-label={lang.page.jumpSlideNumber} onClick={this.promptSlideJump} ref={i => this.slideJumpButton = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '36px', left: 'auto', cursor: 'pointer' }}>
+					playlist_play
+				</i>
 				<i role="button" aria-label={lang.page.toggleDarkModeButton} onClick={this.toggleLightMode} ref={i => this.lightModeToggle = i} class="material-icons" style={{ userSelect: 'none', position: 'absolute', right: '7px', left: 'auto', cursor: 'pointer' }}>
 					{this.state.lightMode ? 'brightness_2' : 'brightness_7'}
 				</i>

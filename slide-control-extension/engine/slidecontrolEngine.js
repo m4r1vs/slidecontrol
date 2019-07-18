@@ -32,6 +32,8 @@ export default class SlidecontrolEngine {
 
 		this.start = this.start.bind(this)
 		this.switchSlides = this.switchSlides.bind(this)
+		this.simulateKeyPress = this.simulateKeyPress.bind(this)
+		this.jumpSlides = this.jumpSlides.bind(this)
 		this.handleNotification = this.handleNotification.bind(this)
 		this.handleDeviceConnected = this.handleDeviceConnected.bind(this)
 		this.handleDeviceDisconnected = this.handleDeviceDisconnected.bind(this)
@@ -166,25 +168,77 @@ export default class SlidecontrolEngine {
 	}
 
 	/**
-	 * The PWA sends 'notify-extension' command, then server redirects it back to us:
-	 * @param {Object} notfication The notification send from PWA over socket
+	 * Simulate a keypress in slides
+	 * @param {String} key The key to be pressed
+	 * @param {Number} keyCode The keycode (also which)
+	 * @param {String} code The code for the key to be pressed
 	 */
-	handleNotification(notfication) {
+	simulateKeyPress(key, keyCode, code) {
 
-		if (!notfication) return
+		Logger.debug("Pressing key: " + key)
+
+		// Pass this to the function
+		const keyMap = {
+			key,
+			keyCode,
+			code
+		}
+
+		// Create script to emulate keydown
+		let script = document.createElement("script")
+		script.textContent = "(" + function (keyMap) {
+			keyMap = JSON.parse(keyMap)
+			let googleSlideContainer = document.querySelector(".punch-viewer-container")
+			let event = document.createEvent("Event")
+			event.initEvent("keydown", true, true)
+			event.key = keyMap.key
+			event.keyCode = keyMap.keyCode
+			event.which = keyMap.keyCode
+			event.code = keyMap.code
+			googleSlideContainer.dispatchEvent(event)
+		} + ')(`' + JSON.stringify(keyMap) + '`)'
+
+		// place script and remove it right after :O
+		document.body.appendChild(script)
+		script.remove()
+	}
+
+	/**
+	 * Jump to a given slide
+	 * @param {Number} slideNumber The slides number
+	 */
+	jumpSlides(slideNumber) {
+
+		// loop through each digit and press the button
+		[...slideNumber + ''].map(n => + n).forEach(digit => {
+			this.simulateKeyPress(digit, 48 + digit, `Digit${digit}`)
+		})
+
+		// then press enter
+		this.simulateKeyPress('Enter', 13, 'Enter')
+	}
+
+	/**
+	 * The PWA sends 'notify-extension' command, then server redirects it back to us:
+	 * @param {Object} notification The notification send from PWA over socket
+	 */
+	handleNotification(notification) {
+
+		if (!notification) return
 
 		// different known types of notification
 		const typeMap = {
 			"next-slide": this.nextSlide,
 			"previous-slide": this.previousSlide,
-			"toggle-webpage": () => this.miniBrowser.toggle(notfication.url),
-			"show-closed-captions": () => this.closedCaptions.set(notfication.cc),
+			"toggle-webpage": () => this.miniBrowser.toggle(notification.url),
+			"jump-slide": () => this.jumpSlides(notification.slideNumber),
+			"show-closed-captions": () => this.closedCaptions.set(notification.cc),
 			"laserpointer-down": () => this.laserpointer.show(),
-			"laserpointer-move": () => this.laserpointer.move(notfication.x, notfication.y),
+			"laserpointer-move": () => this.laserpointer.move(notification.x, notification.y),
 			"laserpointer-up": () => this.laserpointer.hide()
 		}
 
-		if (typeMap[notfication.type]) typeMap[notfication.type]()
+		if (typeMap[notification.type]) typeMap[notification.type]()
 	}
 
 	/**

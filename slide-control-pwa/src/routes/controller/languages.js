@@ -2,6 +2,7 @@ const languages = {
 	en: {
 		page: {
 			toggleDarkModeButton: 'Toggle dark-mode',
+			jumpSlideNumber: 'Jump to slide...',
 			startTimerButton: 'start timer',
 			showNotesButton: 'show notes',
 			showLaserpointerButton: 'laserpointer',
@@ -45,6 +46,7 @@ const languages = {
 	de: {
 		page: {
 			toggleDarkModeButton: 'Wechsel zwischen hellem und dunklem Modus',
+			jumpSlideNumber: 'Wechsel zu Folie...',
 			startTimerButton: 'starte Timer',
 			showNotesButton: 'Notizen',
 			showLaserpointerButton: 'Laserpointer',
