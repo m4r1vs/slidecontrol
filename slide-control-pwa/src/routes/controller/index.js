@@ -79,7 +79,7 @@ export default class Profile extends Component {
 	}
 
 	promptSlideJump = () => {
-		const slideNumber = parseInt(prompt("Enter the slide number you want to jump to"));
+		const slideNumber = parseInt(prompt('Enter the slide number you want to jump to'));
 		this.jumpSlides(slideNumber);
 	}
 

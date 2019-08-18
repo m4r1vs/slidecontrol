@@ -156,6 +156,14 @@ if (PATH.includes("/presentation/d/")) {
 
 		Logger.debug("In presentation-mode")
 
+		// prevent Computer from falling asleep during presentation
+		try {
+			ComputerSleep.prevent()
+			Logger.debug("Preventing computer from falling asleep...")
+		} catch (error) {
+			Logger.error("Couldn't prevent computer from falling asleep :/")
+		}
+
 		// adds the "start slidecontrol" button and connects on click
 		initializePresentation()
 	}

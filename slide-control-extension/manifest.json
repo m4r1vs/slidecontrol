@@ -5,7 +5,7 @@
    },
    "content_scripts": [ {
       "all_frames": false,
-      "js": [ "./lib/qrcodegen.js", "./content.min.js" ],
+      "js": [ "./lib/qrcodegen.js", "./lib/caffeine.js", "./content.min.js" ],
       "matches": [ "https://docs.google.com/presentation/d/*" ],
       "run_at": "document_idle"
    } ],
@@ -25,5 +25,5 @@
    "name": "slidecontrol",
    "offline_enabled": false,
    "short_name": "slidecontrol",
-   "version": "2.5.6"
+   "version": "2.5.7"
 }
