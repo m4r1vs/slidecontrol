@@ -487,7 +487,7 @@ export default class Profile extends Component {
 				{this.state.slideLoaded && this.state.showslideSelectionPrompt && (
 					<section class={style.slideSelectionPrompt}>
 						{this.state.slidesTitles.map((slideTitle, i) => (
-							<div key={i} slidenumber={i + 1} onClick={this.handleSlideJumpClick}>{slideTitle}</div>
+							<div key={i} slidenumber={i + 1} current={this.state.activeSlide === (i + 1) ? 'true' : 'false'} onClick={this.handleSlideJumpClick}>{slideTitle}</div>
 						))}
 					</section>
 				)}

@@ -40,14 +40,26 @@
 		border-radius: 20px;
 		box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
+		@media screen and (max-width: 512px) {
+			left: 0;
+			margin: auto 12px;
+			width: calc(100vw - 24px);
+		}
+
 		div {
 			padding: 10px 24px;
 			color: var(--primary-color);
 			cursor: pointer;
 			border-radius: 16px;
+			user-select: none;
+			word-wrap: break-word;
 
 			&:hover, &:active, &:focus {
 				background: rgba(0, 0, 0, 0.22);
+			}
+
+			&[current=true] {
+				color: var(--primary-color-dark);
 			}
 		}
 	}
