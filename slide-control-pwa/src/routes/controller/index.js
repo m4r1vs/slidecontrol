@@ -79,8 +79,14 @@ export default class Profile extends Component {
 	}
 
 	promptSlideJump = () => {
-		const slideNumber = parseInt(prompt('Enter the slide number you want to jump to'));
-		this.jumpSlides(slideNumber);
+		this.setState({
+			showslideSelectionPrompt: !this.state.showslideSelectionPrompt
+		});
+	}
+
+	handleSlideJumpClick = e => {
+		this.promptSlideJump();
+		this.jumpSlides(parseInt(e.target.attributes.slidenumber.value, 10));
 	}
 
 	toggleLightMode = () => {
@@ -210,6 +216,7 @@ export default class Profile extends Component {
 		this.incrementer = null;
 		this.startTimer = this.startTimer.bind(this);
 		this.promptSlideJump = this.promptSlideJump.bind(this);
+		this.handleSlideJumpClick = this.handleSlideJumpClick.bind(this);
 		this.toggleLightMode = this.toggleLightMode.bind(this);
 		this.toggleClosedCaptions = this.toggleClosedCaptions.bind(this);
 		this.toggleLaserpointer = this.toggleLaserpointer.bind(this);
@@ -313,9 +320,11 @@ export default class Profile extends Component {
 				);
 				this.notesContainer.innerHTML = urlify(message.data.notes);
 				this.props.changeHeaderTitle(`${message.data.title} (${message.data.activeSlide}/${message.data.totalSlides})`);
+
 				this.setState({
 					totalSlides: message.data.totalSlides,
 					activeSlide: message.data.activeSlide,
+					slidesTitles: message.data.slidesTitles,
 					slideLoaded: true,
 					title: message.data.title
 				});
@@ -324,6 +333,7 @@ export default class Profile extends Component {
 			if (message.command === 'presentation-updated') {
 				this.notesContainer.innerHTML = urlify(message.data.notes);
 				this.props.changeHeaderTitle(`${this.state.title} (${message.data.activeSlide}/${this.state.totalSlides})`);
+				
 				this.setState({
 					activeSlide: message.data.activeSlide
 				});
@@ -472,6 +482,17 @@ export default class Profile extends Component {
 						{this.state.laserPointer ? lang.page.showNotesButton : lang.page.showLaserpointerButton}
 					</span>
 				)}
+
+				{/* slide Selection prompt */}
+				{this.state.slideLoaded && this.state.showslideSelectionPrompt && (
+					<section class={style.slideSelectionPrompt}>
+						{this.state.slidesTitles.map((slideTitle, i) => (
+							<div key={i} slidenumber={i + 1} onClick={this.handleSlideJumpClick}>{slideTitle}</div>
+						))}
+					</section>
+				)}
+
+				<div onClick={this.promptSlideJump} hide={this.state.showslideSelectionPrompt ? 'false' : 'true'} class={style.backgroundHidingBox} />
 
 				{/* Notes */}
 				<div

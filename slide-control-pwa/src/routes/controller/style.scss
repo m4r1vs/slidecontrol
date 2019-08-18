@@ -27,6 +27,50 @@
 		}
 	}
 
+	.slideSelectionPrompt {
+		z-index: 100;
+		background: var(--background-color);
+		position: fixed;
+		top: 72px;
+		left: calc(50vw - (512px / 2));
+		width: 100vw;
+		max-width: 512px;
+		height: auto;
+		padding: 24px 6px;
+		border-radius: 20px;
+		box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+		div {
+			padding: 10px 24px;
+			color: var(--primary-color);
+			cursor: pointer;
+			border-radius: 16px;
+
+			&:hover, &:active, &:focus {
+				background: rgba(0, 0, 0, 0.22);
+			}
+		}
+	}
+
+	.backgroundHidingBox {
+		background: transparent;
+		z-index: 99;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 100vh;
+		width: 100vw;
+		transition: background .22s;
+		pointer-events: none;
+
+		&[hide=false] {
+			background: rgba(0, 0, 0, 0.72);
+			pointer-events: all;
+		}
+	}
+
 	div.notesContainer {
 		padding: 0 12px;
 		color: var(--primary-color) !important;

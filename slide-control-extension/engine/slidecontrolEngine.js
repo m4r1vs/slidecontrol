@@ -125,17 +125,27 @@ export default class SlidecontrolEngine {
 		viewerDataScript.remove()
 		document.body.removeAttribute("viewerData")
 
+		const parseTitles = docDataArray => {
+			let buffer = []
+			docDataArray.forEach(slide => {
+				buffer.push(slide[2] || `Slide Nr. ${slide[1] + 1}`)
+			})
+			return buffer
+		}
+
 		// parse information and return it
 		const googleSlideButton = document.querySelector(".goog-flat-menu-button-caption") // Google button containing further info about slide
 		const activeSlide = parseInt(googleSlideButton.getAttribute("aria-posinset")) // current Slide
 		const totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")) // total Slides
+		const slidesTitles = parseTitles(viewerData.docData[1]) // get the titles of all slides as array
 		const notes = viewerData.docData[1][activeSlide - 1][9] // notes as HTML
 		const title = document.querySelector('[property="og:title"]').content // title of presentation
-
+		
 		return {
 			notes,
 			activeSlide,
 			totalSlides,
+			slidesTitles,
 			notes,
 			title
 		}

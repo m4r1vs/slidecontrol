@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "slide-control-pwa",
-  "version": "2.3.1",
+  "version": "2.7.1",
   "license": "LGPL-3.0-only",
   "scripts": {
     "start": "per-env",
