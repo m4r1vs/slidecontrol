@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/m4r1vs/slidecontrol#readme",
   "dependencies": {
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.1",
     "ws": "^6.1.3"
   },
   "devDependencies": {
