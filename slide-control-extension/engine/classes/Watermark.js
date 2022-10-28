@@ -44,7 +44,7 @@ export default class Watermark {
 			font-family: Roboto, Helvetica, Arial;
 		`
 		this.watermark.innerHTML = `
-			<div style='background: url(https://slidecontrol.niveri.xyz/assets/logo.svg); margin: auto; background-size: contain; height: 48px; width: 48px;'> </div>
+			<div style='background: url(https://slidecontrol.niveri.de/assets/logo.svg); margin: auto; background-size: contain; height: 48px; width: 48px;'> </div>
 			<span id="slidecontrol-watermark">#ERROR</span>
 		`
 

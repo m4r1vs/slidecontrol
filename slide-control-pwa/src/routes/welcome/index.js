@@ -16,7 +16,7 @@ const Welcome = props => (
 		
 		<div class={style.qr} />
 
-		<Button to="/help" inverse text="sc.niveri.xyz/help" />
+		<Button to="/help" inverse text="sc.niveri.de/help" />
 
 	</div>
 );

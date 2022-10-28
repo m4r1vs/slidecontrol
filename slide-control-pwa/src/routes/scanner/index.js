@@ -19,7 +19,7 @@ export default class Scanner extends Component {
 		);
 
 		this.scanner = new QrScanner(this.video, result => {
-			if (result.split('/')[0] !== 'sc.niveri.xyz' || result.split('/')[1] !== 'controller') this.props.showSnackbar(
+			if (result.split('/')[0] !== 'sc.niveri.de' || result.split('/')[1] !== 'controller') this.props.showSnackbar(
 				lang.errors.notReadable(result),
 				null,
 				3500,

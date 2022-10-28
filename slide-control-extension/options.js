@@ -50,7 +50,7 @@ const save_ip = () => {
  */
 const restore_options = () => {
 	chrome.storage.sync.get({
-		backendIP: 'wss://www.maniyt.de:61263'
+		backendIP: 'wss://mn.uber.space/slidecontrol-socket'
 	}, settings => {
 		
 		document.getElementById('current-server').textContent = settings.backendIP

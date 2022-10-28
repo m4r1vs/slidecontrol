@@ -27,7 +27,7 @@ const AboutPrivacy = props => (
 				and you will not be tracked at all by us. <a href="https://allaboutdnt.com/" rel="noopener noreferrer" target="_blank">Here</a> you can learn how to do so.
 			</p>
 			<h2>Our Privacy Policy</h2>
-			<p>Your privacy is important to us. It is slidecontrol's policy to respect your privacy regarding any information we may collect from you across our website, <a href="https://slidecontrol.niveri.xyz">https://slidecontrol.niveri.xyz</a>, and other sites we own and operate.</p>
+			<p>Your privacy is important to us. It is slidecontrol's policy to respect your privacy regarding any information we may collect from you across our website, <a href="https://slidecontrol.niveri.de">https://slidecontrol.niveri.de</a>, and other sites we own and operate.</p>
 			<p>We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we’re collecting it and how it will be used.</p>
 			<p>We only retain collected information for as long as necessary to provide you with your requested service. What data we store, we’ll protect within commercially acceptable means to prevent loss and theft, as well as unauthorised access, disclosure, copying, use or modification.</p>
 			<p>We don’t share any personally identifying information publicly or with third-parties, except when required to by law.</p>

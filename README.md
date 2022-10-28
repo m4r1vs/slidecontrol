@@ -23,7 +23,7 @@ This builds the extension into the folder `/slide-control-extension/build` which
 to `chrome://extensions` and clicking `Load unpacked`.
 
 Following the steps after installing the extension will lead you to our PWA (`/slide-control-pwa`), available
-at [slidecontrol.niveri.xyz](https://sc.niveri.xyz).
+at [slidecontrol.niveri.de](https://sc.niveri.de).
 
 ![Screenshot of slidecontrols homescreen](https://maniyt.de/screenshot1.png)
 ## Contributing 😊

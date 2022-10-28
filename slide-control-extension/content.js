@@ -40,7 +40,7 @@ const initializePresentation = () => {
 	Logger.debug("Adding slidecontrol button...")
 
 	// create div to be put into the control-thingy in the presentation
-	const googleSlideController = document.querySelector(".punch-viewer-nav-rounded-container")
+	const googleSlideController = document.querySelector(".punch-viewer-navbar")
 	const slidecontrolProxy = document.createElement("div")
 
 	slidecontrolProxy.className = "goog-inline-block goog-flat-button"
@@ -52,7 +52,7 @@ const initializePresentation = () => {
 
 		<div class="goog-inline-block goog-flat-button" id="slidecontrol-start-block">
 			<div class="punch-viewer-captioned-button" id="slidecontrol-start-button">
-				<div style="width:24px; height:24px; background-image:url(https://slidecontrol.niveri.xyz/assets/logo_ohnekontur.png); filter:grayscale(100); background-size:contain; background-position:center; background-repeat:no-repeat;">
+				<div style="width:24px; height:24px; background-image:url(https://slidecontrol.niveri.de/assets/logo_ohnekontur.png); filter:grayscale(100); background-size:contain; background-position:center; background-repeat:no-repeat;">
 				</div>
 				<div class="punch-viewer-speaker-notes-text goog-inline-block">
 					Start slidecontrol
@@ -70,7 +70,7 @@ const initializePresentation = () => {
 		</div>
 	`
 
-	googleSlideController.appendChild(slidecontrolProxy)
+	googleSlideController.childNodes[0].appendChild(slidecontrolProxy)
 
 	// user starts slidecontrol, we connect to server:
 	document.querySelector("#slidecontrol-start-button").addEventListener("click", slidecontrolSocket.connect)

@@ -70,7 +70,7 @@ export default class SlidecontrolEngine {
 		const idContainer = document.querySelector("#slidecontrol-id-block")
 		const idText = document.querySelector("#slidecontrol-id-text")
 		const qrButtonContainer = document.querySelector("#slidecontrol-qr-button-block")
-		const googleSlideButton = document.querySelector(".goog-flat-menu-button-caption")
+		const googleSlideButton = document.querySelector(".docs-material-menu-button-flat-default-caption")
 
 		// hide the start button and show the ID
 		startButton.style.display = "none"
@@ -134,7 +134,7 @@ export default class SlidecontrolEngine {
 		}
 
 		// parse information and return it
-		const googleSlideButton = document.querySelector(".goog-flat-menu-button-caption") // Google button containing further info about slide
+		const googleSlideButton = document.querySelector(".docs-material-menu-button-flat-default-caption") // Google button containing further info about slide
 		const activeSlide = parseInt(googleSlideButton.getAttribute("aria-posinset")) // current Slide
 		const totalSlides = parseInt(googleSlideButton.getAttribute("aria-setsize")) // total Slides
 		const slidesTitles = parseTitles(viewerData.docData[1]) // get the titles of all slides as array
@@ -160,17 +160,16 @@ export default class SlidecontrolEngine {
 		Logger.debug("Switching slides in direction: " + direction)
 
 		// depending on direction change mousewheel's direction to either up (-120) or down (120)
-		const mousewheelDelta = direction === "next" ? -120 : 120
+		const keyCode = direction === "next" ? 39 : 37
+		const key = direction === "next" ? "ArrowRight" : "ArrowLeft"
 
 		// create script which emits mousewheel event in given direction
 		let script = document.createElement("script")
-		script.textContent = "(" + function (mouseWheelDelta) {
-			let googleSlideContainer = document.querySelector(".punch-viewer-container")
-			let event = document.createEvent("Event")
-			event.initEvent("mousewheel", true, false)
-			event.wheelDelta = mouseWheelDelta
-			googleSlideContainer.dispatchEvent(event)
-		} + ')("' + mousewheelDelta + '")'
+		script.textContent = "(" + function (keyCode, key) {
+			document.dispatchEvent(new KeyboardEvent('keydown', {
+				'key': key, 'keyCode': keyCode, 'code': key
+			}))
+		} + ')(' + keyCode + ',"' + key + '")'
 
 		// place script and remove it right after :O
 		document.body.appendChild(script)
@@ -198,14 +197,9 @@ export default class SlidecontrolEngine {
 		let script = document.createElement("script")
 		script.textContent = "(" + function (keyMap) {
 			keyMap = JSON.parse(keyMap)
-			let googleSlideContainer = document.querySelector(".punch-viewer-container")
-			let event = document.createEvent("Event")
-			event.initEvent("keydown", true, true)
-			event.key = keyMap.key
-			event.keyCode = keyMap.keyCode
-			event.which = keyMap.keyCode
-			event.code = keyMap.code
-			googleSlideContainer.dispatchEvent(event)
+			document.dispatchEvent(new KeyboardEvent('keydown', {
+				'key': keyMap.key, 'keyCode': keyMap.keyCode, 'code': keyMap.code
+			}))
 		} + ')(`' + JSON.stringify(keyMap) + '`)'
 
 		// place script and remove it right after :O

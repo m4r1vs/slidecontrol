@@ -31,7 +31,7 @@ chrome.runtime.onInstalled.addListener(event => {
     
     // open welcome page in new tab when extension is installed
     if (event.reason === 'install') chrome.tabs.create({
-        url: 'https://slidecontrol.niveri.xyz/welcome '
+        url: 'https://slidecontrol.niveri.de/welcome '
     })
     
     // show notification when extension is updated

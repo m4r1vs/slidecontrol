@@ -5,7 +5,7 @@ const AboutLicenses = props => (
 	<div class={style.about} fadeIn>
 
 		<section>
-			<a href="http://slidecontrol.niveri.xyz" rel="noopener noreferrer" target="_blank">
+			<a href="http://slidecontrol.niveri.de" rel="noopener noreferrer" target="_blank">
 				<h1>
                     Slidecontrol - The open-source remote control solution.
 				</h1>

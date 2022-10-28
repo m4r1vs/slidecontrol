@@ -58,7 +58,7 @@ export default class QRCodeWindow {
 		this.background.addEventListener("click", this.hide.bind(this))
 		
 		new QRCode(this.element, {
-			text: `sc.niveri.xyz/controller/${presentationID}`,
+			text: `sc.niveri.de/controller/${presentationID}`,
 			height: 272,
 			width: 272,
 			colorDark: '#ffbc16', // yellow

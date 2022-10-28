@@ -59,7 +59,7 @@ export default class SlidecontrolSocket {
 
 			this.Connection.onerror = error => {
 				Logger.error(error)
-				alert(`Error connecting to slidecontrol server ${settings.backendIP}. Maybe change servers at sc.niveri.xyz/settings`)
+				alert(`Error connecting to slidecontrol server ${settings.backendIP}. Maybe change servers at sc.niveri.de/settings`)
 			}
 		})
 	}
