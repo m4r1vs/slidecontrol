@@ -18,12 +18,10 @@
  */
 
 export default class Watermark {
+  constructor() {
+    this.watermark = document.createElement("div");
 
-	constructor() {
-
-		this.watermark = document.createElement('div')
-
-		this.watermark.style = `
+    this.watermark.style = `
 			display: none;
 			text-align: center;
 			position: fixed;
@@ -42,37 +40,38 @@ export default class Watermark {
 			font-size: 22px;
 			font-weight: 100;
 			font-family: Roboto, Helvetica, Arial;
-		`
-		this.watermark.innerHTML = `
-			<div style='background: url(https://slidecontrol.niveri.de/assets/logo.svg); margin: auto; background-size: contain; height: 48px; width: 48px;'> </div>
+		`;
+    this.watermark.innerHTML = `
+			<div style='background: url(https://slides.niveri.dev/logo.svg); margin: auto; background-size: contain; height: 48px; width: 48px;'> </div>
 			<span id="slidecontrol-watermark">#ERROR</span>
-		`
+		`;
 
-		document.body.appendChild(this.watermark)
-	}
+    document.body.appendChild(this.watermark);
+  }
 
-	/**
-	 * Show a watermark with ID of current slide
-	 * @param {Number} presentationID The ID to be shown in the watermark
-	 */
-	show(presentationID) {
-		document.getElementById('slidecontrol-watermark').textContent = `#${presentationID}`
-		this.watermark.style.display = 'block'
-	}
+  /**
+   * Show a watermark with ID of current slide
+   * @param {Number} presentationID The ID to be shown in the watermark
+   */
+  show(presentationID) {
+    document.getElementById("slidecontrol-watermark").textContent =
+      `#${presentationID}`;
+    this.watermark.style.display = "block";
+  }
 
-	/**
-	 * Hide the watermark
-	 */
-	hide() {
-		this.watermark.style.display = 'none'
-	}
+  /**
+   * Hide the watermark
+   */
+  hide() {
+    this.watermark.style.display = "none";
+  }
 
-	/**
-	 * Toggle a watermark with ID of current slide
-	 * @param {Number} presentationID The ID to be shown in the watermark
-	 */
-	toggle(presentationID) {
-		if (this.watermark.style.display === 'none') this.show(presentationID)
-		else this.hide()
-	}
+  /**
+   * Toggle a watermark with ID of current slide
+   * @param {Number} presentationID The ID to be shown in the watermark
+   */
+  toggle(presentationID) {
+    if (this.watermark.style.display === "none") this.show(presentationID);
+    else this.hide();
+  }
 }

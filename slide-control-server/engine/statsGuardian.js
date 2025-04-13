@@ -17,60 +17,59 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
 
-const STATFILE_PATH = path.join(__dirname, '..', 'stats.json')
+const STATFILE_PATH = path.join(os.homedir(), "slidecontrol-stats.json");
 
 module.exports = class StatsGuardian {
+  constructor() {
+    this.stats = {};
 
-	constructor() {
+    if (fs.existsSync(STATFILE_PATH)) {
+      let stats = fs.readFileSync(STATFILE_PATH);
+      this.stats = JSON.parse(stats);
+      console.log("Got old stats file", this.stats);
+    } else {
+      this.stats = {};
+      console.log("No stats file found. Created new object.");
+    }
 
-		this.stats = {}
+    this.increaseStat = this.increaseStat.bind(this);
+    this.changeStat = this.changeStat.bind(this);
+    this.saveStats = this.saveStats.bind(this);
 
-		if (fs.existsSync(STATFILE_PATH)) {
-			let stats = fs.readFileSync(STATFILE_PATH)
-			this.stats = JSON.parse(stats)
-			console.log('Got old stats file', this.stats)
-		} else {
-			this.stats = {}
-			console.log('No stats file found. Created new object.')
-		}
+    setInterval(this.saveStats, 2000);
+  }
 
-		this.increaseStat = this.increaseStat.bind(this)
-		this.changeStat = this.changeStat.bind(this)
-		this.saveStats = this.saveStats.bind(this)
+  /**
+   * Increase a given stat
+   * @param {String} stat - The stat to be increased
+   * @param {Integer} value - By how much
+   */
+  increaseStat(stat, value) {
+    if (this.stats[stat]) this.stats[stat] += value;
+    else this.stats[stat] = value;
+  }
 
-		setInterval(this.saveStats, 2000)
-	}
+  /**
+   * Change a given stat
+   * @param {String} stat - The stat to be changed
+   * @param {Integer} value - To what value
+   */
+  changeStat(stat, value) {
+    this.stats[stat] = value;
+  }
 
-	/**
-	 * Increase a given stat
-	 * @param {String} stat - The stat to be increased
-	 * @param {Integer} value - By how much
-	 */
-	increaseStat(stat, value) {
-		if (this.stats[stat]) this.stats[stat] += value
-		else this.stats[stat] = value
-	}
-
-	/**
-	 * Change a given stat
-	 * @param {String} stat - The stat to be changed
-	 * @param {Integer} value - To what value
-	 */
-	changeStat(stat, value) {
-		this.stats[stat] = value
-	}
-
-	/**
-	 * Save the stats
-	 */
-	saveStats() {
-		Logger.debug('Saving stats', JSON.stringify(this.stats))
-		fs.writeFile(STATFILE_PATH, JSON.stringify(this.stats), err => {
-			if (err) Logger.error('Could not save stats:', err)
-			Logger.debug("Saved stats:", this.stats)
-		})
-	}
-}
+  /**
+   * Save the stats
+   */
+  saveStats() {
+    Logger.debug("Saving stats", JSON.stringify(this.stats));
+    fs.writeFile(STATFILE_PATH, JSON.stringify(this.stats), (err) => {
+      if (err) Logger.error("Could not save stats:", err);
+      Logger.debug("Saved stats:", this.stats);
+    });
+  }
+};

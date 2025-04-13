@@ -18,50 +18,49 @@
  */
 
 // Libs
-const WebSocket = require('ws')
-const fs = require('fs')
-const http = require('http')
-const https = require('https')
+const WebSocket = require("ws");
+const fs = require("fs");
+const http = require("http");
+const https = require("https");
 
 // SlideControl server
-const SlidecontrolServer = require('./slidecontrolServer')
+const SlidecontrolServer = require("./slidecontrolServer");
 
 // functions
-const httpRouter = require('./functions/httpRouter')
-const Logger = require('./functions/logger')
+const httpRouter = require("./functions/httpRouter");
+const Logger = require("./functions/logger");
 
 // Config is package.json
-const CONFIG = require('./package.json')
+const CONFIG = require("./package.json");
 
 // make some stuff globally available
-global.Logger = Logger
-global.CONFIG = CONFIG
+global.Logger = Logger;
 
 // create servers
-const httpServer = CONFIG.legacySSL
-    ? new https.createServer({
-        cert: fs.readFileSync(CONFIG.sslCertificateLocation),
-        key: fs.readFileSync(CONFIG.sslKeyLocation)
+const httpServer = process.env.SSL_PROXY === "NO"
+  ? new https.createServer({
+      cert: fs.readFileSync(process.env.SSL_CERT),
+      key: fs.readFileSync(process.env.SSL_KEY),
     })
-    : new http.createServer((req, res) => httpRouter(req, res))
-const wssServer = new WebSocket.Server({ server: httpServer })
+  : new http.createServer((req, res) => httpRouter(req, res));
+const wssServer = new WebSocket.Server({ server: httpServer });
 
 // make WebSocket server available for children:
-global.wssServer = wssServer
+global.wssServer = wssServer;
 
 // start SC server
-const slidecontrolServer = new SlidecontrolServer()
+const slidecontrolServer = new SlidecontrolServer();
 
 // Let SC server handle new websocket connection
-wssServer.on('connection', slidecontrolServer.handleNewConnection)
+wssServer.on("connection", slidecontrolServer.handleNewConnection);
 
-// finally listen to the port:
-httpServer.listen(CONFIG.port, error => {
+httpServer.listen(process.env.PORT, (error) => {
+  Logger.debug("Debugging is enabled, with config: ", CONFIG);
+  Logger.debug("With env: ", process.env);
 
-    Logger.debug('Debugging is enabled, with config: ', CONFIG)
+  if (error) return Logger.error("Error starting Server: ", error);
 
-    if (error) return Logger.error('Error starting Server: ', error)
-    
-    Logger.log(`Server v${CONFIG.version}-${__webpack_hash__} is listening on port ${CONFIG.port}`)
-
-})
+  Logger.log(
+    `Server v${CONFIG.version}-${__webpack_hash__} is listening on port ${process.env.PORT}`,
+  );
+});

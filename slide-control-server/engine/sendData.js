@@ -23,8 +23,8 @@
  * @param {Object} data The data to be sent as JSON
  */
 module.exports = sendData = (connection, data) => {
-	if (!data) return
-	if (!connection) return
-	
-	if (connection.OPEN) connection.send(JSON.stringify(data))
-}
+  if (!data) return;
+  if (!connection) return;
+
+  if (connection.OPEN) connection.send(JSON.stringify(data));
+};

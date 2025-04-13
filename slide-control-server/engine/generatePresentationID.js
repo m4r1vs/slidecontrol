@@ -21,26 +21,31 @@
  * Generate a random number with 5 digits
  * @param {Integer} digits How long the ID should be
  */
-const proposePresentationID = digits => {
-	return Math.floor(Math.random() * Math.pow(10, digits - 1) * 9) + Math.pow(10, digits - 1)
-}
+const proposePresentationID = (digits) => {
+  return (
+    Math.floor(Math.random() * Math.pow(10, digits - 1) * 9) +
+    Math.pow(10, digits - 1)
+  );
+};
 
 /**
  * Returns valid ID for new presentation
  * @param {class} SlideControlEngine the instance of the current slidecontrol server
  */
 module.exports = generatePresentationID = (presentations, digits) => {
+  // generate ID
+  const proposedPresentationID = proposePresentationID(digits);
 
-	// generate ID
-	const proposedPresentationID = proposePresentationID(digits)
+  Logger.debug(
+    `Proposing ${digits} digit presentation ID:`,
+    proposedPresentationID,
+  );
 
-	Logger.debug(`Proposing ${digits} digit presentation ID:`, proposedPresentationID)
+  // ID already taken? Generate again!
+  if (presentations[proposedPresentationID]) return generatePresentationID();
 
-	// ID already taken? Generate again!
-	if (presentations[proposedPresentationID]) return generatePresentationID()
+  Logger.debug("Accepted presentation ID:", proposedPresentationID);
 
-	Logger.debug('Accepted presentation ID:', proposedPresentationID)
-
-	// return ID
-	return proposedPresentationID
-}
+  // return ID
+  return proposedPresentationID;
+};

@@ -17,14 +17,18 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
+const CONFIG = require("../package.json")
+
 /**
  * Respond with current server version
  * @param {Object} res The response the version is sent to
  */
 module.exports = sendServerVersion = (req, res) => {
-	res.write(JSON.stringify({
-		version: CONFIG.version,
-		hash: __webpack_hash__
-	}))
-	res.end()
-}
+  res.write(
+    JSON.stringify({
+      version: CONFIG.version,
+      hash: __webpack_hash__,
+    }),
+  );
+  res.end();
+};

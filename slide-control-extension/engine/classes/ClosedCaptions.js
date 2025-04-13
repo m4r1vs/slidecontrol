@@ -18,12 +18,10 @@
  */
 
 export default class ClosedCaptions {
+  constructor() {
+    this.ccContainer = document.createElement("span");
 
-	constructor() {
-
-		this.ccContainer = document.createElement('span')
-
-		this.ccContainer.style = `
+    this.ccContainer.style = `
 			position: fixed;
 			left: 0;
 			bottom: 0;
@@ -37,41 +35,40 @@ export default class ClosedCaptions {
 			color: #fff;
 			text-align: center;
 			background: rgba(0,0,0,.57);
-		`
+		`;
 
-		document.body.appendChild(this.ccContainer)
+    document.body.appendChild(this.ccContainer);
 
-		this.timeout = null
-	}
+    this.timeout = null;
+  }
 
-	/**
-	 * Show closed captions
-	 * @param {String} cc The to-be-shown subtitles
-	 */
-	show(cc) {
-		this.ccContainer.style.display = 'block'
-		this.ccContainer.textContent = cc
-		this.timeout = setTimeout(() => this.hide(false), 4500)
-	}
-	
-	/**
-	 * Hide the closed captions completely
-	 * @param {Boolean} removeCompletely If true, display = none
-	 */
-	hide(removeCompletely) {
-		if (removeCompletely) this.ccContainer.style.display = 'none'
-		this.ccContainer.textContent = ''
-	}
+  /**
+   * Show closed captions
+   * @param {String} cc The to-be-shown subtitles
+   */
+  show(cc) {
+    this.ccContainer.style.display = "block";
+    this.ccContainer.textContent = cc;
+    this.timeout = setTimeout(() => this.hide(false), 4500);
+  }
 
-	/**
-	 * Set subtitles to be-shown, if none, hide the bar
-	 * @param {String} cc The to-be-shown subtitles, if none, hide()
-	 */
-	set(cc) {
+  /**
+   * Hide the closed captions completely
+   * @param {Boolean} removeCompletely If true, display = none
+   */
+  hide(removeCompletely) {
+    if (removeCompletely) this.ccContainer.style.display = "none";
+    this.ccContainer.textContent = "";
+  }
 
-		if (this.timeout) clearTimeout(this.timeout)
+  /**
+   * Set subtitles to be-shown, if none, hide the bar
+   * @param {String} cc The to-be-shown subtitles, if none, hide()
+   */
+  set(cc) {
+    if (this.timeout) clearTimeout(this.timeout);
 
-		if (!cc) this.hide(true)
-		else this.show(cc)
-	}
+    if (!cc) this.hide(true);
+    else this.show(cc);
+  }
 }

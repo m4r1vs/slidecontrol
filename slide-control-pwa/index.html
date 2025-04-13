@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="Description"
+    content="Slidecontrol - The free and open-source remote solution for Google Slides. We feature speaker's notes, laserpointer, automated closed captioning and much more! No installation required!" />
+  <meta name="author" content="Marius Niveri" />
+  <meta name="keywords" content="Slidecontrol,Remote For Google Slides,Remote,Free,Open-source" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="/src/manifest.json" />
+  <meta name="theme-color" content="#212121" />
+  <meta charset="UTF-8" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Slidecontrol</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+</head>
+
+<body style="background: #212121">
+  <div id="app"></div>
+  <script type="module" src="/src/index.jsx"></script>
+
+  <noscript>
+    <h1>
+      Javascript is required for slidecontrol to work. Please enable it in
+      your browser.
+    </h1>
+  </noscript>
+</body>
+
+<script type="text/javascript">
+  WebFontConfig = {
+    google: {families: ["Roboto:300,400,700", "Material+Icons"]},
+  };
+  var a = document.createElement("script");
+  a.src = "https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js";
+  a.type = "text/javascript";
+  a.async = "true";
+  var b = document.getElementsByTagName("script")[0];
+  b.parentNode.insertBefore(a, b);
+</script>
+
+<script src="/watson-speech.min.js"></script>
+
+</html>

@@ -18,20 +18,18 @@
  */
 
 export default class MiniBrowser {
+  constructor() {
+    this.iFrame = null;
+  }
 
-	constructor() {
-		this.iFrame = null
-	}
+  /**
+   * Show an iFrame with given URL
+   * @param {String} url The webpages URL
+   */
+  show(url) {
+    this.iFrame = document.createElement("iFrame");
 
-	/**
-	 * Show an iFrame with given URL
-	 * @param {String} url The webpages URL
-	 */
-	show(url) {
-
-		this.iFrame = document.createElement('iFrame')
-
-		this.iFrame.style = `
+    this.iFrame.style = `
 				position: fixed;
 				left: 0;
 				top: 0;
@@ -39,29 +37,29 @@ export default class MiniBrowser {
 				width: 100vw;
 				z-index: 1000;
 				display: block;
-		`
+		`;
 
-		this.iFrame.setAttribute('src', url)
+    this.iFrame.setAttribute("src", url);
 
-		document.body.appendChild(this.iFrame)
-	}
+    document.body.appendChild(this.iFrame);
+  }
 
-	/**
-	 * Hide the webpage
-	 */
-	hide() {
-		if (!this.iFrame) return
+  /**
+   * Hide the webpage
+   */
+  hide() {
+    if (!this.iFrame) return;
 
-		this.iFrame.remove()
-		this.iFrame = null
-	}
+    this.iFrame.remove();
+    this.iFrame = null;
+  }
 
-	/**
-	 * Toggle the MiniBrowser
-	 * @param {String} url The url (if it should be shown)
-	 */
-	toggle(url) {
-		if (this.iFrame) this.hide()
-		else this.show(url)
-	}
+  /**
+   * Toggle the MiniBrowser
+   * @param {String} url The url (if it should be shown)
+   */
+  toggle(url) {
+    if (this.iFrame) this.hide();
+    else this.show(url);
+  }
 }

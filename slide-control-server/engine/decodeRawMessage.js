@@ -22,12 +22,11 @@
  * @param {String} raw The raw string recieved by the socket
  */
 module.exports = decodeRawMessage = (raw, connection) => {
-	try {
-		return JSON.parse(raw)
-	}
-	catch (error) {
-		Logger.error('Error decoding message, killing connection: ', error)
-		connection.terminate()
-	}
-	return false
-}
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    Logger.error("Error decoding message, killing connection: ", error);
+    connection.terminate();
+  }
+  return false;
+};

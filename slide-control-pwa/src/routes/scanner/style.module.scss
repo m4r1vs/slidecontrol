@@ -1,0 +1,35 @@
+.scanner {
+  color: var(--primary-color);
+  margin: auto;
+  background: #000;
+
+  .loader {
+    position: absolute;
+    left: calc(50vw - 22px);
+    top: 40vh;
+  }
+
+  video {
+    background: #000;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, calc(-50% + 56px)) !important;
+    min-width: 100vw;
+    min-height: calc(100vh - 56px);
+    z-index: 0;
+  }
+
+  .scanWindow {
+    display: none;
+    height: 256px;
+    width: 256px;
+    border: 3px solid var(--primary-color);
+    position: fixed;
+    top: calc(50vh - (256px / 2));
+    border-radius: 12px;
+    left: calc(50vw - (256px / 2));
+    box-shadow: 0px 0px 20px 4px rgba(0, 0, 0, 0.87);
+    z-index: 1;
+  }
+}

@@ -10,33 +10,41 @@
 </div>
 
 ## Getting started 🚀
+
 Slidecontrol's extension is available in
 the [Chrome webstore](https://chrome.google.com/webstore/detail/slidecontrol/ghfjfgbiehcemjfapohnnfngcbappodg) or
 by installing it locally:
+
 ```sh
 git clone https://github.com/m4r1vs/slidecontrol.git
 cd ./slidecontrol/slide-control-extension
 npm install
 npm run build
 ```
+
 This builds the extension into the folder `/slide-control-extension/build` which can then be added by navigating
 to `chrome://extensions` and clicking `Load unpacked`.
 
 Following the steps after installing the extension will lead you to our PWA (`/slide-control-pwa`), available
-at [slidecontrol.niveri.de](https://sc.niveri.de).
+at [slides.niveri.dev](https://slides.niveri.dev).
 
 ![Screenshot of slidecontrols homescreen](https://maniyt.de/screenshot1.png)
+
 ## Contributing 😊
+
 To contribute to the PWA just run this:
+
 ```sh
 git clone https://github.com/m4r1vs/slidecontrol.git
 cd ./slidecontrol/slide-control-pwa
 npm install
 npm run start
 ```
+
 And to help improving the extension you can install it locally as descrived above.
 
 And finally to run the WebSocket on your machine you can just cd into it and run it:
+
 ```sh
 git clone https://github.com/m4r1vs/slidecontrol.git
 cd ./slidecontrol/slide-control-server
@@ -48,9 +56,10 @@ In order to connect to it with the PWA and/or extension you need to head into th
 and everything should work out perfectly.
 
 ## Screenshots 📸
-*Slidecontrol has a build in QR-Scanner to connect to your presentation.*
+
+_Slidecontrol has a build in QR-Scanner to connect to your presentation._
 ![Screenshot of slidecontrols QR-Scanner](https://maniyt.de/screenshot2.png)
-*The speakers notes are synced on your phone as well.*
+_The speakers notes are synced on your phone as well._
 ![Screenshot of slidecontrols controller](https://maniyt.de/screenshot3.png)
-*Finally there's also a laser-pointer which is controllable from the app.*
+_Finally there's also a laser-pointer which is controllable from the app._
 ![Screenshot of slidecontrols controller](https://maniyt.de/screenshot4.png)

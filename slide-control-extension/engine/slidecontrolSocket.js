@@ -17,89 +17,97 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-import SlidecontrolEngine from './slidecontrolEngine'
+import SlidecontrolEngine from "./slidecontrolEngine";
 
 export default class SlidecontrolSocket {
+  constructor() {
+    this.Connection = null;
+    this.slidecontrolEngine = null;
 
-	constructor() {
-		this.Connection = null
-		this.slidecontrolEngine = null
+    this.connect = this.connect.bind(this);
+    this.handleMessage = this.handleMessage.bind(this);
+    this.registerPresentation = this.registerPresentation.bind(this);
+  }
 
-		this.connect = this.connect.bind(this)
-		this.handleMessage = this.handleMessage.bind(this)
-		this.registerPresentation = this.registerPresentation.bind(this)
-	}
+  /**
+   * Connect to server chosen in options
+   * Runs when user clicks 'start slidecontrol' button
+   */
+  connect() {
+    // Now that we are connecting, already initialize the engine
+    this.slidecontrolEngine = new SlidecontrolEngine();
 
-	/**
-	 * Connect to server chosen in options
-	 * Runs when user clicks 'start slidecontrol' button
-	 */
-	connect() {
-		
-		// Now that we are connecting, already initialize the engine
-		this.slidecontrolEngine = new SlidecontrolEngine()
+    // get user chosen server from storage and connect
+    chrome.storage.sync.get(
+      {
+        backendIP: "wss://sc-server.niveri.dev",
+      },
+      (settings) => {
+        Logger.log("Connecting to socket on server: " + settings.backendIP);
 
-		// get user chosen server from storage and connect
-		chrome.storage.sync.get({
-			backendIP: 'wss://www.maniyt.de:61263'
-		}, settings => {
+        this.Connection = new WebSocket(settings.backendIP);
 
-			Logger.log('Connecting to socket on server: ' + settings.backendIP)
+        this.Connection.onopen = () => {
+          // register current presentation to server, also get ID
+          this.registerPresentation();
 
-			this.Connection = new WebSocket(settings.backendIP)
+          // let handle run whenever new message is recieved
+          this.Connection.onmessage = (message) =>
+            this.handleMessage(JSON.parse(message.data));
+        };
 
-			this.Connection.onopen = () => {
+        this.Connection.onerror = (error) => {
+          Logger.error(error);
+          alert(
+            `Error connecting to slidecontrol server ${settings.backendIP}. Maybe change servers at slides.niveri.dev/settings or in the extension settings.`,
+          );
+        };
+      },
+    );
+  }
 
-				// register current presentation to server, also get ID
-				this.registerPresentation()
+  /**
+   * Runs whenever message from server is recieved
+   * @param {Object} message message from server
+   */
+  handleMessage(message) {
+    Logger.debug("Recieved message: " + message.command);
 
-				// let handle run whenever new message is recieved
-				this.Connection.onmessage = message => this.handleMessage(JSON.parse(message.data))
-			}
+    // if no message (or command) sent, dont do shit
+    if (!message) return;
+    if (!message.command) return;
+    if (!this.Connection) return;
 
-			this.Connection.onerror = error => {
-				Logger.error(error)
-				alert(`Error connecting to slidecontrol server ${settings.backendIP}. Maybe change servers at sc.niveri.de/settings`)
-			}
-		})
-	}
+    // All recievable commands from server
+    const commandMap = {
+      "new-presentation-added": () =>
+        this.slidecontrolEngine.start(
+          this.Connection,
+          parseInt(message.data.presentationID),
+        ),
+      "notify-extension": () =>
+        this.slidecontrolEngine.handleNotification(message.data),
+      "new-controller-synced": this.slidecontrolEngine.handleDeviceConnected,
+      "controller-disconnected":
+        this.slidecontrolEngine.handleDeviceDisconnected,
+    };
 
-	/**
-	 * Runs whenever message from server is recieved
-	 * @param {Object} message message from server
-	 */
-	handleMessage(message) {
+    // check if recieved command valid:
+    if (commandMap[message.command]) commandMap[message.command]();
+  }
 
-		Logger.debug('Recieved message: ' + message.command)
+  /**
+   * Send information about current presentation and slide to server
+   * It then answers with 'new-presentation-added' and generated ID
+   */
+  registerPresentation() {
+    if (!this.Connection) return;
 
-		// if no message (or command) sent, dont do shit
-		if (!message) return
-		if (!message.command) return
-		if (!this.Connection) return
-
-		// All recievable commands from server
-		const commandMap = {
-			"new-presentation-added": () => this.slidecontrolEngine.start(this.Connection, parseInt(message.data.presentationID)),
-			"notify-extension": () => this.slidecontrolEngine.handleNotification(message.data),
-			"new-controller-synced": this.slidecontrolEngine.handleDeviceConnected,
-			"controller-disconnected": this.slidecontrolEngine.handleDeviceDisconnected
-		}
-
-		// check if recieved command valid:
-		if (commandMap[message.command]) commandMap[message.command]()
-	}
-
-	/**
-	 * Send information about current presentation and slide to server
-	 * It then answers with 'new-presentation-added' and generated ID
-	 */
-	registerPresentation() {
-
-		if (!this.Connection) return
-
-		this.Connection.send(JSON.stringify({
-			command: 'add-new-presentation',
-			data: this.slidecontrolEngine.presentationData
-		}))
-	}
+    this.Connection.send(
+      JSON.stringify({
+        command: "add-new-presentation",
+        data: this.slidecontrolEngine.presentationData,
+      }),
+    );
+  }
 }

@@ -1,30 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
-	<head>
-		<title>Slidecontrol options</title>
-	</head>
+<head>
+  <title>Slidecontrol options</title>
+</head>
 
-	<body>
+<body>
+  Select WebSocket-server to connect to:
+  <select id="server-options">
+    <option value="wss://sc-server.niveri.dev">
+      wss://sc-server.niveri.dev
+    </option>
+    <option value="wss://mn.uber.space/slidecontrol-socket">
+      wss://mn.uber.space/slidecontrol-socket
+    </option>
+    <option value="wss://www.maniyt.de:61263">
+      wss://www.maniyt.de:61263
+    </option>
+  </select>
 
-		Select WebSocket-server to connect to:
-		<select id="server-options">
-			<option value="wss://mn.uber.space/slidecontrol-socket">wss://mn.uber.space/slidecontrol-socket</option>
-			<option value="wss://www.maniyt.de:61263">wss://www.maniyt.de:61263</option>
-		</select>
+  <br />Or if you run your server locally:<br />
+  <input aria-label="Or local server" type="text" placeholder="ws://localhost:1337" id="server-local" />
 
-		<br />Or if you run your server locally:<br />
-		<input aria-label="Or local server" type="text" placeholder="ws://localhost:1337" id="server-local" />
+  <br /><br />
+  Current server: <span id="current-server"></span> <br /><br />
 
-		<br /><br />
-		Current server: <span id="current-server"></span>
-		<br /><br />
+  <div id="status"></div>
+  <button id="save">Save</button>
 
-		<div id="status"></div>
-		<button id="save">Save</button>
-
-        <script src="options.js"></script>
-        
-	</body>
+  <script src="options.js"></script>
+</body>
 
 </html>

@@ -18,41 +18,40 @@
  */
 
 // the main logic is in /engine/
-import SlidecontrolSocket from './engine/slidecontrolSocket'
+import SlidecontrolSocket from "./engine/slidecontrolSocket";
 
 // Logger for info and errors
 window.Logger = {
-	log: log => console.log("[slidecontrol]", log),
-	debug: log => DEV_MODE ? console.log("[slidecontrol debug]", log) : null,
-	error: error => console.error("[slidecontrol error]", error)
-}
+  log: (log) => console.log("[slidecontrol]", log),
+  debug: (log) => (DEV_MODE ? console.log("[slidecontrol debug]", log) : null),
+  error: (error) => console.error("[slidecontrol error]", error),
+};
 
-const slidecontrolSocket = new SlidecontrolSocket()
+const slidecontrolSocket = new SlidecontrolSocket();
 
 // variables
-const PATH = window.location.pathname
+const PATH = window.location.pathname;
 
 /**
  * Add button to start slidecontrol (when presentation is opened is present-mode)
  */
 const initializePresentation = () => {
+  Logger.debug("Adding slidecontrol button...");
 
-	Logger.debug("Adding slidecontrol button...")
+  // create div to be put into the control-thingy in the presentation
+  const googleSlideController = document.querySelector(".punch-viewer-navbar");
+  const slidecontrolProxy = document.createElement("div");
 
-	// create div to be put into the control-thingy in the presentation
-	const googleSlideController = document.querySelector(".punch-viewer-navbar")
-	const slidecontrolProxy = document.createElement("div")
+  slidecontrolProxy.className = "goog-inline-block goog-flat-button";
+  slidecontrolProxy.style.margin = "0 4px";
+  slidecontrolProxy.style.padding = "0";
 
-	slidecontrolProxy.className = "goog-inline-block goog-flat-button"
-	slidecontrolProxy.style.margin = "0 4px"
-	slidecontrolProxy.style.padding = "0"
-
-	slidecontrolProxy.innerHTML = `
+  slidecontrolProxy.innerHTML = `
 		<div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"></div>
 
 		<div class="goog-inline-block goog-flat-button" id="slidecontrol-start-block">
 			<div class="punch-viewer-captioned-button" id="slidecontrol-start-button">
-				<div style="width:24px; height:24px; background-image:url(https://slidecontrol.niveri.de/assets/logo_ohnekontur.png); filter:grayscale(100); background-size:contain; background-position:center; background-repeat:no-repeat;">
+				<div style="width:24px; height:24px; background-image:url(https://slides.niveri.dev/logo_ohnekontur.png); filter:grayscale(100); background-size:contain; background-position:center; background-repeat:no-repeat;">
 				</div>
 				<div class="punch-viewer-speaker-notes-text goog-inline-block">
 					Start slidecontrol
@@ -68,23 +67,24 @@ const initializePresentation = () => {
 		<div id="slidecontrol-qr-button-block" class="goog-inline-block goog-flat-button" style="display: none; text-align: center; cursor: pointer; line-height: 28px; cursor: text;">
 			<div style="cursor: pointer;font-size: 14px;font-weight: 700;">QR-CODE</div>
 		</div>
-	`
+	`;
 
-	googleSlideController.childNodes[0].appendChild(slidecontrolProxy)
+  googleSlideController.childNodes[0].appendChild(slidecontrolProxy);
 
-	// user starts slidecontrol, we connect to server:
-	document.querySelector("#slidecontrol-start-button").addEventListener("click", slidecontrolSocket.connect)
-}
+  // user starts slidecontrol, we connect to server:
+  document
+    .querySelector("#slidecontrol-start-button")
+    .addEventListener("click", slidecontrolSocket.connect);
+};
 
 /**
  * Add button to open presentation with slidecontrol
  */
 const addSlidecontrolButton = () => {
+  // create stylesheet for button
+  const stylesheet = document.createElement("style");
 
-	// create stylesheet for button
-	const stylesheet = document.createElement("style")
-
-	stylesheet.innerHTML = `
+  stylesheet.innerHTML = `
 		#slidecontrol-open-presentation-button {
 			text-decoration: none !important
 		}
@@ -109,62 +109,62 @@ const addSlidecontrolButton = () => {
 			border: 1px solid #feedbc!important;
 			background: #fffdf6
 		}
-	`
+	`;
 
-	// place stylesheet
-	document.head.appendChild(stylesheet)
+  // place stylesheet
+  document.head.appendChild(stylesheet);
 
-	// get the google slides button and create new one
-	const googleSlideController = document.querySelector(".punch-start-presentation-container")
-	const openPresentationButton = document.createElement("a")
-	const openPresentationButtonText = document.createElement("div")
+  // get the google slides button and create new one
+  const googleSlideController = document.querySelector(
+    ".punch-start-presentation-container",
+  );
+  const openPresentationButton = document.createElement("a");
+  const openPresentationButtonText = document.createElement("div");
 
-	// initialize button to open presentation in new tab
-	openPresentationButton.className = "punch-start-presentation-container"
-	openPresentationButton.id = "slidecontrol-open-presentation-button"
-	openPresentationButton.target = "_blank"
-	openPresentationButton.href = window.location.href.replace("edit", "present")
+  // initialize button to open presentation in new tab
+  openPresentationButton.className = "punch-start-presentation-container";
+  openPresentationButton.id = "slidecontrol-open-presentation-button";
+  openPresentationButton.target = "_blank";
+  openPresentationButton.href = window.location.href.replace("edit", "present");
 
-	// add some google-made stylinng too
-	openPresentationButtonText.className = "goog-inline-block jfk-button jfk-button-standard jfk-button-collapse-right docs-titlebar-button jfk-button-clear-outline"
-	openPresentationButtonText.innerHTML = "slidecontrol"
-	openPresentationButtonText.id = "slidecontrol-open-presentation-button-text"
+  // add some google-made stylinng too
+  openPresentationButtonText.className =
+    "goog-inline-block jfk-button jfk-button-standard jfk-button-collapse-right docs-titlebar-button jfk-button-clear-outline";
+  openPresentationButtonText.innerHTML = "slidecontrol";
+  openPresentationButtonText.id = "slidecontrol-open-presentation-button-text";
 
-	// place button
-	openPresentationButton.appendChild(openPresentationButtonText)
-	googleSlideController.before(openPresentationButton)
-}
+  // place button
+  openPresentationButton.appendChild(openPresentationButtonText);
+  googleSlideController.before(openPresentationButton);
+};
 
 // only run all the stuff here if we are on an opened google slide
 if (PATH.includes("/presentation/d/")) {
+  Logger.debug("Slidecontrol got evoked");
 
-	Logger.debug("Slidecontrol got evoked")
+  const trimmedPath = PATH.replace("/presentation/d/", "");
 
-	const trimmedPath = PATH.replace("/presentation/d/", "")
+  // we are in editing mode so create our lovely button
+  if (trimmedPath.includes("/edit")) {
+    Logger.debug("In edit-mode");
 
-	// we are in editing mode so create our lovely button
-	if (trimmedPath.includes("/edit"))  {
+    // adds button to open presentation with slidecontrol
+    addSlidecontrolButton();
+  }
 
-		Logger.debug("In edit-mode")
+  // we are in presentation mode, so initilize slidecontrol
+  if (trimmedPath.includes("/present")) {
+    Logger.debug("In presentation-mode");
 
-		// adds button to open presentation with slidecontrol
-		addSlidecontrolButton()
-	}
+    // prevent Computer from falling asleep during presentation
+    try {
+      ComputerSleep.prevent();
+      Logger.debug("Preventing computer from falling asleep...");
+    } catch (error) {
+      Logger.error("Couldn't prevent computer from falling asleep :/");
+    }
 
-	// we are in presentation mode, so initilize slidecontrol
-	if (trimmedPath.includes("/present")) {
-
-		Logger.debug("In presentation-mode")
-
-		// prevent Computer from falling asleep during presentation
-		try {
-			ComputerSleep.prevent()
-			Logger.debug("Preventing computer from falling asleep...")
-		} catch (error) {
-			Logger.error("Couldn't prevent computer from falling asleep :/")
-		}
-
-		// adds the "start slidecontrol" button and connects on click
-		initializePresentation()
-	}
+    // adds the "start slidecontrol" button and connects on click
+    initializePresentation();
+  }
 }

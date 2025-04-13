@@ -1,0 +1,35 @@
+.help {
+  padding: 18px;
+  margin: auto;
+  max-width: 524px;
+  min-height: calc(100vh - 56px);
+  position: relative;
+
+  h1 {
+    text-align: center;
+  }
+
+  section {
+    padding-bottom: 124px;
+
+    p {
+      line-height: 1.618;
+      text-align: justify;
+    }
+
+    span {
+      background: var(--primary-color-dark);
+      color: var(--background-color);
+      padding: 1px 4px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+  }
+
+  .buttons {
+    position: absolute;
+    bottom: 12px;
+    width: 100%;
+    left: 0;
+  }
+}

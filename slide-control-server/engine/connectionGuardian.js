@@ -21,55 +21,57 @@
  * Keeps track of active connection and closes broken ones
  */
 module.exports = class ConnectionGuardian {
+  constructor() {
+    this.connections = 0;
 
-	constructor() {
-		this.connections = 0
+    this.increaseConnections = this.increaseConnections.bind(this);
+    this.decreaseConnections = this.decreaseConnections.bind(this);
+    this.ping = this.ping.bind(this);
+    this.heartbeat = this.heartbeat.bind(this);
 
-		this.increaseConnections = this.increaseConnections.bind(this)
-		this.decreaseConnections = this.decreaseConnections.bind(this)
-		this.ping = this.ping.bind(this)
-		this.heartbeat = this.heartbeat.bind(this)
+    setInterval(this.ping, 60000);
+  }
 
-		setInterval(this.ping, 60000)
-	}
+  increaseConnections() {
+    console.log(this.connections);
+    this.connections++;
+  }
+  decreaseConnections() {
+    console.log(this.connections);
+    this.connections--;
+  }
 
-	increaseConnections() { 
-		console.log(this.connections)
-		this.connections++ }
-	decreaseConnections() { 
-		console.log(this.connections)
-		this.connections-- }
+  /**
+   * Ping every connection every minute
+   */
+  ping() {
+    if (!this.connections) return;
 
-	/**
-	 * Ping every connection every minute
-	 */
-	ping() {
+    Logger.log(`Checking if ${this.connections} connections still alive...`);
 
-		if (!this.connections) return
+    wssServer.clients.forEach((connection) => {
+      if (connection.__isAlive__ === false) {
+        Logger.log("    - Connection dead, killed");
+        return connection.terminate();
+      }
 
-		Logger.log(`Checking if ${this.connections} connections still alive...`)
+      Logger.log("    - Connection alive, kept alive");
 
-		wssServer.clients.forEach(connection => {
+      connection.__isAlive__ = false;
+      connection.ping();
+    });
+  }
 
-			if (connection.__isAlive__ === false) {
-				Logger.log('    - Connection dead, killed')
-				return connection.terminate()
-			}
-
-			Logger.log('    - Connection alive, kept alive')
-
-			connection.__isAlive__ = false
-			connection.ping()
-		})
-	}
-
-	/**
-	 * Runs when connection recieved and answered to ping
-	 * @param {Object} connection The connection that is alive
-	 * @param {Object} request Request the connection is from
-	 */
-	heartbeat(connection, request) {
-		Logger.debug('Recieved heartbeat from IP: ', request.connection.remoteAddress)
-		connection.__isAlive__ = true
-	}
-}
+  /**
+   * Runs when connection recieved and answered to ping
+   * @param {Object} connection The connection that is alive
+   * @param {Object} request Request the connection is from
+   */
+  heartbeat(connection, request) {
+    Logger.debug(
+      "Recieved heartbeat from IP: ",
+      request.connection.remoteAddress,
+    );
+    connection.__isAlive__ = true;
+  }
+};

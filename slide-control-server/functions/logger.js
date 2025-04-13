@@ -18,7 +18,9 @@
  */
 
 module.exports = {
-	log: log => console.log(`[${new Date()}] LOG: ${log}`),
-	debug: (log, data) => (process.env.DEBUG === 'true') && console.log(`[${new Date()}] DEBUG: ${log}`, data),
-	error: (msg, error) => console.error(`[${new Date()}] ERROR: ${msg}`, error),
-}
+  log: (log) => console.log(`[${new Date()}] LOG: ${log}`),
+  debug: (log, data) =>
+    process.env.DEBUG === "true" &&
+    console.log(`[${new Date()}] DEBUG: ${log}`, data),
+  error: (msg, error) => console.error(`[${new Date()}] ERROR: ${msg}`, error),
+};
