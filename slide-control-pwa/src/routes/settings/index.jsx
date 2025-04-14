@@ -65,8 +65,8 @@ export default class Settings extends Component {
 
     this.state = {
       serverIpInput: "",
-      serverIpSelect: "wss://sc-server.niveri.dev",
-      serverIp: "wss://sc-server.niveri.dev",
+      serverIpSelect: "/socket",
+      serverIp: "/socket",
       languageSelect: localStorage.getItem("slidecontrol-language") || "en",
       speechToTextEnabled: localStorage.getItem("slidecontrol-cc") === "true",
     };
@@ -102,9 +102,7 @@ export default class Settings extends Component {
             value={this.state.serverIpSelect}
             onChange={this.changeServerIpSelect}
           >
-            <option value="wss://sc-server.niveri.dev">
-              wss://sc-server.niveri.dev
-            </option>
+            <option value="/socket">/socket</option>
             <option value="wss://www.maniyt.de:61263">
               wss://www.maniyt.de:61263
             </option>

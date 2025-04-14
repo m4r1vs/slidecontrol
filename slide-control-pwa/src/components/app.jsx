@@ -184,10 +184,7 @@ export default class App extends Component {
   componentDidMount() {
     if (typeof window !== "undefined") {
       if (!localStorage.getItem("slidecontrol-websocket-ip"))
-        localStorage.setItem(
-          "slidecontrol-websocket-ip",
-          "wss://sc-server.niveri.dev",
-        );
+        localStorage.setItem("slidecontrol-websocket-ip", "/socket");
       if (localStorage.getItem("slidecontrolLit") === "totally")
         this.makeItLit(true);
     }

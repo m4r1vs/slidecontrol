@@ -52,14 +52,14 @@ const save_ip = () => {
 const restore_options = () => {
   chrome.storage.sync.get(
     {
-      backendIP: "wss://sc-server.niveri.dev",
+      backendIP: "wss://slides.niveri.dev/socket",
     },
     (settings) => {
       document.getElementById("current-server").textContent =
         settings.backendIP;
 
       if (
-        settings.backendIP === "wss://sc-server.niveri.dev" ||
+        settings.backendIP === "wss://slides.niveri.dev/socket" ||
         settings.backendIP === "wss://www.maniyt.de:61263" ||
         settings.backendIP === "wss://mn.uber.space/slidecontrol-socket"
       ) {

@@ -40,7 +40,7 @@ export default class SlidecontrolSocket {
     // get user chosen server from storage and connect
     chrome.storage.sync.get(
       {
-        backendIP: "wss://sc-server.niveri.dev",
+        backendIP: "wss://slides.niveri.dev/socket",
       },
       (settings) => {
         Logger.log("Connecting to socket on server: " + settings.backendIP);
