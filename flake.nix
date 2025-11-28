@@ -263,9 +263,9 @@
       };
 
     overlays.default = final: prev: {
-      slidecontrol-server = self.packages.${prev.system}.slidecontrol-server;
-      slidecontrol-pwa = self.packages.${prev.system}.slidecontrol-pwa;
-      slidecontrol-extension = self.packages.${prev.system}.slidecontrol-extension;
+      slidecontrol-server = self.packages.${prev.stdenv.hostPlatform.system}.slidecontrol-server;
+      slidecontrol-pwa = self.packages.${prev.stdenv.hostPlatform.system}.slidecontrol-pwa;
+      slidecontrol-extension = self.packages.${prev.stdenv.hostPlatform.system}.slidecontrol-extension;
     };
   };
 }
